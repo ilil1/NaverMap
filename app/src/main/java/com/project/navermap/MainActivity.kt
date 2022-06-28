@@ -1,13 +1,17 @@
 package com.project.navermap
 
 import android.Manifest
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 
 class MainActivity : AppCompatActivity() , OnMapReadyCallback {
 
@@ -15,6 +19,7 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
 
     companion object {
+
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
         private val PERMISSIONS = arrayOf(
@@ -43,7 +48,7 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
             }
             else {
                 Log.d("권한 승인", "권한 승인됨")
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현위치 버튼 컨트롤 활성
+                //naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현위치 버튼 컨트롤 활성
             }
             return
         }
@@ -51,12 +56,28 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
     }
 
     override fun onMapReady(map : NaverMap) {
+
         this.naverMap = map
 
         naverMap.uiSettings.isLocationButtonEnabled = true
-        naverMap.locationSource = locationSource
+        naverMap.uiSettings.isScaleBarEnabled = true //축적바 기본값은 true
 
+        naverMap.locationSource = locationSource
         ActivityCompat.requestPermissions(this, PERMISSIONS, LOCATION_PERMISSION_REQUEST_CODE)
+
+        val marker: Marker = Marker(MarkerIcons.BLACK).apply {
+            zIndex = 111
+            iconTintColor = Color.parseColor("#FA295B")
+            width = 100
+            height = 125
+        }
+
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = naverMap
+
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.489479, 126.724519))
+        naverMap.moveCamera(cameraUpdate)
+
         Toast.makeText(this, "맵 초기화 완료", Toast.LENGTH_LONG).show()
     }
 }
