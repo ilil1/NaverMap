@@ -9,18 +9,22 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.CircleOverlay
+import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 
 class MainActivity : AppCompatActivity() , OnMapReadyCallback {
 
-    private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
+    private lateinit var naverMap: NaverMap
+    private var infoWindow: InfoWindow? = null
 
     companion object {
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        private const val DISTANCE = 300
 
         private val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -75,8 +79,24 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
         marker.position = LatLng(37.5670135, 126.9783740)
         marker.map = naverMap
 
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.489479, 126.724519))
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5670135, 126.9783740))
         naverMap.moveCamera(cameraUpdate)
+
+        marker.setOnClickListener {
+            this.infoWindow?.close()
+            this.infoWindow = InfoWindow()
+            this.infoWindow?.open(marker)
+            true
+        }
+
+        val circle = CircleOverlay()
+        circle.center = LatLng(37.5670135, 126.9783740)
+        circle.radius = DISTANCE.toDouble()
+
+        circle.outlineWidth = 1
+        circle.outlineColor = Color.parseColor("#AC97FE")
+        circle.zIndex = 100
+        circle.map = naverMap
 
         Toast.makeText(this, "맵 초기화 완료", Toast.LENGTH_LONG).show()
     }
