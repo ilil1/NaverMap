@@ -1,10 +1,19 @@
 package com.project.navermap
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Rect
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.naver.maps.geometry.LatLng
@@ -16,6 +25,7 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.databinding.ActivityMainBinding
+import com.project.navermap.databinding.DialogFilterBinding
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -27,8 +37,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var locationSource: FusedLocationSource
+    private lateinit var locationManager: LocationManager
     private lateinit var naverMap: NaverMap
     private var infoWindow: InfoWindow? = null
+    private lateinit var curLocation: Location
+
+    private lateinit var builder: AlertDialog.Builder
+    private lateinit var dialog: AlertDialog
+
+    private lateinit var chkAll: CheckBox
+    private var filterCategoryOptions = mutableListOf<CheckBox>()
+    private var filterCategoryChecked = mutableListOf<Boolean>()
 
     companion object {
 
@@ -41,19 +60,52 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
+//    private val locationListener: LocationListener by lazy {
+//        LocationListener { location -> curLocation = location }
+//    }
+
+    private val dialogBinding by lazy {
+        val displayRectangle = Rect()
+        this.window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
+        DialogFilterBinding.inflate(layoutInflater).apply {
+            root.minimumHeight = (displayRectangle.width() * 0.9f).toInt()
+            root.minimumHeight = (displayRectangle.height() * 0.9f).toInt()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         var mapFragment: MapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment
+
+        locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+//        locationManager.requestLocationUpdates(
+//            LocationManager.GPS_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener
+//        )
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.NETWORK_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener
+//        )
+
         mapFragment.getMapAsync(this)
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         uiScope = CoroutineScope(Dispatchers.Main)
 
         getApiShopList()
+        initDialog()
 
         binding.btnSearchAround.setOnClickListener {
             try {
@@ -61,6 +113,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             } catch (ex: Exception) {
                 Toast.makeText(this, "리스트를 가져오는 중", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.btnFilter.setOnClickListener {
+            dialog = builder.show()
+        }
+
+        binding.btnCloseMarkers.setOnClickListener {
+            removeAllMarkers()
         }
     }
 
@@ -102,7 +162,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             height = 125
         }
 
-        marker.position = LatLng(37.5670135, 126.9783740)
+        try {
+            marker.position = LatLng(37.5670135, 126.9783740)
+        } catch (ex: Exception) {
+            Toast.makeText(this, "마커를 읽어오는 중", Toast.LENGTH_SHORT).show()
+        }
         marker.map = naverMap
 
         val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5670135, 126.9783740))
@@ -125,6 +189,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         circle.map = naverMap
 
         Toast.makeText(this, "맵 초기화 완료", Toast.LENGTH_LONG).show()
+    }
+
+    private fun removeAllMarkers() {
+        markers.forEach { marker ->
+            marker.map = null
+        }
+        infoWindow?.close()
     }
 
     fun getApiShopList() {
@@ -204,7 +275,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         deleteMarkers()
 
-        var markets: List<ShopData> = mutableListOf()
+        var markets: List<ShopData>
         var temp = arrayListOf<Marker>()
         var i = 0
 
@@ -212,16 +283,132 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         markets?.let {
             repeat(markets.size) {
-                temp += Marker().apply {
-                    position = LatLng(markets[i].latitude, markets[i].longitude)
-                    icon = MarkerIcons.BLACK
-                    tag = markets[i].shop_name
-                    zIndex = i
+
+//                val dist = calDist(
+//                    curLocation.latitude,
+//                    curLocation.longitude,
+//                    markets[i].latitude,
+//                    markets[i].longitude)
+
+                if (filterCategoryChecked[getCategoryNum(markets[i].category)]) {
+                    temp += Marker().apply {
+                        position = LatLng(markets[i].latitude, markets[i].longitude)
+                        icon = MarkerIcons.BLACK
+                        tag = markets[i].shop_name
+                        zIndex = i
+                    }
                 }
                 i++
             }
             markers = temp
             searchAround()
         }
+    }
+
+    private fun calDist(lat1:Double, lon1:Double, lat2:Double, lon2:Double) : Long {
+
+        val EARTH_R = 6371000.0
+        val rad = Math.PI / 180
+        val radLat1 = rad * lat1
+        val radLat2 = rad * lat2
+        val radDist = rad * (lon1 - lon2)
+
+        var distance = Math.sin(radLat1) * Math.sin(radLat2)
+        distance = distance + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radDist)
+        val ret = EARTH_R * Math.acos(distance)
+
+        return Math.round(ret)
+    }
+
+    private fun initDialog() {
+
+        builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+
+        chkAll = dialogBinding.all
+
+        with(dialogBinding) {
+            filterCategoryOptions.addAll(arrayOf(
+                foodBeverage, service, fashionAccessories,
+                supermarket, fashionClothes, etc)
+            )
+        }
+
+        chkAll.setOnClickListener {
+            filterCategoryOptions.forEach { checkBox ->
+                checkBox.isChecked = chkAll.isChecked
+            }
+        }
+
+        filterCategoryOptions.forEach { checkBox ->
+            filterCategoryChecked.add(true)
+            checkBox.setOnClickListener {
+                for (_checkBox in filterCategoryOptions) {
+                    if (!_checkBox.isChecked) {
+                        chkAll.isChecked = false
+                        return@setOnClickListener
+                    }
+                }
+                chkAll.isChecked = true
+            }
+        }
+
+        dialogBinding.btnCloseFilter.setOnClickListener {
+
+            var check = true
+            for (i in 0 until filterCategoryOptions.size) {
+                filterCategoryOptions[i].isChecked = filterCategoryChecked[i]
+                if (!filterCategoryOptions[i].isChecked)
+                    check = false
+            }
+            chkAll.isChecked = check
+
+            dialog.dismiss()
+            if (dialogBinding.root.parent != null) {
+                (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
+            }
+        }
+
+        dialogBinding.btnFilterApply.setOnClickListener {
+
+            var noChk = true
+            for (item in filterCategoryOptions) {
+                if (item.isChecked) {
+                    noChk = false
+                    break
+                }
+            }
+
+            if (noChk) {
+                Toast.makeText(this, "적어도 하나 이상 카테고리를 선택해야 합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            for (i in 0 until filterCategoryOptions.size)
+                filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
+
+            updateMarker()
+
+            dialog.dismiss()
+            if (dialogBinding.root.parent != null) {
+                (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
+            }
+        }
+
+        dialogBinding.btnFilterReset.setOnClickListener {
+
+            filterCategoryOptions.forEach { it.isChecked = true }
+
+            var check = true
+            for (item in filterCategoryOptions)
+                if (!item.isChecked) {
+                    check = false
+                }
+
+            if (check) chkAll.isChecked = true
+        }
+
+        builder.setView(dialogBinding.root)
+        builder.create()
     }
 }
