@@ -2,8 +2,10 @@ package com.project.navermap
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.location.Location
@@ -11,11 +13,17 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.CircleOverlay
@@ -27,6 +35,9 @@ import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.databinding.DialogFilterBinding
 import kotlinx.coroutines.*
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -49,10 +60,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var filterCategoryOptions = mutableListOf<CheckBox>()
     private var filterCategoryChecked = mutableListOf<Boolean>()
 
+    private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
+    private val GEOCODE_USER_INFO = ""
+
     companion object {
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
         private const val DISTANCE = 300
+        const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
 
         private val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -122,7 +137,64 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.btnCloseMarkers.setOnClickListener {
             removeAllMarkers()
         }
+
+        binding.etSearch.setOnClickListener {
+            openSearchActivityForResult()
+        }
     }
+
+    private fun openSearchActivityForResult() {
+        startSearchActivityForResult.launch(
+            Intent(applicationContext, SearchAddressActivity::class.java)
+        )
+    }
+
+    private val startSearchActivityForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
+                val str = bundle?.get(MY_LOCATION_KEY).toString()
+                var asw : MapSearchInfoEntity?
+
+                Thread {
+
+                    val obj: URL
+                    val address: String = URLEncoder.encode(str, "UTF-8")
+
+                    obj = URL(GEOCODE_URL + address)
+
+                    val con: HttpURLConnection = obj.openConnection() as HttpURLConnection
+
+                    con.setRequestMethod("GET")
+                    con.setRequestProperty("Authorization", "KakaoAK " + GEOCODE_USER_INFO)
+                    con.setRequestProperty("content-type", "application/json")
+                    con.setDoOutput(true)
+                    con.setUseCaches(false)
+                    con.setDefaultUseCaches(false)
+
+                    val data = con.inputStream.bufferedReader().readText()
+                    val dataList = "[$data]"
+                    val xy = Gson().fromJson(dataList, Array<Address>::class.java).toList()
+
+                    asw = MapSearchInfoEntity(
+                        xy[0].documents[0].addressName,
+                        xy[0].documents[0].roadAddress.buildingName,
+                        LocationLatLngEntity(
+                            xy[0].documents[0].y.toDouble(),
+                            xy[0].documents[0].x.toDouble()
+                        )
+                    )
+
+                    runOnUiThread {
+                        Toast.makeText(this, asw.toString(), Toast.LENGTH_LONG).show()
+                    }
+
+                }.start()
+            }
+        }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

@@ -22,8 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SearchAddressActivity"
+            android:exported="true" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value=""/>
+            android:value="5le4pbwk0f"/>
     </application>
 </manifest>

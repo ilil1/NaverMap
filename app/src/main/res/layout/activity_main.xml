@@ -10,22 +10,36 @@
         android:id="@+id/topLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnFilter"
-            android:layout_width="wrap_content"
+            android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:text="필터" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCloseMarkers"
-            android:layout_width="wrap_content"
+            android:layout_width="65dp"
             android:layout_height="wrap_content"
             android:text="닫기" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/TmapBtn"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:text="Tmap" />
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="도로, 건물명 지번으로 검색" />
+        <!--키보드 올라오는 현상 방지 android:focusable-->
     </LinearLayout>
 
     <fragment
