@@ -42,6 +42,16 @@
         <!--키보드 올라오는 현상 방지 android:focusable-->
     </LinearLayout>
 
+    <WebView
+        android:id="@+id/webView_address"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLinearLayout" />
+
+
     <fragment
         android:id="@+id/map_fragment"
         android:name="com.naver.maps.map.MapFragment"

@@ -1,12 +1,18 @@
 package com.project.navermap
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.net.http.SslError
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
+import android.view.ViewGroup
 import android.webkit.*
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.project.navermap.MainActivity.Companion.MY_LOCATION_KEY
 import com.project.navermap.databinding.ActivitySearchAddressBinding
@@ -15,7 +21,6 @@ import com.project.navermap.databinding.ActivitySearchAddressBinding
 class SearchAddressActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchAddressBinding
-    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,88 +31,97 @@ class SearchAddressActivity : AppCompatActivity() {
 
     private fun init() {
 
-        binding.webViewAddress.settings.apply {
-            javaScriptEnabled = true//javaScript 허용
-            javaScriptCanOpenWindowsAutomatically = true //javaScript window.open 허용
-            setSupportMultipleWindows(true)
+//        webViewAddress = // 메인 웹뷰
+//        webViewLayout = // 웹뷰가 속한 레이아웃
+// 공통 설정
+        binding.webViewAddress.settings.run {
+                javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
+                javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
+                setSupportMultipleWindows(true)
         }
 
-        binding.webViewAddress.apply {
-            webViewClient = client
-            webChromeClient = chromeClient
-            addJavascriptInterface(AndroidBridge(), "TestApp")
-            loadUrl("http://3.36.51.15/search.php")
-        }
+        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
+        binding.webViewAddress.loadUrl("")
+        binding.webViewAddress.webChromeClient = webChromeClient
+
     }
 
-    // TODO : search.php에서 arg1 매개변수 안넣게 하기
     private inner class AndroidBridge {
         // 웹에서 JavaScript로 android 함수를 호출할 수 있도록 도와줌
         @JavascriptInterface
         fun setAddress(arg1: String?, arg2: String?, arg3: String?) {
-            // search.php에서 호출되는 함수
-            handler.post {
-                setResult(RESULT_OK,
-                Intent().apply {
-                        putExtra(MY_LOCATION_KEY, String.format("%s %s", arg2, arg3))
-                    },
-                )
-                finish()
-            }
+            // search.php에서 callback 호출되는 함수
+
+            Log.d("arg1.toString()", arg1.toString())
+            Log.d("arg2.toString()", arg2.toString())
+            Log.d("arg3.toString()", arg3.toString())
+
+            val extra = Bundle()
+            val intent = Intent()
+            extra.putString(MY_LOCATION_KEY, String.format("%s %s", arg2, arg3))
+            intent.putExtras(extra)
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
 
-    // TODO : 제거?
-    private val client: WebViewClient = object : WebViewClient() {
-        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-            return false
-        }
+    private val webChromeClient = object: WebChromeClient() {
 
-        // TODO : 제거?
-        override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?
-        ) {
-            handler?.proceed()
-        }
-    }
+        /// ---------- 팝업 열기 ----------
+        /// - 카카오 JavaScript SDK의 로그인 기능은 popup을 이용합니다.
+        /// - window.open() 호출 시 별도 팝업 webview가 생성되어야 합니다.
+        ///
+        lateinit var dialog : Dialog
 
-    private val chromeClient = object : WebChromeClient() {
-
-        override fun onCreateWindow(
-            view: WebView?,
-            isDialog: Boolean,
-            isUserGesture: Boolean,
-            resultMsg: Message?
-        ): Boolean {
-
-            val newWebView = WebView(this@SearchAddressActivity).apply {
-                settings.javaScriptEnabled = true
-            }
-
-            setContentView(newWebView)
-            newWebView.webChromeClient = object : WebChromeClient() {
-                override fun onJsAlert(
-                    view: WebView,
-                    url: String,
-                    message: String,
-                    result: JsResult
-                ): Boolean {
-                    super.onJsAlert(view, url, message, result)
-
-                    // 선택한 주소 출력
-//                    Toast.makeText(
-//                        this@SearchAddressActivity,
-//                        "결과 : " + result.toString(),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-
-                    return true
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onCreateWindow(view: WebView, isDialog: Boolean,
+                                    isUserGesture: Boolean, resultMsg: Message): Boolean {
+            // 웹뷰 만들기
+            var childWebView = WebView(view.context)
+            Log.d("TAG", "웹뷰 만들기")
+            // 부모 웹뷰와 동일하게 웹뷰 설정
+            childWebView.run {
+                settings.run {
+                    javaScriptEnabled = true
+                    javaScriptCanOpenWindowsAutomatically = true
+                    setSupportMultipleWindows(true)
                 }
+                layoutParams = view.layoutParams
+                webViewClient = view.webViewClient
+                webChromeClient = view.webChromeClient
             }
 
-            (resultMsg!!.obj as WebView.WebViewTransport).webView = newWebView
+            dialog = Dialog(this@SearchAddressActivity).apply {
+                setContentView(childWebView)
+                window!!.attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+                window!!.attributes.height = ViewGroup.LayoutParams.MATCH_PARENT
+                show()
+            }
+
+            //webViewLayout.addView(childWebView)
+            // TODO: 화면 추가 이외에 onBackPressed() 와 같이
+            //       사용자의 내비게이션 액션 처리를 위해
+            //       별도 웹뷰 관리를 권장함
+            //   ex) childWebViewList.add(childWebView)
+
+            // 웹뷰 간 연동
+            val transport = resultMsg.obj as WebView.WebViewTransport
+            transport.webView = childWebView
             resultMsg.sendToTarget()
 
             return true
+        }
+
+        override fun onCloseWindow(window: WebView) {
+            super.onCloseWindow(window)
+            Log.d("로그 ", "onCloseWindow")
+            dialog.dismiss()
+            //window!!.destroy()
+            // 화면에서 제거하기
+            // TODO: 화면 제거 이외에 onBackPressed() 와 같이
+            //       사용자의 내비게이션 액션 처리를 위해
+            //       별도 웹뷰 array 관리를 권장함
+            //   ex) childWebViewList.remove(childWebView)
         }
     }
 }

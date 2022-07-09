@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -11,17 +12,18 @@ import android.graphics.Rect
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
-    private val GEOCODE_USER_INFO = ""
+    private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
 
     companion object {
 
@@ -139,13 +141,144 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.etSearch.setOnClickListener {
-            openSearchActivityForResult()
+            init()
+            //openSearchActivityForResult()
+        }
+    }
+
+    private fun init() {
+
+//        webViewAddress = // 메인 웹뷰
+//        webViewLayout = // 웹뷰가 속한 레이아웃
+// 공통 설정
+        binding.webViewAddress.settings.run {
+            javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
+            javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
+            setSupportMultipleWindows(true)
+        }
+
+        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
+        binding.webViewAddress.loadUrl("")
+        binding.webViewAddress.webChromeClient = webChromeClient
+
+    }
+
+    private inner class AndroidBridge {
+        // 웹에서 JavaScript로 android 함수를 호출할 수 있도록 도와줌
+        @JavascriptInterface
+        fun setAddress(arg1: String?, arg2: String?, arg3: String?) {
+            // search.php에서 callback 호출되는 함수
+
+            Log.d("arg1.toString()", arg1.toString())
+            Log.d("arg2.toString()", arg2.toString())
+            Log.d("arg3.toString()", arg3.toString())
+
+            val str = String.format("%s %s", arg2, arg3)
+            var asw : MapSearchInfoEntity?
+
+            Log.d("SearchActivityForResult", str)
+
+            Thread {
+
+                val obj: URL
+                val address: String = URLEncoder.encode(str, "UTF-8")
+
+                obj = URL(GEOCODE_URL + address)
+
+                val con: HttpURLConnection = obj.openConnection() as HttpURLConnection
+
+                con.setRequestMethod("GET")
+                con.setRequestProperty("Authorization", "KakaoAK " + GEOCODE_USER_INFO)
+                con.setRequestProperty("content-type", "application/json")
+                con.setDoOutput(true)
+                con.setUseCaches(false)
+                con.setDefaultUseCaches(false)
+
+                val data = con.inputStream.bufferedReader().readText()
+
+                Log.d("application/json", data)
+
+                val dataList = "[$data]"
+                val xy = Gson().fromJson(dataList, Array<Address>::class.java).toList()
+
+                asw = MapSearchInfoEntity(
+                    xy[0].documents[0].addressName,
+                    xy[0].documents[0].roadAddress.buildingName,
+                    LocationLatLngEntity(
+                        xy[0].documents[0].y.toDouble(),
+                        xy[0].documents[0].x.toDouble()
+                    )
+                )
+
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, asw.toString(), Toast.LENGTH_LONG).show()
+                }
+
+            }.start()
+        }
+    }
+
+    private val webChromeClient = object: WebChromeClient() {
+
+        /// ---------- 팝업 열기 ----------
+        /// - 카카오 JavaScript SDK의 로그인 기능은 popup을 이용합니다.
+        /// - window.open() 호출 시 별도 팝업 webview가 생성되어야 합니다.
+        ///
+        lateinit var dialog : Dialog
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun onCreateWindow(view: WebView, isDialog: Boolean,
+                                    isUserGesture: Boolean, resultMsg: Message): Boolean {
+            // 웹뷰 만들기
+            var childWebView = WebView(view.context)
+            Log.d("TAG", "웹뷰 만들기")
+            // 부모 웹뷰와 동일하게 웹뷰 설정
+            childWebView.run {
+                settings.run {
+                    javaScriptEnabled = true
+                    javaScriptCanOpenWindowsAutomatically = true
+                    setSupportMultipleWindows(true)
+                }
+                layoutParams = view.layoutParams
+                webViewClient = view.webViewClient
+                webChromeClient = view.webChromeClient
+            }
+
+            dialog = Dialog(this@MainActivity).apply {
+                setContentView(childWebView)
+                window!!.attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+                window!!.attributes.height = ViewGroup.LayoutParams.MATCH_PARENT
+                show()
+            }
+
+            // TODO: 화면 추가 이외에 onBackPressed() 와 같이
+            //       사용자의 내비게이션 액션 처리를 위해
+            //       별도 웹뷰 관리를 권장함
+            //   ex) childWebViewList.add(childWebView)
+
+            // 웹뷰 간 연동
+            val transport = resultMsg.obj as WebView.WebViewTransport
+            transport.webView = childWebView
+            resultMsg.sendToTarget()
+
+            return true
+        }
+
+        override fun onCloseWindow(window: WebView) {
+            super.onCloseWindow(window)
+            Log.d("로그 ", "onCloseWindow")
+            dialog.dismiss()
+            // 화면에서 제거하기
+            // TODO: 화면 제거 이외에 onBackPressed() 와 같이
+            //       사용자의 내비게이션 액션 처리를 위해
+            //       별도 웹뷰 array 관리를 권장함
+            //   ex) childWebViewList.remove(childWebView)
         }
     }
 
     private fun openSearchActivityForResult() {
         startSearchActivityForResult.launch(
-            Intent(applicationContext, SearchAddressActivity::class.java)
+            Intent(this, SearchAddressActivity::class.java)
         )
     }
 
@@ -153,11 +286,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result: ActivityResult ->
 
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
 
                 val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
                 val str = bundle?.get(MY_LOCATION_KEY).toString()
                 var asw : MapSearchInfoEntity?
+
+                Log.d("SearchActivityForResult", str)
 
                 Thread {
 
@@ -176,6 +311,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     con.setDefaultUseCaches(false)
 
                     val data = con.inputStream.bufferedReader().readText()
+
+                    Log.d("application/json", data)
+
                     val dataList = "[$data]"
                     val xy = Gson().fromJson(dataList, Array<Address>::class.java).toList()
 
@@ -413,7 +551,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         filterCategoryOptions.forEach { checkBox ->
-            filterCategoryChecked.add(true)
+            filterCategoryChecked.add(true) // btnclose 할 시 ture 반환을 위해서
             checkBox.setOnClickListener {
                 for (_checkBox in filterCategoryOptions) {
                     if (!_checkBox.isChecked) {
@@ -441,6 +579,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+        dialogBinding.btnFilterReset.setOnClickListener {
+
+            filterCategoryOptions.forEach { it.isChecked = true }
+
+            var check = true
+            for (item in filterCategoryOptions)
+                if (!item.isChecked) {
+                    check = false
+                }
+
+            if (check) chkAll.isChecked = true
+        }
+
         dialogBinding.btnFilterApply.setOnClickListener {
 
             var noChk = true
@@ -465,19 +616,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             if (dialogBinding.root.parent != null) {
                 (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
             }
-        }
-
-        dialogBinding.btnFilterReset.setOnClickListener {
-
-            filterCategoryOptions.forEach { it.isChecked = true }
-
-            var check = true
-            for (item in filterCategoryOptions)
-                if (!item.isChecked) {
-                    check = false
-                }
-
-            if (check) chkAll.isChecked = true
         }
 
         builder.setView(dialogBinding.root)
