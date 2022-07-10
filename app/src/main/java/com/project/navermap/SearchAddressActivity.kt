@@ -50,8 +50,8 @@ class SearchAddressActivity : AppCompatActivity() {
         // 웹에서 JavaScript로 android 함수를 호출할 수 있도록 도와줌
         @JavascriptInterface
         fun setAddress(arg1: String?, arg2: String?, arg3: String?) {
-            // search.php에서 callback 호출되는 함수
 
+            // search.php에서 callback 호출되는 함수
             Log.d("arg1.toString()", arg1.toString())
             Log.d("arg2.toString()", arg2.toString())
             Log.d("arg3.toString()", arg3.toString())

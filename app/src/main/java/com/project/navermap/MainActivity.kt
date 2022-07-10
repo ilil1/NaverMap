@@ -36,6 +36,8 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.databinding.DialogFilterBinding
+import com.skt.Tmap.TMapGpsManager
+import com.skt.Tmap.TMapView
 import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -88,6 +90,34 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             root.minimumHeight = (displayRectangle.width() * 0.9f).toInt()
             root.minimumHeight = (displayRectangle.height() * 0.9f).toInt()
         }
+    }
+
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val bundle = result.data?.extras
+                val result = bundle?.get("result")
+
+                //intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
+                //setResult(Activity.RESULT_OK, intent)
+                //saveRecentSearchItems(result as MapSearchInfoEntity)
+                //finish()//반환시에 MyLocationActivity finish()
+            }
+        }
+
+    private fun openActivityForResult() {
+
+//        startForResult.launch(
+//            MapLocationSettingActivity.newIntent(this,
+//                intent.getParcelableExtra(MY_LOCATION_KEY)!! //수정필요
+//            )
+//        )
+
+        startForResult.launch(
+            Intent(this, MapLocationSettingActivity::class.java)
+        )
     }
 
     @SuppressLint("MissingPermission")
@@ -144,6 +174,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             init()
             //openSearchActivityForResult()
         }
+
+        binding.TmapBtn.setOnClickListener {
+            openActivityForResult()
+        }
     }
 
     private fun init() {
@@ -158,9 +192,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
-        binding.webViewAddress.loadUrl("")
+        binding.webViewAddress.loadUrl("http://3.36.51.15/search.php")
         binding.webViewAddress.webChromeClient = webChromeClient
-
     }
 
     private inner class AndroidBridge {
@@ -204,7 +237,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 asw = MapSearchInfoEntity(
                     xy[0].documents[0].addressName,
                     xy[0].documents[0].roadAddress.buildingName,
-                    LocationLatLngEntity(
+                    LocationEntity(
                         xy[0].documents[0].y.toDouble(),
                         xy[0].documents[0].x.toDouble()
                     )
@@ -320,7 +353,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     asw = MapSearchInfoEntity(
                         xy[0].documents[0].addressName,
                         xy[0].documents[0].roadAddress.buildingName,
-                        LocationLatLngEntity(
+                        LocationEntity(
                             xy[0].documents[0].y.toDouble(),
                             xy[0].documents[0].x.toDouble()
                         )

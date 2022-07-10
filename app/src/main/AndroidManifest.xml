@@ -15,18 +15,24 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".MapLocationSettingActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SearchAddressActivity"
             android:exported="true" />
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value=""/>
+            android:value="" />
     </application>
+
 </manifest>

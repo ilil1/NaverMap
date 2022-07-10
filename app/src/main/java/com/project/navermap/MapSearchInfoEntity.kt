@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class MapSearchInfoEntity(
     val fullAddress: String,
     val name: String,
-    val locationLatLng: LocationLatLngEntity
+    val locationLatLng: LocationEntity
 ): Parcelable
