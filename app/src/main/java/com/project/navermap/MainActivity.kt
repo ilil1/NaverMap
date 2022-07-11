@@ -7,6 +7,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Rect
 import android.location.Location
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var locationManager: LocationManager
     private lateinit var naverMap: NaverMap
     private var infoWindow: InfoWindow? = null
+
     private lateinit var curLocation: Location
 
     private lateinit var builder: AlertDialog.Builder
@@ -66,6 +68,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
+
+    private lateinit var mapSearchInfoEntity : MapSearchInfoEntity
 
     companion object {
 
@@ -79,9 +83,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-//    private val locationListener: LocationListener by lazy {
-//        LocationListener { location -> curLocation = location }
-//    }
+    private lateinit var locationListener: LocationListener
 
     private val dialogBinding by lazy {
         val displayRectangle = Rect()
@@ -100,24 +102,44 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 val bundle = result.data?.extras
                 val result = bundle?.get("result")
 
-                //intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
-                //setResult(Activity.RESULT_OK, intent)
-                //saveRecentSearchItems(result as MapSearchInfoEntity)
-                //finish()//반환시에 MyLocationActivity finish()
+                Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
             }
         }
 
     private fun openActivityForResult() {
-
-//        startForResult.launch(
-//            MapLocationSettingActivity.newIntent(this,
-//                intent.getParcelableExtra(MY_LOCATION_KEY)!! //수정필요
-//            )
-//        )
-
         startForResult.launch(
-            Intent(this, MapLocationSettingActivity::class.java)
+            MapLocationSettingActivity.newIntent(this, mapSearchInfoEntity)
         )
+    }
+
+    fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
+
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+
+                val currentLocation = locationLatLngEntity
+
+                val response = RetrofitUtil.mapApiService.getReverseGeoCode(
+                    lat = locationLatLngEntity.latitude,
+                    lon = locationLatLngEntity.longitude
+                )//response = addressInfo
+
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    withContext(Dispatchers.Main) {
+
+                        mapSearchInfoEntity = MapSearchInfoEntity(
+                            fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
+                            name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
+                            locationLatLng = currentLocation
+                        )
+                    }
+                }
+                else {
+                    null
+                }
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -129,22 +151,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var mapFragment: MapFragment =
             supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment
-
-        locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-//        locationManager.requestLocationUpdates(
-//            LocationManager.GPS_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener
-//        )
-//
-//        locationManager.requestLocationUpdates(
-//            LocationManager.NETWORK_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener
-//        )
 
         mapFragment.getMapAsync(this)
 
@@ -178,6 +184,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.TmapBtn.setOnClickListener {
             openActivityForResult()
         }
+
+        locationListener = LocationListener { location ->
+            curLocation = location
+
+           val locationEntity = LocationEntity(
+                latitude = location.latitude,
+                longitude = location.longitude)
+
+            getReverseGeoInformation(locationEntity)
+
+            Toast.makeText(this, "curLocation 초기화 완료", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun init() {
@@ -192,7 +210,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
-        binding.webViewAddress.loadUrl("http://3.36.51.15/search.php")
+        binding.webViewAddress.loadUrl("")
         binding.webViewAddress.webChromeClient = webChromeClient
     }
 
@@ -207,7 +225,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d("arg3.toString()", arg3.toString())
 
             val str = String.format("%s %s", arg2, arg3)
-            var asw : MapSearchInfoEntity?
+            var asw: MapSearchInfoEntity?
 
             Log.d("SearchActivityForResult", str)
 
@@ -251,17 +269,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private val webChromeClient = object: WebChromeClient() {
+    private val webChromeClient = object : WebChromeClient() {
 
         /// ---------- 팝업 열기 ----------
         /// - 카카오 JavaScript SDK의 로그인 기능은 popup을 이용합니다.
         /// - window.open() 호출 시 별도 팝업 webview가 생성되어야 합니다.
         ///
-        lateinit var dialog : Dialog
+        lateinit var dialog: Dialog
 
         @RequiresApi(Build.VERSION_CODES.O)
-        override fun onCreateWindow(view: WebView, isDialog: Boolean,
-                                    isUserGesture: Boolean, resultMsg: Message): Boolean {
+        override fun onCreateWindow(
+            view: WebView, isDialog: Boolean,
+            isUserGesture: Boolean, resultMsg: Message
+        ): Boolean {
             // 웹뷰 만들기
             var childWebView = WebView(view.context)
             Log.d("TAG", "웹뷰 만들기")
@@ -323,7 +343,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
                 val str = bundle?.get(MY_LOCATION_KEY).toString()
-                var asw : MapSearchInfoEntity?
+                var asw: MapSearchInfoEntity?
 
                 Log.d("SearchActivityForResult", str)
 
@@ -380,11 +400,34 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 naverMap.locationTrackingMode = LocationTrackingMode.None
             } else {
                 Log.d("권한 승인", "권한 승인됨")
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현위치 버튼 컨트롤 활성
+                naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현위치 버튼 컨트롤
+                initMap()
             }
             return
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun initMap() {
+
+        locationManager = this@MainActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        //위치 이동시마다 갱신
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            1000,
+            1f,
+            locationListener
+        )
+
+        //위치 이동시마다 갱신
+        locationManager.requestLocationUpdates(
+            LocationManager.NETWORK_PROVIDER,
+            1000,
+            1f,
+            locationListener
+        )
     }
 
     override fun onMapReady(map: NaverMap) {
@@ -452,8 +495,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                             shopList.add(ShopData)
                         }
                     }
-                }
-                else {
+                } else {
                     null
                 }
             }
@@ -490,7 +532,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getCategoryNum(category: String): Int =
-        when(category) {
+        when (category) {
             "FOOD_BEVERAGE" -> 0
             "SERVICE" -> 1
             "ACCESSORY" -> 2
@@ -548,7 +590,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun calDist(lat1:Double, lon1:Double, lat2:Double, lon2:Double) : Long {
+    private fun calDist(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Long {
 
         val EARTH_R = 6371000.0
         val rad = Math.PI / 180
@@ -571,9 +613,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         chkAll = dialogBinding.all
 
         with(dialogBinding) {
-            filterCategoryOptions.addAll(arrayOf(
-                foodBeverage, service, fashionAccessories,
-                supermarket, fashionClothes, etc)
+            filterCategoryOptions.addAll(
+                arrayOf(
+                    foodBeverage, service, fashionAccessories,
+                    supermarket, fashionClothes, etc
+                )
             )
         }
 

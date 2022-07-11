@@ -1,5 +1,6 @@
 package com.project.navermap
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,6 @@ class MapLocationSettingActivity : AppCompatActivity() {
 
     var isCurAddressNull = true
     private lateinit var tMapView: TMapView
-    private lateinit var tMapGPS: TMapGpsManager
     private lateinit var binding: ActivityMapLocationSettingBinding
     private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
     private lateinit var mapSearchInfoEntity : MapSearchInfoEntity
@@ -28,7 +28,6 @@ class MapLocationSettingActivity : AppCompatActivity() {
 
     companion object {
 
-        const val CAMERA_ZOOM_LEVEL = 15f
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
 
         fun newIntent(context: Context, mapSearchInfoEntity: MapSearchInfoEntity) =
@@ -47,8 +46,28 @@ class MapLocationSettingActivity : AppCompatActivity() {
 
         Text.observe(this, Observer {
             // it로 넘어오는 param은 LiveData의 value
+            isCurAddressNull = false
             binding.tvCurAddress.text = it
         })
+
+        binding.btnSetCurLocation.setOnClickListener {
+
+            if (!isCurAddressNull) {
+                val entity = mapSearchInfoEntity
+                val intent = Intent()
+                intent.putExtra("result", entity)
+                setResult(Activity.RESULT_OK, intent)
+                Toast.makeText(this@MapLocationSettingActivity, "설정완료!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            else {
+                Toast.makeText(
+                    this@MapLocationSettingActivity,
+                    "위치를 드래그해서 갱신해주세요!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
@@ -84,39 +103,21 @@ class MapLocationSettingActivity : AppCompatActivity() {
     private fun initMap() = with(binding) {
 
         tMapView = TMapView(this@MapLocationSettingActivity).apply {
-            setSKTMapApiKey("l7xx47edb2787b5040fc8e004c19e85c0053")
+            setSKTMapApiKey(Key.TMap_View_API) //지도 출력APIkey
             setOnDisableScrollWithZoomLevelListener { _, tMapPoint ->
                 isCurAddressNull = true
                 getReverseGeoInformation(
-                    LocationEntity(tMapPoint.latitude,
-                        tMapPoint.longitude)
+                    LocationEntity(tMapPoint.latitude, tMapPoint.longitude)
                 )
             }
         }
 
-        tMapGPS = TMapGpsManager(applicationContext)
-
-        // Initial Setting
-        tMapGPS.setMinTime(1000)
-        tMapGPS.setMinDistance(10F)
-        tMapGPS.setProvider(tMapGPS.provider)
-        //tMapGPS.setProvider(tMapGPS.GPS_PROVIDER)
-
-        tMapGPS.OpenGps()
-
         TMap.addView(tMapView)
 
-        var entity : MapSearchInfoEntity? = null
+        val entity =  intent.getParcelableExtra<MapSearchInfoEntity>(MY_LOCATION_KEY)
 
-        try {
-
-            entity = mapSearchInfoEntity
-            tvCurAddress.text = entity?.fullAddress ?: "정보없음"
-            tMapView.setLocationPoint(entity?.locationLatLng!!.longitude, entity?.locationLatLng.latitude)
-            tMapView.setCenterPoint(entity?.locationLatLng!!.longitude, entity?.locationLatLng.latitude)
-
-        } catch (ex: Exception) {
-            Toast.makeText(this@MapLocationSettingActivity, "mapSearchInfoEntity 가져오는 중", Toast.LENGTH_SHORT).show()
-        }
+        tvCurAddress.text = entity?.fullAddress ?: "정보없음"
+        tMapView.setLocationPoint(entity?.locationLatLng!!.longitude, entity?.locationLatLng.latitude)
+        tMapView.setCenterPoint(entity?.locationLatLng!!.longitude, entity?.locationLatLng.latitude)
     }
 }
