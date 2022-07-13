@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 class MapLocationSettingActivity : AppCompatActivity() {
 
     var isCurAddressNull = true
+
     private lateinit var tMapView: TMapView
     private lateinit var binding: ActivityMapLocationSettingBinding
     private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
@@ -38,17 +39,18 @@ class MapLocationSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMapLocationSettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         uiScope = CoroutineScope(Dispatchers.Main) // UI와 상호작용하거나 빠른 작업을 위해 메인스레드에서 코루틴 실행
         initMap()
 
-        Text.observe(this, Observer {
-            // it로 넘어오는 param은 LiveData의 value
-            isCurAddressNull = false
-            binding.tvCurAddress.text = it
-        })
+//        Text.observe(this, Observer {
+//            // it로 넘어오는 param은 LiveData의 value
+//            isCurAddressNull = false
+//            binding.tvCurAddress.text = it
+//        })
 
         binding.btnSetCurLocation.setOnClickListener {
 
@@ -90,7 +92,10 @@ class MapLocationSettingActivity : AppCompatActivity() {
                             name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
                             locationLatLng = currentLocation
                         )
-                        Text.value = mapSearchInfoEntity.fullAddress
+
+                        binding.tvCurAddress.text = mapSearchInfoEntity.fullAddress
+                        isCurAddressNull = false
+                        //Text.value = mapSearchInfoEntity.fullAddress
                     }
                 }
                 else {
@@ -117,7 +122,7 @@ class MapLocationSettingActivity : AppCompatActivity() {
         val entity =  intent.getParcelableExtra<MapSearchInfoEntity>(MY_LOCATION_KEY)
 
         tvCurAddress.text = entity?.fullAddress ?: "정보없음"
-        tMapView.setLocationPoint(entity?.locationLatLng!!.longitude, entity?.locationLatLng.latitude)
-        tMapView.setCenterPoint(entity?.locationLatLng!!.longitude, entity?.locationLatLng.latitude)
+        tMapView.setLocationPoint(entity?.locationLatLng!!.longitude, entity.locationLatLng.latitude)
+        tMapView.setCenterPoint(entity.locationLatLng.longitude, entity.locationLatLng.latitude)
     }
 }

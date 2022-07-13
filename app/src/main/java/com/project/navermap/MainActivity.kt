@@ -106,12 +106,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-    private fun openActivityForResult() {
-        startForResult.launch(
-            MapLocationSettingActivity.newIntent(this, mapSearchInfoEntity)
-        )
-    }
-
     fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
 
         uiScope.launch {
@@ -182,7 +176,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.TmapBtn.setOnClickListener {
-            openActivityForResult()
+            try {
+                startForResult.launch(
+                    MapLocationSettingActivity.newIntent(this, mapSearchInfoEntity)
+                )
+            } catch (ex: Exception) {
+                Toast.makeText(this, "initMap() 초기화 중", Toast.LENGTH_SHORT).show()
+            }
         }
 
         locationListener = LocationListener { location ->
@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
-        binding.webViewAddress.loadUrl("")
+        binding.webViewAddress.loadUrl("http://3.36.51.15/search.php")
         binding.webViewAddress.webChromeClient = webChromeClient
     }
 
