@@ -16,6 +16,7 @@ import android.location.LocationManager
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
@@ -49,13 +50,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
     private var shopList: MutableList<ShopData> = mutableListOf()
     private var markers = mutableListOf<Marker>()
-
+    private var infoWindow: InfoWindow? = null
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var locationManager: LocationManager
     private lateinit var naverMap: NaverMap
-    private var infoWindow: InfoWindow? = null
 
     private lateinit var curLocation: Location
 
@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
-        binding.webViewAddress.loadUrl("http://3.36.51.15/search.php")
+        binding.webViewAddress.loadUrl("")
         binding.webViewAddress.webChromeClient = webChromeClient
     }
 
@@ -461,6 +461,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         marker.setOnClickListener {
             this.infoWindow?.close()
             this.infoWindow = InfoWindow()
+            this.infoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(this) {
+                override fun getText(infoWindow: InfoWindow): CharSequence {
+                    return "정보 창 내용"
+                }
+            }
             this.infoWindow?.open(marker)
             true
         }
@@ -475,6 +480,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         circle.map = naverMap
 
         Toast.makeText(this, "맵 초기화 완료", Toast.LENGTH_LONG).show()
+    }
+
+    private fun setMarkerListener() {
+        for (marker in markers) {
+
+            var tempinfoWindow = InfoWindow()
+            tempinfoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(this) {
+                override fun getText(infoWindow: InfoWindow): CharSequence {
+                    return infoWindow.marker?.tag as CharSequence
+                }
+            }
+
+            infoWindow = tempinfoWindow
+
+            marker.setOnClickListener {
+
+                if(tempinfoWindow?.marker != null) {
+                    tempinfoWindow?.close()
+                } else {
+                    tempinfoWindow?.open(marker)
+                }
+                true
+            }
+        }
     }
 
     private fun removeAllMarkers() {
@@ -587,6 +616,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             markers = temp
             searchAround()
+            setMarkerListener()
         }
     }
 
