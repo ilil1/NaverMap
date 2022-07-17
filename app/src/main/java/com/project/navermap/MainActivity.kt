@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -38,6 +39,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.databinding.DialogFilterBinding
+import com.project.navermap.screen.myLocation.MyLocationActivity
 import com.skt.Tmap.TMapGpsManager
 import com.skt.Tmap.TMapView
 import kotlinx.coroutines.*
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var builder: AlertDialog.Builder
     private lateinit var dialog: AlertDialog
+    //private lateinit var dialog: Dialog
 
     private lateinit var chkAll: CheckBox
     private var filterCategoryOptions = mutableListOf<CheckBox>()
@@ -121,7 +124,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (response.isSuccessful) {
                     val body = response.body()
                     withContext(Dispatchers.Main) {
-
+                        binding.locationTitleTextView.text = "${body?.addressInfo?.fullAddress}"
                         mapSearchInfoEntity = MapSearchInfoEntity(
                             fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
                             name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
@@ -135,6 +138,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
+    private val changeLocationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { results ->
+            results.data?.getParcelableExtra<MapSearchInfoEntity>(
+                MapLocationSettingActivity.MY_LOCATION_KEY)
+                ?.let { mapSearchInfoEntity ->
+                    getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
+                    //setDestinationLocation(mapSearchInfoEntity.locationLatLng)
+                }
+        }
+
+    private val myLocationStartForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+
+            }
+        }
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -162,8 +184,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+        binding.locationTitleTextView.setOnClickListener {
+            try {
+                myLocationStartForResult.launch(
+                    MyLocationActivity.newIntent(this, mapSearchInfoEntity)
+                )
+            } catch (ex: Exception) {
+                Toast.makeText(this, "myLocation 초기화 중", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.btnFilter.setOnClickListener {
             dialog = builder.show()
+            //dialog.show()
         }
 
         binding.btnCloseMarkers.setOnClickListener {
@@ -637,8 +670,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun initDialog() {
 
+        //dialog = Dialog(this)
+        //dialog.setCancelable(false)
+
         builder = AlertDialog.Builder(this)
         builder.setCancelable(false)
+
+//        val dialog = Dialog(context)
+//        dialog.setContentView(R.layout.dialog_update)
+//        val width = WindowManager.LayoutParams.MATCH_PARENT
+//        val height = WindowManager.LayoutParams.WRAP_CONTENT
+//        dialog.window!!.setLayout(width, height)
+//        dialog.show()
 
         chkAll = dialogBinding.all
 
@@ -681,9 +724,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             chkAll.isChecked = check
 
             dialog.dismiss()
-            if (dialogBinding.root.parent != null) {
-                (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
-            }
+            (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
         }
 
         dialogBinding.btnFilterReset.setOnClickListener {
@@ -720,10 +761,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             updateMarker()
 
             dialog.dismiss()
-            if (dialogBinding.root.parent != null) {
-                (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
-            }
+            (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
         }
+
+        //dialog.setContentView(dialogBinding.root)
 
         builder.setView(dialogBinding.root)
         builder.create()

@@ -6,41 +6,101 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/topLinearLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="0dp"
+        android:fitsSystemWindows="false"
+        android:gravity="center"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/map_fragment"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnFilter"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
-            android:text="필터" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCloseMarkers"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
-            android:text="닫기" />
+            <LinearLayout
+                android:id="@+id/Adreeslayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/topLinearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/TmapBtn"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
-            android:text="Tmap" />
+                <ProgressBar
+                    android:id="@+id/locationLoading"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="right"
+                    android:layout_marginStart="20dp" />
 
-        <EditText
-            android:id="@+id/etSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="도로, 건물명 지번으로 검색" />
-        <!--키보드 올라오는 현상 방지 android:focusable-->
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/locationTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingStart="30dp"
+                    android:paddingRight="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    tools:text="현재 위치" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/topLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/Adreeslayout">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnFilter"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:text="필터" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCloseMarkers"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:text="닫기" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/TmapBtn"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:text="Tmap" />
+
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="도로, 건물명 지번으로 검색" />
+                <!--키보드 올라오는 현상 방지 android:focusable-->
+
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <WebView
         android:id="@+id/webView_address"
@@ -49,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 
     <fragment
@@ -60,7 +120,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSearchAround"

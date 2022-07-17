@@ -15,6 +15,9 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
+            android:name="com.project.navermap.screen.myLocation.MyLocationActivity"
+            android:exported="true" />
+        <activity
             android:name=".MapLocationSettingActivity"
             android:exported="true" />
         <activity
