@@ -1,4 +1,4 @@
-package com.project.navermap.screen.myLocation
+package com.project.navermap.screen.map.myLocation
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,7 @@ import com.project.navermap.*
 import com.project.navermap.data.db.MapDB
 import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
+import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
 import kotlinx.coroutines.runBlocking
 
 class MyLocationActivity : AppCompatActivity() {
@@ -20,6 +21,8 @@ class MyLocationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyLocationBinding
     lateinit var database: MapDB
     lateinit var recentAddrAdapter: RecentAddrAdapter
+
+    var dataList : MutableList<AddressHistoryEntity> = mutableListOf()
 
     companion object {
 
@@ -40,9 +43,18 @@ class MyLocationActivity : AppCompatActivity() {
         database = MapDB.getInstance(this)!!
 
         binding.btnSetLocation.setOnClickListener {
-            startForResult.launch(MapLocationSettingActivity.newIntent
+            startForResult.launch(
+                MapLocationSettingActivity.newIntent
                 (this, intent.getParcelableExtra(MY_LOCATION_KEY)!!)
             )
+        }
+
+        binding.btnClear.setOnClickListener {
+            runBlocking {
+                database.addressHistoryDao().deleteAllAddresses()
+                recentAddrAdapter.clear()
+                recentAddrAdapter.notifyDataSetChanged()
+            }
         }
 
         binding.etSearch.setOnClickListener {
@@ -58,10 +70,15 @@ class MyLocationActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.rvRecentAddr.layoutManager = LinearLayoutManager(this@MyLocationActivity, LinearLayoutManager.VERTICAL, false)
+        binding.rvRecentAddr.layoutManager = LinearLayoutManager(
+            this@MyLocationActivity,
+            LinearLayoutManager.VERTICAL,
+            false)
+
         binding.rvRecentAddr.adapter = recentAddrAdapter
 
         runBlocking {
+            //배열로 하나씩 받아서 넣어준다.
             for (allAddress in database.addressHistoryDao().getAllAddresses()) {
                 recentAddrAdapter.datas.add(allAddress)
             }

@@ -15,10 +15,10 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.project.navermap.screen.myLocation.MyLocationActivity"
+            android:name="com.project.navermap.screen.map.myLocation.MyLocationActivity"
             android:exported="true" />
         <activity
-            android:name=".MapLocationSettingActivity"
+            android:name=".screen.map.mapLocationSetting.MapLocationSettingActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

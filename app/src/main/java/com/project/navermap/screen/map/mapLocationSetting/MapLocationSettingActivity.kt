@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.screen.map.mapLocationSetting
 
 import android.app.Activity
 import android.content.Context
@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import com.project.navermap.Key
+import com.project.navermap.LocationEntity
+import com.project.navermap.MapSearchInfoEntity
+import com.project.navermap.RetrofitUtil
 import com.project.navermap.databinding.ActivityMapLocationSettingBinding
-import com.skt.Tmap.TMapGpsManager
 import com.skt.Tmap.TMapView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -7,7 +7,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Rect
 import android.location.Location
@@ -16,9 +15,7 @@ import android.location.LocationManager
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -39,9 +36,8 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.databinding.DialogFilterBinding
-import com.project.navermap.screen.myLocation.MyLocationActivity
-import com.skt.Tmap.TMapGpsManager
-import com.skt.Tmap.TMapView
+import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
+import com.project.navermap.screen.map.myLocation.MyLocationActivity
 import kotlinx.coroutines.*
 import java.net.HttpURLConnection
 import java.net.URL

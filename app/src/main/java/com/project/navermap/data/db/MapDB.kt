@@ -9,7 +9,6 @@ import com.project.navermap.data.entity.AddressHistoryEntity
 
 @Database(entities = [AddressHistoryEntity::class], version = 1)
 abstract class MapDB : RoomDatabase() {
-
     companion object {
         private var instance: MapDB? = null
         fun getInstance(_context: Context): MapDB? {
