@@ -2,9 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/home">
-
+    app:startDestination="@id/map">
+    <include app:graph="@navigation/map" />
     <include app:graph="@navigation/home" />
     <include app:graph="@navigation/chat" />
-    <include app:graph="@navigation/map" />
+
 </navigation>

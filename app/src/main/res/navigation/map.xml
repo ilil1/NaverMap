@@ -8,4 +8,5 @@
         android:id="@+id/mapFragment"
         android:name="com.project.navermap.screen.map.mapFragment.MapFragment"
         android:label="MapFragment" />
+
 </navigation>

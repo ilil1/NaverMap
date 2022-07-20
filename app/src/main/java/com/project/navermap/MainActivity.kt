@@ -25,6 +25,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.navigation.NavHost
+import androidx.navigation.ui.setupWithNavController
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -43,8 +45,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-
+class MainActivity : AppCompatActivity() {
+    //, OnMapReadyCallback
     private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
     private var shopList: MutableList<ShopData> = mutableListOf()
     private var markers = mutableListOf<Marker>()
@@ -84,6 +86,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var locationListener: LocationListener
 
+    private val navController by lazy {
+        val hostContainer =
+            supportFragmentManager
+                .findFragmentById(R.id.fragmentContainer)
+                    as NavHost
+
+        hostContainer.navController
+    }
+
     private val dialogBinding by lazy {
         val displayRectangle = Rect()
         this.window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
@@ -111,7 +122,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             withContext(Dispatchers.IO) {
 
                 val currentLocation = locationLatLngEntity
-
                 val response = RetrofitUtil.mapApiService.getReverseGeoCode(
                     lat = locationLatLngEntity.latitude,
                     lon = locationLatLngEntity.longitude
@@ -141,7 +151,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             results.data?.getParcelableExtra<MapSearchInfoEntity>(
                 MapLocationSettingActivity.MY_LOCATION_KEY)
                 ?.let { mapSearchInfoEntity ->
-                    getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
+                    //getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
                     //setDestinationLocation(mapSearchInfoEntity.locationLatLng)
                 }
         }
@@ -161,70 +171,72 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var mapFragment: MapFragment =
-            supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment
+        binding.bottomNav.setupWithNavController(navController)
 
-        mapFragment.getMapAsync(this)
+//        var mapFragment: MapFragment =
+//            supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment
+//
+//        mapFragment.getMapAsync(this)
 
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-        uiScope = CoroutineScope(Dispatchers.Main)
+//        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+//        uiScope = CoroutineScope(Dispatchers.Main)
+//
+//        getApiShopList()
+//        initDialog()
+//
+//        binding.btnSearchAround.setOnClickListener {
+//            try {
+//                updateMarker()
+//            } catch (ex: Exception) {
+//                Toast.makeText(this, "리스트를 가져오는 중", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+//        binding.locationTitleTextView.setOnClickListener {
+//            try {
+//                myLocationStartForResult.launch(
+//                    MyLocationActivity.newIntent(this, mapSearchInfoEntity)
+//                )
+//            } catch (ex: Exception) {
+//                Toast.makeText(this, "myLocation 초기화 중", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
-        getApiShopList()
-        initDialog()
+//        binding.btnFilter.setOnClickListener {
+//            dialog = builder.show()
+//            //dialog.show()
+//        }
+//
+//        binding.btnCloseMarkers.setOnClickListener {
+//            removeAllMarkers()
+//        }
+//
+//        binding.etSearch.setOnClickListener {
+//            init()
+//            //openSearchActivityForResult()
+//        }
+//
+//        binding.TmapBtn.setOnClickListener {
+//            try {
+//                startForResult.launch(
+//                    MapLocationSettingActivity.newIntent(this, mapSearchInfoEntity)
+//                )
+//            } catch (ex: Exception) {
+//                Toast.makeText(this, "initMap() 초기화 중", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
-        binding.btnSearchAround.setOnClickListener {
-            try {
-                updateMarker()
-            } catch (ex: Exception) {
-                Toast.makeText(this, "리스트를 가져오는 중", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        binding.locationTitleTextView.setOnClickListener {
-            try {
-                myLocationStartForResult.launch(
-                    MyLocationActivity.newIntent(this, mapSearchInfoEntity)
-                )
-            } catch (ex: Exception) {
-                Toast.makeText(this, "myLocation 초기화 중", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        binding.btnFilter.setOnClickListener {
-            dialog = builder.show()
-            //dialog.show()
-        }
-
-        binding.btnCloseMarkers.setOnClickListener {
-            removeAllMarkers()
-        }
-
-        binding.etSearch.setOnClickListener {
-            init()
-            //openSearchActivityForResult()
-        }
-
-        binding.TmapBtn.setOnClickListener {
-            try {
-                startForResult.launch(
-                    MapLocationSettingActivity.newIntent(this, mapSearchInfoEntity)
-                )
-            } catch (ex: Exception) {
-                Toast.makeText(this, "initMap() 초기화 중", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        locationListener = LocationListener { location ->
-            curLocation = location
-
-           val locationEntity = LocationEntity(
-                latitude = location.latitude,
-                longitude = location.longitude)
-
-            getReverseGeoInformation(locationEntity)
-
-            Toast.makeText(this, "curLocation 초기화 완료", Toast.LENGTH_SHORT).show()
-        }
+//        locationListener = LocationListener { location ->
+//            curLocation = location
+//
+//           val locationEntity = LocationEntity(
+//                latitude = location.latitude,
+//                longitude = location.longitude)
+//
+//            getReverseGeoInformation(locationEntity)
+//
+//            Toast.makeText(this, "curLocation 초기화 완료", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     private fun init() {
@@ -232,15 +244,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //        webViewAddress = // 메인 웹뷰
 //        webViewLayout = // 웹뷰가 속한 레이아웃
 // 공통 설정
-        binding.webViewAddress.settings.run {
-            javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
-            javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
-            setSupportMultipleWindows(true)
-        }
-
-        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
-        binding.webViewAddress.loadUrl("")
-        binding.webViewAddress.webChromeClient = webChromeClient
+//        binding.webViewAddress.settings.run {
+//            javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
+//            javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
+//            setSupportMultipleWindows(true)
+//        }
+//
+//        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
+//        binding.webViewAddress.loadUrl("")
+//        binding.webViewAddress.webChromeClient = webChromeClient
     }
 
     private inner class AndroidBridge {
@@ -459,57 +471,57 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    override fun onMapReady(map: NaverMap) {
-
-        this.naverMap = map
-
-        naverMap.uiSettings.isLocationButtonEnabled = true
-        naverMap.uiSettings.isScaleBarEnabled = true //축적바 기본값은 true
-
-        naverMap.locationSource = locationSource
-
-        ActivityCompat.requestPermissions(this, PERMISSIONS, LOCATION_PERMISSION_REQUEST_CODE)
-
-        val marker: Marker = Marker(MarkerIcons.BLACK).apply {
-            zIndex = 111
-            iconTintColor = Color.parseColor("#FA295B")
-            width = 100
-            height = 125
-        }
-
-        try {
-            marker.position = LatLng(37.5670135, 126.9783740)
-        } catch (ex: Exception) {
-            Toast.makeText(this, "마커를 읽어오는 중", Toast.LENGTH_SHORT).show()
-        }
-        marker.map = naverMap
-
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5670135, 126.9783740))
-        naverMap.moveCamera(cameraUpdate)
-
-        marker.setOnClickListener {
-            this.infoWindow?.close()
-            this.infoWindow = InfoWindow()
-            this.infoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(this) {
-                override fun getText(infoWindow: InfoWindow): CharSequence {
-                    return "정보 창 내용"
-                }
-            }
-            this.infoWindow?.open(marker)
-            true
-        }
-
-        val circle = CircleOverlay()
-        circle.center = LatLng(37.5670135, 126.9783740)
-        circle.radius = DISTANCE.toDouble()
-
-        circle.outlineWidth = 1
-        circle.outlineColor = Color.parseColor("#AC97FE")
-        circle.zIndex = 100
-        circle.map = naverMap
-
-        Toast.makeText(this, "맵 초기화 완료", Toast.LENGTH_LONG).show()
-    }
+//    override fun onMapReady(map: NaverMap) {
+//
+//        this.naverMap = map
+//
+//        naverMap.uiSettings.isLocationButtonEnabled = true
+//        naverMap.uiSettings.isScaleBarEnabled = true //축적바 기본값은 true
+//
+//        naverMap.locationSource = locationSource
+//
+//        ActivityCompat.requestPermissions(this, PERMISSIONS, LOCATION_PERMISSION_REQUEST_CODE)
+//
+//        val marker: Marker = Marker(MarkerIcons.BLACK).apply {
+//            zIndex = 111
+//            iconTintColor = Color.parseColor("#FA295B")
+//            width = 100
+//            height = 125
+//        }
+//
+//        try {
+//            marker.position = LatLng(37.5670135, 126.9783740)
+//        } catch (ex: Exception) {
+//            Toast.makeText(this, "마커를 읽어오는 중", Toast.LENGTH_SHORT).show()
+//        }
+//        marker.map = naverMap
+//
+//        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5670135, 126.9783740))
+//        naverMap.moveCamera(cameraUpdate)
+//
+//        marker.setOnClickListener {
+//            this.infoWindow?.close()
+//            this.infoWindow = InfoWindow()
+//            this.infoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(this) {
+//                override fun getText(infoWindow: InfoWindow): CharSequence {
+//                    return "정보 창 내용"
+//                }
+//            }
+//            this.infoWindow?.open(marker)
+//            true
+//        }
+//
+//        val circle = CircleOverlay()
+//        circle.center = LatLng(37.5670135, 126.9783740)
+//        circle.radius = DISTANCE.toDouble()
+//
+//        circle.outlineWidth = 1
+//        circle.outlineColor = Color.parseColor("#AC97FE")
+//        circle.zIndex = 100
+//        circle.map = naverMap
+//
+//        Toast.makeText(this, "맵 초기화 완료", Toast.LENGTH_LONG).show()
+//    }
 
     private fun setMarkerListener() {
         for (marker in markers) {
