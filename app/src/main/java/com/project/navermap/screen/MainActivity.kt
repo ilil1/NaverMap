@@ -1,63 +1,38 @@
-package com.project.navermap
+package com.project.navermap.screen
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.Rect
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
-import android.view.ViewGroup
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
+import androidx.activity.viewModels
 import androidx.navigation.NavHost
 import androidx.navigation.ui.setupWithNavController
-import com.google.gson.Gson
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.*
-import com.naver.maps.map.overlay.CircleOverlay
-import com.naver.maps.map.overlay.InfoWindow
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
-import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.util.MarkerIcons
+import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.MapSearchInfoEntity
+import com.project.navermap.R
+import com.project.navermap.RetrofitUtil
 import com.project.navermap.databinding.ActivityMainBinding
-import com.project.navermap.databinding.DialogFilterBinding
-import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.screen.map.myLocation.MyLocationActivity
 import kotlinx.coroutines.*
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var locationManager: LocationManager
-    private lateinit var naverMap: NaverMap
 
     private lateinit var curLocation: Location
-
-    private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
-    private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
-
     private lateinit var mapSearchInfoEntity: MapSearchInfoEntity
 
     companion object {
@@ -112,12 +87,15 @@ class MainActivity : AppCompatActivity() {
 
                         binding.locationTitleTextView.text = "${body?.addressInfo?.fullAddress}"
 
+                        viewModel.setDestinationLocation(currentLocation)
+
                         mapSearchInfoEntity = MapSearchInfoEntity(
                             fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
                             name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
                             locationLatLng = currentLocation
                         )
                     }
+
                 } else {
                     null
                 }
@@ -128,20 +106,10 @@ class MainActivity : AppCompatActivity() {
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { results ->
-            results.data?.getParcelableExtra<MapSearchInfoEntity>(
-                MapLocationSettingActivity.MY_LOCATION_KEY
-            )
-                ?.let { mapSearchInfoEntity ->
-                    //getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
-                    //setDestinationLocation(mapSearchInfoEntity.locationLatLng)
-                }
-        }
-
-    private val myLocationStartForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
+            results.data?.getParcelableExtra<MapSearchInfoEntity>(MyLocationActivity.MY_LOCATION_KEY)?.let {
+                    mapSearchInfoEntity ->
+                    getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
+                    viewModel.setDestinationLocation(mapSearchInfoEntity.locationLatLng)
             }
         }
 
@@ -170,8 +138,9 @@ class MainActivity : AppCompatActivity() {
         getMyLocation()
 
         binding.locationTitleTextView.setOnClickListener {
+
             try {
-                myLocationStartForResult.launch(
+                changeLocationLauncher.launch(
                     MyLocationActivity.newIntent(this, mapSearchInfoEntity)
                 )
             } catch (ex: Exception) {
@@ -217,6 +186,8 @@ class MainActivity : AppCompatActivity() {
 
     inner class MyLocationListener : LocationListener {
         override fun onLocationChanged(location: Location) {
+
+            viewModel.setCurrentLocation(location)
 
             getReverseGeoInformation(
                 LocationEntity(

@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.project.navermap.Key
-import com.project.navermap.LocationEntity
-import com.project.navermap.MapSearchInfoEntity
+import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.RetrofitUtil
 import com.project.navermap.databinding.ActivityMapLocationSettingBinding
 import com.skt.Tmap.TMapView

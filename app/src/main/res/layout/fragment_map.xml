@@ -26,10 +26,16 @@
             android:text="닫기" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/TmapBtn"
+            android:id="@+id/btn_curLocation"
             android:layout_width="65dp"
             android:layout_height="wrap_content"
-            android:text="Tmap" />
+            android:text="현위치" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_destLocation"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:text="주소지" />
 
         <EditText
             android:id="@+id/etSearch"

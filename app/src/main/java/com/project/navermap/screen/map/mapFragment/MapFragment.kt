@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
@@ -28,12 +29,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.navigation.NavHost
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.MapFragment
 import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
@@ -42,11 +42,13 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.*
 import com.project.navermap.R
-import com.project.navermap.databinding.ActivityMainBinding
+import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.DialogFilterBinding
 import com.project.navermap.databinding.FragmentMapBinding
+import com.project.navermap.screen.MainActivity
+import com.project.navermap.screen.MainViewModel
 import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
-import com.project.navermap.screen.map.myLocation.MyLocationActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,9 +59,13 @@ import java.net.URLEncoder
 
 class MapFragment : Fragment() , OnMapReadyCallback {
 
+    private val activityViewModel by activityViewModels<MainViewModel>()
+    private val viewModel: MapViewModel by viewModels()
+
     private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
     private var shopList: MutableList<ShopData> = mutableListOf()
     private var markers = mutableListOf<Marker>()
+
     private var infoWindow: InfoWindow? = null
     private lateinit var binding: FragmentMapBinding
 
@@ -96,6 +102,12 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     private lateinit var locationListener: LocationListener
 
+//    private val locationListener: LocationListener by lazy {
+//        LocationListener { location ->
+//            activityViewModel.curLocation = location
+//        }
+//    }
+
     private val dialogBinding by lazy {
         val displayRectangle = Rect()
         requireActivity().window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
@@ -103,42 +115,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             root.minimumHeight = (displayRectangle.width() * 0.9f).toInt()
             root.minimumHeight = (displayRectangle.height() * 0.9f).toInt()
         }
-    }
-
-    private val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                val bundle = result.data?.extras
-                val result = bundle?.get("result")
-
-                Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_LONG).show()
-            }
-        }
-
-    private val changeLocationLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { results ->
-            results.data?.getParcelableExtra<MapSearchInfoEntity>(
-                MapLocationSettingActivity.MY_LOCATION_KEY)
-                ?.let { mapSearchInfoEntity ->
-                    //getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
-                    //setDestinationLocation(mapSearchInfoEntity.locationLatLng)
-                }
-        }
-
-    private val myLocationStartForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-            }
-        }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
     }
 
     fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
@@ -177,11 +153,39 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
         binding.mapView.getMapAsync(this@MapFragment)
 
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+        //locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         uiScope = CoroutineScope(Dispatchers.Main)
 
         getApiShopList()
         initDialog()
+        initMap()
+
+        binding.btnCurLocation.setOnClickListener {
+
+            try {
+                viewModel.getMap()?.cameraPosition = CameraPosition(
+                    LatLng(activityViewModel.getCurrentLocation().latitude,
+                        activityViewModel.getCurrentLocation().longitude),
+                    15.0)
+            } catch (ex: Exception) {
+                Toast.makeText(context, "CurLocation 초기화 중", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.btnDestLocation.setOnClickListener {
+
+            try {
+                viewModel.getMap()?.cameraPosition = CameraPosition(
+                    LatLng(activityViewModel.getDestinationLocation().latitude,
+                        activityViewModel.getDestinationLocation().longitude),
+                    15.0)
+
+                viewModel.updateLocation(activityViewModel.getDestinationLocation())
+
+            } catch (ex: Exception) {
+                Toast.makeText(context, "DestLocation 초기화 중", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         binding.btnSearchAround.setOnClickListener {
             try {
@@ -203,16 +207,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         binding.etSearch.setOnClickListener {
             init()
             openSearchActivityForResult()
-        }
-
-        binding.TmapBtn.setOnClickListener {
-            try {
-                startForResult.launch(
-                    MapLocationSettingActivity.newIntent(requireContext(), mapSearchInfoEntity)
-                )
-            } catch (ex: Exception) {
-                Toast.makeText(requireContext(), "initMap() 초기화 중", Toast.LENGTH_SHORT).show()
-            }
         }
 
         locationListener = LocationListener { location ->
@@ -310,14 +304,51 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    @SuppressLint("MissingPermission")
+    private fun initMap() = with(binding) {
+
+        locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
+
+        try {
+            val destLocation = activityViewModel.getDestinationLocation()
+            viewModel.setDestinationLocation(destLocation)
+        } catch (ex: Exception) {
+            Toast.makeText(context, "destLocation 가져오는 중", Toast.LENGTH_SHORT).show()
+        }
+
+//        locationManager =
+//            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.GPS_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener)
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.NETWORK_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener)
+    }
+
     override fun onMapReady(map: NaverMap) {
 
-        this.naverMap = map
+        this.naverMap = map.apply {
+            this.locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
+            locationTrackingMode = LocationTrackingMode.NoFollow
+            uiSettings.isLocationButtonEnabled = true
+            uiSettings.isScaleBarEnabled = true
+            uiSettings.isCompassEnabled = true
+        }
 
-        naverMap.uiSettings.isLocationButtonEnabled = true
-        naverMap.uiSettings.isScaleBarEnabled = true //축적바 기본값은 true
+        viewModel.setMap(naverMap)
 
-        naverMap.locationSource = locationSource
+        try {
+            viewModel.firstupdateLocation()
+        } catch (ex: Exception) {
+            Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
+        }
 
         requestPermissions(PERMISSIONS, LOCATION_PERMISSION_REQUEST_CODE)
 
@@ -333,6 +364,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         } catch (ex: Exception) {
             Toast.makeText(requireContext(), "마커를 읽어오는 중", Toast.LENGTH_SHORT).show()
         }
+
         marker.map = naverMap
 
         val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5670135, 126.9783740))
@@ -367,6 +399,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 //        webViewAddress = // 메인 웹뷰
 //        webViewLayout = // 웹뷰가 속한 레이아웃
 // 공통 설정
+
         binding.webViewAddress.settings.run {
             javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
             javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
@@ -699,7 +732,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
 
     private fun searchAround() {
-
         deleteMarkers()
         for (marker in markers) {
             marker.map = naverMap

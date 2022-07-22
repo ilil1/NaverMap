@@ -1,20 +1,16 @@
 package com.project.navermap
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
-import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.Message
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.*
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.project.navermap.MainActivity.Companion.MY_LOCATION_KEY
+import com.project.navermap.screen.MainActivity.Companion.MY_LOCATION_KEY
 import com.project.navermap.databinding.ActivitySearchAddressBinding
 
 

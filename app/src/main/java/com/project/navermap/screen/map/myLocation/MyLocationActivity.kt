@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.*
 import com.project.navermap.data.db.MapDB
 import com.project.navermap.data.entity.AddressHistoryEntity
+import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
 import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
 import kotlinx.coroutines.runBlocking
@@ -65,7 +67,7 @@ class MyLocationActivity : AppCompatActivity() {
         }
 
         recentAddrAdapter = RecentAddrAdapter { item ->
-            intent?.putExtra(MY_LOCATION_KEY, MapSearchInfoEntity(item.name, item.name, LocationEntity(item.lat, item.lng)))
+            intent.putExtra(MY_LOCATION_KEY, MapSearchInfoEntity(item.name, item.name, LocationEntity(item.lat, item.lng)))
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -103,8 +105,8 @@ class MyLocationActivity : AppCompatActivity() {
                 val bundle = result.data?.extras
                 val result = bundle?.get("result")
 
-                intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
-                setResult(Activity.RESULT_OK, intent)
+                //intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
+                //setResult(Activity.RESULT_OK, intent)
 
                 saveRecentSearchItems(result as MapSearchInfoEntity)
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".screen.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,16 +23,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <!--            <LinearLayout-->
-            <!--                android:id="@+id/Adreeslayout"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:orientation="horizontal"-->
-            <!--                app:layout_constraintBottom_toTopOf="@+id/topLinearLayout"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent">-->
 
             <LinearLayout
                 android:id="@+id/Adreeslayout"
@@ -65,81 +55,8 @@
 
             </LinearLayout>
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/topLinearLayout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="32dp"-->
-<!--                android:orientation="horizontal"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/Adreeslayout">-->
-
-<!--                <androidx.appcompat.widget.AppCompatButton-->
-<!--                    android:id="@+id/btnFilter"-->
-<!--                    android:layout_width="65dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="필터" />-->
-
-<!--                <androidx.appcompat.widget.AppCompatButton-->
-<!--                    android:id="@+id/btnCloseMarkers"-->
-<!--                    android:layout_width="65dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="닫기" />-->
-
-<!--                <androidx.appcompat.widget.AppCompatButton-->
-<!--                    android:id="@+id/TmapBtn"-->
-<!--                    android:layout_width="65dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Tmap" />-->
-
-<!--                <EditText-->
-<!--                    android:id="@+id/etSearch"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:clickable="true"-->
-<!--                    android:focusable="false"-->
-<!--                    android:hint="도로, 건물명 지번으로 검색" />-->
-<!--                &lt;!&ndash;키보드 올라오는 현상 방지 android:focusable&ndash;&gt;-->
-
-
-<!--            </LinearLayout>-->
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
-
-<!--    <WebView-->
-<!--        android:id="@+id/webView_address"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
-
-
-<!--    <fragment-->
-<!--        android:id="@+id/map_fragment"-->
-<!--        android:name="com.naver.maps.map.MapFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
-
-<!--    <androidx.appcompat.widget.AppCompatButton-->
-<!--        android:id="@+id/btnSearchAround"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="30dp"-->
-<!--        android:layout_marginBottom="30dp"-->
-<!--        android:backgroundTint="@color/white"-->
-<!--        android:text="근처 가게 보기"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDateTime
 
 @Parcelize
 data class ShopData(
@@ -14,8 +15,8 @@ data class ShopData(
     @SerializedName("shop_name")
     val shop_name: String,
     @Expose
-    @SerializedName("is_open")
-    val is_open: Boolean,
+    @SerializedName("updated_at")
+    val updatedAt: LocalDateTime?,
     @Expose
     @SerializedName("lot_number_address")
     val lot_number_address: String,
