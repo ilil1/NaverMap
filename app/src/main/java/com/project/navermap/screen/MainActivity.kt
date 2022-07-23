@@ -21,8 +21,10 @@ import com.project.navermap.R
 import com.project.navermap.RetrofitUtil
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.screen.map.myLocation.MyLocationActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()

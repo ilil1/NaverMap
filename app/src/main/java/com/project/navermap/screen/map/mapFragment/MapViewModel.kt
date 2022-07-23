@@ -1,6 +1,7 @@
 package com.project.navermap.screen.map.mapFragment
 
 import android.graphics.Color
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition

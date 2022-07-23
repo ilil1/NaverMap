@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.data.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.screen.map.SearchAddress
 
 import android.app.Dialog
 import android.content.Intent

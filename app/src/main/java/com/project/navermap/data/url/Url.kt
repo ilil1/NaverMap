@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.data.url
 
 object Url {
     const val TMAP_URL = "https://apis.openapi.sk.com"

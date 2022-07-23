@@ -2,10 +2,8 @@ package com.project.navermap.screen.map.mapFragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
@@ -48,7 +46,7 @@ import com.project.navermap.databinding.DialogFilterBinding
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.screen.MainActivity
 import com.project.navermap.screen.MainViewModel
-import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
+import com.project.navermap.screen.map.SearchAddress.SearchAddressActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -167,6 +165,9 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                     LatLng(activityViewModel.getCurrentLocation().latitude,
                         activityViewModel.getCurrentLocation().longitude),
                     15.0)
+
+                //viewModel.updateLocation(activityViewModel.getCurrentLocation() as LocationEntity)
+
             } catch (ex: Exception) {
                 Toast.makeText(context, "CurLocation 초기화 중", Toast.LENGTH_SHORT).show()
             }
@@ -398,7 +399,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
 //        webViewAddress = // 메인 웹뷰
 //        webViewLayout = // 웹뷰가 속한 레이아웃
-// 공통 설정
+//        공통 설정
 
         binding.webViewAddress.settings.run {
             javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움

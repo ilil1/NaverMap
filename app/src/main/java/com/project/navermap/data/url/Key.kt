@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.data.url
 
 object Key {
     const val TMAP_API = ""

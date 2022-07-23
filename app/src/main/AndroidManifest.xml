@@ -8,6 +8,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".MapApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -30,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SearchAddressActivity"
+            android:name=".screen.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
 
         <meta-data

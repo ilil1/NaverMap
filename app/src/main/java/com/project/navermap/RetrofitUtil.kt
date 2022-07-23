@@ -1,5 +1,8 @@
 package com.project.navermap
 
+import com.project.navermap.data.network.MapApiService
+import com.project.navermap.data.network.ShopController
+import com.project.navermap.data.url.Url
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
