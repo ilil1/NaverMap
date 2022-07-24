@@ -35,15 +35,24 @@ object NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
-    fun provideRetrofitInstance(): Retrofit {
+    @Singleton
+    fun provideConverterFactory(): GsonConverterFactory {
+        return GsonConverterFactory.create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofitInstance(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Url.TMAP_URL)
-            .client(provideHttpClient())
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .addConverterFactory(gsonConverterFactory)
             .build()
-    }//이 레트로핏을 service에 넣을것
+    }
 
     @Provides
     @Singleton

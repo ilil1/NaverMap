@@ -19,11 +19,15 @@ import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.R
 import com.project.navermap.RetrofitUtil
+import com.project.navermap.data.network.MapApiService
 import com.project.navermap.databinding.ActivityMainBinding
+import com.project.navermap.di.NetworkModule
 import com.project.navermap.screen.map.myLocation.MyLocationActivity
+import dagger.Provides
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -72,45 +76,47 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
 
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-
-                val currentLocation = locationLatLngEntity
-                val response = RetrofitUtil.mapApiService.getReverseGeoCode(
-                    lat = locationLatLngEntity.latitude,
-                    lon = locationLatLngEntity.longitude
-                )//response = addressInfo
-
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    withContext(Dispatchers.Main) {
-
-                        binding.locationTitleTextView.text = "${body?.addressInfo?.fullAddress}"
-
-                        viewModel.setDestinationLocation(currentLocation)
-
-                        mapSearchInfoEntity = MapSearchInfoEntity(
-                            fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
-                            name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
-                            locationLatLng = currentLocation
-                        )
-                    }
-
-                } else {
-                    null
-                }
-            }
-        }
-    }
+//    fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
+//
+//        uiScope.launch {
+//            withContext(Dispatchers.IO) {
+//
+//                val currentLocation = locationLatLngEntity
+//
+//                val response = RetrofitUtil.mapApiService.getReverseGeoCode(
+//                    lat = locationLatLngEntity.latitude,
+//                    lon = locationLatLngEntity.longitude
+//                )//response = addressInfo
+//
+//                if (response.isSuccessful) {
+//                    val body = response.body()
+//                    withContext(Dispatchers.Main) {
+//
+//                        binding.locationTitleTextView.text = "${body?.addressInfo?.fullAddress}"
+//
+//                        viewModel.setDestinationLocation(currentLocation)
+//
+//                        mapSearchInfoEntity = MapSearchInfoEntity(
+//                            fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
+//                            name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
+//                            locationLatLng = currentLocation
+//                        )
+//                    }
+//
+//                } else {
+//                    null
+//                }
+//            }
+//        }
+//    }
 
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { results ->
             results.data?.getParcelableExtra<MapSearchInfoEntity>(MyLocationActivity.MY_LOCATION_KEY)?.let {
                     mapSearchInfoEntity ->
-                    getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
+                    viewModel.getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
                     viewModel.setDestinationLocation(mapSearchInfoEntity.locationLatLng)
             }
         }
@@ -143,8 +149,9 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 changeLocationLauncher.launch(
-                    MyLocationActivity.newIntent(this, mapSearchInfoEntity)
+                    MyLocationActivity.newIntent(this, viewModel.mapSearchInfoEntity)
                 )
+
             } catch (ex: Exception) {
                 Toast.makeText(this, "myLocation 초기화 중", Toast.LENGTH_SHORT).show()
             }
@@ -190,8 +197,7 @@ class MainActivity : AppCompatActivity() {
         override fun onLocationChanged(location: Location) {
 
             viewModel.setCurrentLocation(location)
-
-            getReverseGeoInformation(
+            viewModel.getReverseGeoInformation(
                 LocationEntity(
                     latitude = location.latitude,
                     longitude = location.longitude
