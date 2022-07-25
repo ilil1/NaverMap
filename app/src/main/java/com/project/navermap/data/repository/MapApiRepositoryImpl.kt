@@ -6,14 +6,14 @@ import com.project.navermap.di.annotation.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-class DefaultMapApiRepository
-constructor(
+//Inject?
+class MapApiRepositoryImpl @Inject constructor(
     private val mapApiService: MapApiService,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) {
-    suspend fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) =
+) : MapApiRepository {
+    override suspend fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) =
         withContext(ioDispatcher) {
             val response = mapApiService.getReverseGeoCode(
                 lat = locationLatLngEntity.latitude,

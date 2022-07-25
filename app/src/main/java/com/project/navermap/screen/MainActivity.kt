@@ -18,12 +18,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.R
-import com.project.navermap.RetrofitUtil
-import com.project.navermap.data.network.MapApiService
 import com.project.navermap.databinding.ActivityMainBinding
-import com.project.navermap.di.NetworkModule
-import com.project.navermap.screen.map.myLocation.MyLocationActivity
-import dagger.Provides
+import com.project.navermap.screen.myLocation.MyLocationActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
