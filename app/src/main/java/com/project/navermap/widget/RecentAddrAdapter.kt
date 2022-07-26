@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.widget
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,8 +1,8 @@
 package com.project.navermap.di
 
-import com.project.navermap.di.annotation.DefaultDispatcher
-import com.project.navermap.di.annotation.IoDispatcher
-import com.project.navermap.di.annotation.MainDispatcher
+import com.project.navermap.di.annotation.dispatchermodule.DefaultDispatcher
+import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
+import com.project.navermap.di.annotation.dispatchermodule.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

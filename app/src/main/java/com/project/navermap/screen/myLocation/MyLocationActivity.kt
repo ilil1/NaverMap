@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.*
 import com.project.navermap.data.db.MapDB
@@ -15,10 +16,15 @@ import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
-import com.project.navermap.screen.map.mapLocationSetting.MapLocationSettingActivity
+import com.project.navermap.screen.MainActivity.map.mapLocationSetting.MapLocationSettingActivity
+import com.project.navermap.widget.RecentAddrAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 
+@AndroidEntryPoint
 class MyLocationActivity : AppCompatActivity() {
+
+    private val viewModel: MyLocationViewModel by viewModels()
 
     private lateinit var binding: ActivityMyLocationBinding
     lateinit var database: MapDB
@@ -42,7 +48,7 @@ class MyLocationActivity : AppCompatActivity() {
         binding = ActivityMyLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        database = MapDB.getInstance(this)!!
+        //database = MapDB.getInstance(this)!!
 
         binding.btnSetLocation.setOnClickListener {
             startForResult.launch(
@@ -53,7 +59,7 @@ class MyLocationActivity : AppCompatActivity() {
 
         binding.btnClear.setOnClickListener {
             runBlocking {
-                database.addressHistoryDao().deleteAllAddresses()
+                viewModel.deleteAllAddresses()
                 recentAddrAdapter.clear()
                 recentAddrAdapter.notifyDataSetChanged()
             }
@@ -68,7 +74,7 @@ class MyLocationActivity : AppCompatActivity() {
 
         recentAddrAdapter = RecentAddrAdapter { item ->
             intent.putExtra(MY_LOCATION_KEY, MapSearchInfoEntity(item.name, item.name, LocationEntity(item.lat, item.lng)))
-            setResult(Activity.RESULT_OK, intent)
+            setResult(RESULT_OK, intent)
             finish()
         }
 
@@ -81,7 +87,7 @@ class MyLocationActivity : AppCompatActivity() {
 
         runBlocking {
             //배열로 하나씩 받아서 넣어준다.
-            for (allAddress in database.addressHistoryDao().getAllAddresses()) {
+            for (allAddress in viewModel.getAllAddresses()) {
                 recentAddrAdapter.datas.add(allAddress)
             }
         }
@@ -94,7 +100,7 @@ class MyLocationActivity : AppCompatActivity() {
             lat = entity.locationLatLng.latitude,
             lng = entity.locationLatLng.longitude
         )
-        database.addressHistoryDao().insertAddress(data)
+        viewModel.insertAddress(data)
     }
 
     private val startForResult =

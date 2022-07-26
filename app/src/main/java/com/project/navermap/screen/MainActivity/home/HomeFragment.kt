@@ -1,4 +1,4 @@
-package com.project.navermap.screen.chat
+package com.project.navermap.screen.MainActivity.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.project.navermap.R
 
-class ChatFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,13 +20,13 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ChatFragment().apply {
+            HomeFragment().apply {
                 arguments = Bundle().apply {
                 }
             }

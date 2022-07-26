@@ -1,4 +1,4 @@
-package com.project.navermap.screen.map.mapFragment
+package com.project.navermap.screen.MainActivity.map.mapFragment
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -44,9 +44,10 @@ import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.DialogFilterBinding
 import com.project.navermap.databinding.FragmentMapBinding
-import com.project.navermap.screen.MainActivity
-import com.project.navermap.screen.MainViewModel
-import com.project.navermap.screen.map.SearchAddress.SearchAddressActivity
+import com.project.navermap.screen.MainActivity.MainActivity
+import com.project.navermap.screen.MainActivity.MainViewModel
+import com.project.navermap.screen.MainActivity.map.SearchAddress.SearchAddressActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,6 +56,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
+@AndroidEntryPoint
 class MapFragment : Fragment() , OnMapReadyCallback {
 
     private val activityViewModel by activityViewModels<MainViewModel>()
@@ -142,6 +144,33 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
     }
 
+    fun observeData() {
+
+//        viewModel.data.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is MapState.Uninitialized -> {
+//                    viewModel.getApiShopList()
+//                }
+//                is MapState.Loading -> {}
+//                // 마커 정보를 다 가져오면 지도에 출력
+//                is MapState.Success -> {}//onSuccess(it)
+//                is MapState.Error -> {}
+//            }
+//        }
+//
+//        activityViewModel.locationData.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is MainState.Uninitialized -> {}
+//                is MainState.Loading -> {}
+//                is MainState.Success -> {
+//                    mapViewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
+//                    removeAllMarkers()
+//                }
+//                is MainState.Error -> {}
+//            }
+//        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -154,7 +183,8 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         //locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         uiScope = CoroutineScope(Dispatchers.Main)
 
-        getApiShopList()
+        viewModel.getApiShopList()
+//        getApiShopList()
         initDialog()
         initMap()
 

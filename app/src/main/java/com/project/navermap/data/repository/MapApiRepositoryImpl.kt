@@ -2,13 +2,11 @@ package com.project.navermap.data.repository
 
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.network.MapApiService
-import com.project.navermap.di.annotation.IoDispatcher
+import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-//Inject?
 class MapApiRepositoryImpl @Inject constructor(
     private val mapApiService: MapApiService,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher

@@ -15,8 +15,8 @@ data class ShopData(
     @SerializedName("shop_name")
     val shop_name: String,
     @Expose
-    @SerializedName("updated_at")
-    val updatedAt: LocalDateTime?,
+    @SerializedName("is_open")
+    val is_open: Boolean,
     @Expose
     @SerializedName("lot_number_address")
     val lot_number_address: String,

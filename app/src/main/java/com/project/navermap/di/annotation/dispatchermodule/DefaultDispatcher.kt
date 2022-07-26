@@ -1,4 +1,4 @@
-package com.project.navermap.di.annotation
+package com.project.navermap.di.annotation.dispatchermodule
 
 import javax.inject.Qualifier
 

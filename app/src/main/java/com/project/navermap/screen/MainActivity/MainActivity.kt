@@ -1,4 +1,4 @@
-package com.project.navermap.screen
+package com.project.navermap.screen.MainActivity
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.view.isGone
 import androidx.navigation.NavHost
 import androidx.navigation.ui.setupWithNavController
 import com.project.navermap.data.entity.LocationEntity
@@ -29,13 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var locationManager: LocationManager
-
-    private lateinit var curLocation: Location
-    private lateinit var mapSearchInfoEntity: MapSearchInfoEntity
 
     companion object {
 
@@ -72,41 +68,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-//    fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
-//
-//        uiScope.launch {
-//            withContext(Dispatchers.IO) {
-//
-//                val currentLocation = locationLatLngEntity
-//
-//                val response = RetrofitUtil.mapApiService.getReverseGeoCode(
-//                    lat = locationLatLngEntity.latitude,
-//                    lon = locationLatLngEntity.longitude
-//                )//response = addressInfo
-//
-//                if (response.isSuccessful) {
-//                    val body = response.body()
-//                    withContext(Dispatchers.Main) {
-//
-//                        binding.locationTitleTextView.text = "${body?.addressInfo?.fullAddress}"
-//
-//                        viewModel.setDestinationLocation(currentLocation)
-//
-//                        mapSearchInfoEntity = MapSearchInfoEntity(
-//                            fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
-//                            name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
-//                            locationLatLng = currentLocation
-//                        )
-//                    }
-//
-//                } else {
-//                    null
-//                }
-//            }
-//        }
-//    }
-
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { results ->
@@ -137,19 +98,35 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.bottomNav.setupWithNavController(navController)
-
-        uiScope = CoroutineScope(Dispatchers.Main)
-        getMyLocation()
-
         binding.locationTitleTextView.setOnClickListener {
 
-            try {
+            viewModel.getMapSearchInfo()?.let { mapSearchInfoEntity ->
                 changeLocationLauncher.launch(
-                    MyLocationActivity.newIntent(this, viewModel.mapSearchInfoEntity)
+                    MyLocationActivity.newIntent(this@MainActivity, mapSearchInfoEntity)
                 )
+            }
+        }
 
-            } catch (ex: Exception) {
-                Toast.makeText(this, "myLocation 초기화 중", Toast.LENGTH_SHORT).show()
+        observeData()
+    }
+
+    private fun observeData() = with(binding) {
+
+        viewModel.locationData.observe(this@MainActivity) {
+            when (it) {
+                is MainState.Uninitialized -> { getMyLocation() }
+
+                is MainState.Loading -> {}
+
+                is MainState.Success -> {
+                    locationLoading.isGone = true
+                    locationTitleTextView.text = it.mapSearchInfoEntity.fullAddress
+                    viewModel.setDestinationLocation(it.mapSearchInfoEntity.locationLatLng)
+                }//MainState.Success가 호출이 됬을 때
+
+                is MainState.Error -> {
+                    locationTitleTextView.text = getString(it.errorMessage)
+                }
             }
         }
     }
@@ -163,9 +140,6 @@ class MainActivity : AppCompatActivity() {
             permissionLauncher.launch(PERMISSIONS)
         }
     }
-
-    @SuppressLint("MissingPermission")
-    private fun initMap() {}
 
     @Suppress("MissingPermission")
     private fun setLocationListener() {

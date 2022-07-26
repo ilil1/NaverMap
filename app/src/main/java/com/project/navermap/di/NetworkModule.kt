@@ -3,7 +3,10 @@ package com.project.navermap.di
 import com.project.navermap.BuildConfig
 import com.project.navermap.RetrofitUtil
 import com.project.navermap.data.network.MapApiService
+import com.project.navermap.data.network.ShopController
 import com.project.navermap.data.url.Url
+import com.project.navermap.di.annotation.networkmodule.ShopRetrofitInstance
+import com.project.navermap.di.annotation.networkmodule.TmapRetrofitInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,9 +44,10 @@ object NetworkModule {
         return GsonConverterFactory.create()
     }
 
+    @TmapRetrofitInstance
     @Provides
     @Singleton
-    fun provideRetrofitInstance(
+    fun provideTmapRetrofitInstance(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
@@ -54,9 +58,29 @@ object NetworkModule {
             .build()
     }
 
+    @ShopRetrofitInstance
     @Provides
     @Singleton
-    fun provideMapApiService(retrofit: Retrofit): MapApiService {
+    fun provideShopRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
+        return Retrofit.Builder()
+                .baseUrl(Url.SHOP_URL)
+                .addConverterFactory(gsonConverterFactory)
+                .client(okHttpClient)
+                .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMapApiService(@TmapRetrofitInstance retrofit: Retrofit): MapApiService {
         return retrofit.create(MapApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideShopController(@ShopRetrofitInstance retrofit: Retrofit): ShopController {
+        return retrofit.create(ShopController::class.java)
     }
 }
