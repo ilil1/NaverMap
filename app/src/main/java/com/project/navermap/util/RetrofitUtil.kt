@@ -1,5 +1,6 @@
-package com.project.navermap
+package com.project.navermap.util
 
+import com.project.navermap.BuildConfig
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.data.network.ShopController
 import com.project.navermap.data.url.Url
@@ -9,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+//레거시
 object RetrofitUtil {
 
     private var shopinstance: Retrofit? = null

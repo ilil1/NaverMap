@@ -1,7 +1,6 @@
 package com.project.navermap.di
 
 import com.project.navermap.BuildConfig
-import com.project.navermap.RetrofitUtil
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.data.network.ShopController
 import com.project.navermap.data.url.Url

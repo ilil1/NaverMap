@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.project.navermap.data.url.Key
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.RetrofitUtil
+import com.project.navermap.util.RetrofitUtil
 import com.project.navermap.databinding.ActivityMapLocationSettingBinding
 import com.skt.Tmap.TMapView
 import kotlinx.coroutines.CoroutineScope

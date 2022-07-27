@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
@@ -42,11 +43,14 @@ import com.project.navermap.*
 import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
+import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.databinding.DialogFilterBinding
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.screen.MainActivity.MainActivity
+import com.project.navermap.screen.MainActivity.MainState
 import com.project.navermap.screen.MainActivity.MainViewModel
 import com.project.navermap.screen.MainActivity.map.SearchAddress.SearchAddressActivity
+import com.project.navermap.util.RetrofitUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,10 +65,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     private val activityViewModel by activityViewModels<MainViewModel>()
     private val viewModel: MapViewModel by viewModels()
-
-    private lateinit var uiScope: CoroutineScope // 코루틴 생명주기 관리
-    private var shopList: MutableList<ShopData> = mutableListOf()
-    private var markers = mutableListOf<Marker>()
+    private var markets : List<ShopInfoEntity> = mutableListOf() //뷰모델에 넣어야하는지 고민
 
     private var infoWindow: InfoWindow? = null
     private lateinit var binding: FragmentMapBinding
@@ -72,8 +73,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var locationManager: LocationManager
     private lateinit var naverMap: NaverMap
-
-    private lateinit var curLocation: Location
 
     private lateinit var builder: AlertDialog.Builder
     private lateinit var dialog: AlertDialog
@@ -85,8 +84,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
-
-    private lateinit var mapSearchInfoEntity : MapSearchInfoEntity
 
     companion object {
 
@@ -100,13 +97,11 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         )
     }
 
-    private lateinit var locationListener: LocationListener
-
-//    private val locationListener: LocationListener by lazy {
-//        LocationListener { location ->
-//            activityViewModel.curLocation = location
-//        }
-//    }
+    private val locationListener: LocationListener by lazy {
+        LocationListener { location ->
+            activityViewModel.curLocation = location
+        }
+    }
 
     private val dialogBinding by lazy {
         val displayRectangle = Rect()
@@ -117,58 +112,32 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
     }
 
-    fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) {
-
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-
-                val currentLocation = locationLatLngEntity
-                val response = RetrofitUtil.mapApiService.getReverseGeoCode(
-                    lat = locationLatLngEntity.latitude,
-                    lon = locationLatLngEntity.longitude
-                )//response = addressInfo
-
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    withContext(Dispatchers.Main) {
-                        mapSearchInfoEntity = MapSearchInfoEntity(
-                            fullAddress = body!!.addressInfo.fullAddress ?: "주소 정보 없음",
-                            name = body!!.addressInfo.buildingName ?: "주소 정보 없음",
-                            locationLatLng = currentLocation
-                        )
-                    }
-                } else {
-                    null
-                }
-            }
-        }
-    }
-
     fun observeData() {
 
-//        viewModel.data.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is MapState.Uninitialized -> {
-//                    viewModel.getApiShopList()
-//                }
-//                is MapState.Loading -> {}
-//                // 마커 정보를 다 가져오면 지도에 출력
-//                is MapState.Success -> {}//onSuccess(it)
-//                is MapState.Error -> {}
-//            }
-//        }
-//
-//        activityViewModel.locationData.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is MainState.Uninitialized -> {}
-//                is MainState.Loading -> {}
-//                is MainState.Success -> {
-//                    mapViewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
-//                    removeAllMarkers()
-//                }
-//                is MainState.Error -> {}
-//            }
-//        }
+        viewModel.data.observe(viewLifecycleOwner) {
+            when (it) {
+                is MapState.Uninitialized -> {
+                    viewModel.getApiShopList()
+                }
+                is MapState.Loading -> {}
+                is MapState.Success -> {
+                    markets = viewModel.getShopEntityList()!!
+                }
+                is MapState.Error -> {}
+            }
+        }
+
+        activityViewModel.locationData.observe(viewLifecycleOwner) {
+            when (it) {
+                is MainState.Uninitialized -> {}
+                is MainState.Loading -> {}
+                is MainState.Success -> {
+                    viewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
+                    removeAllMarkers()
+                }
+                is MainState.Error -> {}
+            }
+        }
     }
 
     override fun onCreateView(
@@ -177,16 +146,11 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMapBinding.inflate(layoutInflater)
-
         binding.mapView.getMapAsync(this@MapFragment)
 
-        //locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-        uiScope = CoroutineScope(Dispatchers.Main)
-
-        viewModel.getApiShopList()
-//        getApiShopList()
         initDialog()
         initMap()
+        observeData()
 
         binding.btnCurLocation.setOnClickListener {
 
@@ -195,8 +159,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                     LatLng(activityViewModel.getCurrentLocation().latitude,
                         activityViewModel.getCurrentLocation().longitude),
                     15.0)
-
-                //viewModel.updateLocation(activityViewModel.getCurrentLocation() as LocationEntity)
 
             } catch (ex: Exception) {
                 Toast.makeText(context, "CurLocation 초기화 중", Toast.LENGTH_SHORT).show()
@@ -238,18 +200,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         binding.etSearch.setOnClickListener {
             init()
             openSearchActivityForResult()
-        }
-
-        locationListener = LocationListener { location ->
-            curLocation = location
-
-            val locationEntity = LocationEntity(
-                latitude = location.latitude,
-                longitude = location.longitude)
-
-            getReverseGeoInformation(locationEntity)
-
-            Toast.makeText(requireContext(), "curLocation 초기화 완료", Toast.LENGTH_SHORT).show()
         }
 
         return binding.root
@@ -340,89 +290,20 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
         locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
 
-        try {
-            val destLocation = activityViewModel.getDestinationLocation()
-            viewModel.setDestinationLocation(destLocation)
-        } catch (ex: Exception) {
-            Toast.makeText(context, "destLocation 가져오는 중", Toast.LENGTH_SHORT).show()
-        }
+        locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-//        locationManager =
-//            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//
-//        locationManager.requestLocationUpdates(
-//            LocationManager.GPS_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener)
-//
-//        locationManager.requestLocationUpdates(
-//            LocationManager.NETWORK_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener)
-    }
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            1000,
+            1f,
+            locationListener)
 
-    override fun onMapReady(map: NaverMap) {
-
-        this.naverMap = map.apply {
-            this.locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
-            locationTrackingMode = LocationTrackingMode.NoFollow
-            uiSettings.isLocationButtonEnabled = true
-            uiSettings.isScaleBarEnabled = true
-            uiSettings.isCompassEnabled = true
-        }
-
-        viewModel.setMap(naverMap)
-
-        try {
-            viewModel.firstupdateLocation()
-        } catch (ex: Exception) {
-            Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
-        }
-
-        requestPermissions(PERMISSIONS, LOCATION_PERMISSION_REQUEST_CODE)
-
-        val marker: Marker = Marker(MarkerIcons.BLACK).apply {
-            zIndex = 111
-            iconTintColor = Color.parseColor("#FA295B")
-            width = 100
-            height = 125
-        }
-
-        try {
-            marker.position = LatLng(37.5670135, 126.9783740)
-        } catch (ex: Exception) {
-            Toast.makeText(requireContext(), "마커를 읽어오는 중", Toast.LENGTH_SHORT).show()
-        }
-
-        marker.map = naverMap
-
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5670135, 126.9783740))
-        naverMap.moveCamera(cameraUpdate)
-
-        marker.setOnClickListener {
-            this.infoWindow?.close()
-            this.infoWindow = InfoWindow()
-            this.infoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
-                override fun getText(infoWindow: InfoWindow): CharSequence {
-                    return "정보 창 내용"
-                }
-            }
-            this.infoWindow?.open(marker)
-            true
-        }
-
-        val circle = CircleOverlay()
-        circle.center = LatLng(37.5670135, 126.9783740)
-        circle.radius = DISTANCE.toDouble()
-
-        circle.outlineWidth = 1
-        circle.outlineColor = Color.parseColor("#AC97FE")
-        circle.zIndex = 100
-        circle.map = naverMap
-
-        Toast.makeText(requireContext(), "맵 초기화 완료", Toast.LENGTH_LONG).show()
+        locationManager.requestLocationUpdates(
+            LocationManager.NETWORK_PROVIDER,
+            1000,
+            1f,
+            locationListener)
     }
 
     private fun init() {
@@ -659,23 +540,10 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         builder.create()
     }
 
-    private fun calDist(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Long {
 
-        val EARTH_R = 6371000.0
-        val rad = Math.PI / 180
-        val radLat1 = rad * lat1
-        val radLat2 = rad * lat2
-        val radDist = rad * (lon1 - lon2)
 
-        var distance = Math.sin(radLat1) * Math.sin(radLat2)
-        distance = distance + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radDist)
-        val ret = EARTH_R * Math.acos(distance)
-
-        return Math.round(ret)
-    }
-
-    private fun setMarkerListener() {
-        for (marker in markers) {
+    private fun setMarkerListener(markets: List<ShopInfoEntity>) {
+        for (marker in viewModel.getMarkers()!!) {
 
             var tempinfoWindow = InfoWindow()
             tempinfoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
@@ -693,109 +561,34 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 } else {
                     tempinfoWindow?.open(marker)
                 }
+
+                // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
+                //viewPagerAdapter.registerStore(markets[marker.zIndex])
+                //binding.viewPager2.adapter = viewPagerAdapter
+                //binding.viewPager2.visibility = View.VISIBLE
+                //binding.fbtnCloseViewPager.visibility = View.VISIBLE
                 true
             }
         }
     }
 
     private fun removeAllMarkers() {
-        markers.forEach { marker ->
+        viewModel.getMarkers()!!.forEach { marker ->
             marker.map = null
         }
         infoWindow?.close()
     }
 
-    fun getApiShopList() {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                val response = RetrofitUtil.shopController.getList()
-                if (response.isSuccessful) {
-                    val list = response.body()
-                    list?.let {
-                        it.shopList.forEach { ShopData ->
-                            shopList.add(ShopData)
-                        }
-                    }
-                } else {
-                    null
-                }
-            }
-        }
-    }
-
-    private fun setMarkerIconAndColor(marker: Marker, category: Int) = with(marker) {
-        when (category) {
-            0 -> {
-                icon = OverlayImage.fromResource(R.drawable.marker_m)
-                iconTintColor = Color.parseColor("#46F5FF")
-            }
-            1 -> {
-                icon = OverlayImage.fromResource(R.drawable.marker_r)
-                iconTintColor = Color.parseColor("#FFCB41")
-            }
-            2 -> {
-                icon = OverlayImage.fromResource(R.drawable.marker_s)
-                iconTintColor = Color.parseColor("#886AFF")
-            }
-            3 -> {
-                icon = OverlayImage.fromResource(R.drawable.marker_e)
-                iconTintColor = Color.parseColor("#04B404")
-            }
-            4 -> {
-                icon = OverlayImage.fromResource(R.drawable.marker_f)
-                iconTintColor = Color.parseColor("#8A0886")
-            }
-            5 -> {
-                icon = OverlayImage.fromResource(R.drawable.marker_f)
-                iconTintColor = Color.parseColor("#0B2F3A")
-            }
-        }
-    }
-
-    private fun getCategoryNum(category: String): Int =
-        when (category) {
-            "FOOD_BEVERAGE" -> 0
-            "SERVICE" -> 1
-            "ACCESSORY" -> 2
-            "MART" -> 3
-            "FASHION" -> 4
-            else -> 5
-        }
-
-    private fun searchAround() {
-        deleteMarkers()
-        for (marker in markers) {
-            marker.map = naverMap
-            setMarkerIconAndColor(marker, getCategoryNum(shopList.get(marker.zIndex)!!.category))
-        }
-    }
-
-    private fun deleteMarkers() {
-        for (marker in markers) {
-            marker.map = null
-        }
-    }
-
     private fun updateMarker() {
 
-        deleteMarkers()
+        viewModel.deleteMarkers()
 
-        var markets: List<ShopData>
         var temp = arrayListOf<Marker>()
         var i = 0
 
-        markets = shopList
-
         markets?.let {
             repeat(markets.size) {
-
-//                val dist = calDist(
-//                    curLocation.latitude,
-//                    curLocation.longitude,
-//                    markets[i].latitude,
-//                    markets[i].longitude)
-
-                if (filterCategoryChecked[getCategoryNum(markets[i].category)]) {
+                if (filterCategoryChecked[viewModel.getCategoryNum(markets[i].category)]) {
                     temp += Marker().apply {
                         position = LatLng(markets[i].latitude, markets[i].longitude)
                         icon = MarkerIcons.BLACK
@@ -805,9 +598,32 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 }
                 i++
             }
-            markers = temp
-            searchAround()
-            setMarkerListener()
+            viewModel.setMarkers(temp)
+            viewModel.deleteMarkers()
+            viewModel.showMarkersOnMap()
+
+            setMarkerListener(markets)
         }
+    }
+
+    override fun onMapReady(map: NaverMap) {
+
+        this.naverMap = map.apply {
+            this.locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
+            locationTrackingMode = LocationTrackingMode.NoFollow
+            uiSettings.isLocationButtonEnabled = true
+            uiSettings.isScaleBarEnabled = true
+            uiSettings.isCompassEnabled = true
+        }
+
+        viewModel.setMap(naverMap)
+
+        try {//중복코드로 리팩토링으로 제거 필요함
+            viewModel.firstupdateLocation()
+        } catch (ex: Exception) {
+            Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
+        }
+
+        Toast.makeText(requireContext(), "맵 초기화 완료", Toast.LENGTH_LONG).show()
     }
 }
