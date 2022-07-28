@@ -293,17 +293,17 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            1000,
-            1f,
-            locationListener)
-
-        locationManager.requestLocationUpdates(
-            LocationManager.NETWORK_PROVIDER,
-            1000,
-            1f,
-            locationListener)
+//        locationManager.requestLocationUpdates(
+//            LocationManager.GPS_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener)
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.NETWORK_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener)
     }
 
     private fun init() {

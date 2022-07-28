@@ -48,7 +48,7 @@ class MyLocationActivity : AppCompatActivity() {
         binding = ActivityMyLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //database = MapDB.getInstance(this)!!
+        database = MapDB.getInstance(this)!!
 
         binding.btnSetLocation.setOnClickListener {
             startForResult.launch(
@@ -87,6 +87,7 @@ class MyLocationActivity : AppCompatActivity() {
 
         runBlocking {
             //배열로 하나씩 받아서 넣어준다.
+            database.addressHistoryDao().getAllAddresses()
             for (allAddress in viewModel.getAllAddresses()) {
                 recentAddrAdapter.datas.add(allAddress)
             }

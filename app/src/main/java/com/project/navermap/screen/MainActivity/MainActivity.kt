@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.core.view.isGone
 import androidx.navigation.NavHost
 import androidx.navigation.ui.setupWithNavController
@@ -29,14 +30,11 @@ import kotlinx.coroutines.*
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
-
     private lateinit var binding: ActivityMainBinding
-    private lateinit var locationManager: LocationManager
 
     companion object {
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val DISTANCE = 300
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
 
         private val PERMISSIONS = arrayOf(
@@ -55,18 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         hostContainer.navController
     }
-
-    private val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                val bundle = result.data?.extras
-                val result = bundle?.get("result")
-
-                Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
-            }
-        }
 
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -106,7 +92,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-
         observeData()
     }
 
@@ -114,7 +99,11 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.locationData.observe(this@MainActivity) {
             when (it) {
-                is MainState.Uninitialized -> { getMyLocation() }
+                is MainState.Uninitialized -> {
+                    if(viewModel.getMyLocation(this@MainActivity)) {
+                        permissionLauncher.launch(PERMISSIONS)
+                    }
+                }
 
                 is MainState.Loading -> {}
 
@@ -122,22 +111,12 @@ class MainActivity : AppCompatActivity() {
                     locationLoading.isGone = true
                     locationTitleTextView.text = it.mapSearchInfoEntity.fullAddress
                     viewModel.setDestinationLocation(it.mapSearchInfoEntity.locationLatLng)
-                }//MainState.Success가 호출이 됬을 때
+                }
 
                 is MainState.Error -> {
                     locationTitleTextView.text = getString(it.errorMessage)
                 }
             }
-        }
-    }
-
-    private fun getMyLocation() {
-        if (::locationManager.isInitialized.not()) {
-            locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        }
-        val isGpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        if (isGpsEnable) {
-            permissionLauncher.launch(PERMISSIONS)
         }
     }
 
@@ -150,7 +129,7 @@ class MainActivity : AppCompatActivity() {
             myLocationListener = MyLocationListener()
         }
 
-        with(locationManager) {
+        with(viewModel.getLocationManager()) {
             requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 minTime, minDistance, myLocationListener
@@ -164,6 +143,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class MyLocationListener : LocationListener {
+        @RequiresApi(Build.VERSION_CODES.P)
         override fun onLocationChanged(location: Location) {
 
             viewModel.setCurrentLocation(location)
@@ -176,10 +156,11 @@ class MainActivity : AppCompatActivity() {
             removeLocationListener()
         }
 
+        @RequiresApi(Build.VERSION_CODES.P)
         @SuppressLint("MissingPermission")
         private fun removeLocationListener() {
-            if (::locationManager.isInitialized && ::myLocationListener.isInitialized) {
-                locationManager.removeUpdates(myLocationListener)
+            if (viewModel.getLocationManager().isLocationEnabled && ::myLocationListener.isInitialized) {
+                viewModel.getLocationManager().removeUpdates(myLocationListener)
             }
         }
     }

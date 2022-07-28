@@ -1,6 +1,8 @@
 package com.project.navermap.screen.MainActivity
 
+import android.content.Context
 import android.location.Location
+import android.location.LocationManager
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -23,6 +25,8 @@ constructor(
 
     private val _locationData = MutableLiveData<MainState>(MainState.Uninitialized)
     val locationData: LiveData<MainState> = _locationData
+
+    private lateinit var locationManager: LocationManager
 
     fun setCurrentLocation(loc: Location) {
         curLocation = loc
@@ -48,6 +52,18 @@ constructor(
             }
         }
         return null
+    }
+
+    fun getMyLocation(context : Context) : Boolean {
+        if (::locationManager.isInitialized.not()) {
+            locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        }
+        val isGpsEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        return isGpsEnable
+    }
+
+    fun getLocationManager(): LocationManager {
+        return locationManager
     }
 
     fun getReverseGeoInformation(
