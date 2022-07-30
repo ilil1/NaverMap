@@ -1,5 +1,6 @@
 package com.project.navermap.screen.MainActivity.map.mapFragment
 
+import android.content.Context
 import android.graphics.Color
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.MarkerIcons
@@ -27,7 +29,7 @@ constructor(
     private var naverMap: NaverMap? = null
     lateinit var destLocation: LocationEntity
     private var markers = mutableListOf<Marker>()
-
+    var infoWindow: InfoWindow? = null
     private var shopList: MutableList<ShopInfoEntity> = mutableListOf()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
@@ -59,28 +61,6 @@ constructor(
     fun setMap(m: NaverMap) { naverMap = m }
     fun getMap(): NaverMap? { return naverMap }
 
-    /**
-     * 네이버 지도상 마커를 모두 없애는 method
-     */
-    fun deleteMarkers() {
-        if (markers.isNullOrEmpty())
-            return
-        for (marker in markers) {
-            marker.map = null
-        }
-    }
-
-    /**
-     * 네이버 지도상에 마커를 표시
-     */
-    fun showMarkersOnMap() {
-        if (markers.isNullOrEmpty())
-            return
-        for (marker in markers) {
-            marker.map = getMap()
-            setMarkerIconAndColor(marker, getCategoryNum(getShopEntityList()?.get(marker.zIndex)!!.category))
-        }
-    }
 
     fun getShopEntityList(): List<ShopInfoEntity>? {
         when (data.value) {
@@ -139,6 +119,28 @@ constructor(
             else -> 5
         }
 
+    /**
+     * 네이버 지도상 마커를 모두 없애는 method
+     */
+    fun deleteMarkers() {
+        if (markers.isNullOrEmpty())
+            return
+        for (marker in markers) {
+            marker.map = null
+        }
+    }
+
+    /**
+     * 네이버 지도상에 마커를 표시
+     */
+    fun showMarkersOnMap() {
+        if (markers.isNullOrEmpty())
+            return
+        for (marker in markers) {
+            marker.map = getMap()
+            setMarkerIconAndColor(marker, getCategoryNum(getShopEntityList()?.get(marker.zIndex)!!.category))
+        }
+    }
 
     fun setMarkerIconAndColor(marker: Marker, category: Int) = with(marker) {
         when (category) {
@@ -167,6 +169,66 @@ constructor(
                 iconTintColor = Color.parseColor("#0B2F3A")
             }
         }
+    }
+
+    fun setMarkerListener(markets: List<ShopInfoEntity>, context : Context) {
+        for (marker in getMarkers()!!) {
+            var tempinfoWindow = InfoWindow()
+            tempinfoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(context) {
+                override fun getText(infoWindow: InfoWindow): CharSequence {
+                    return infoWindow.marker?.tag as CharSequence
+                }
+            }
+            infoWindow = tempinfoWindow
+            marker.setOnClickListener {
+
+                if (tempinfoWindow?.marker != null) {
+                    tempinfoWindow?.close()
+                } else {
+                    tempinfoWindow?.open(marker)
+                }
+
+                // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
+                //viewPagerAdapter.registerStore(markets[marker.zIndex])
+                //binding.viewPager2.adapter = viewPagerAdapter
+                //binding.viewPager2.visibility = View.VISIBLE
+                //binding.fbtnCloseViewPager.visibility = View.VISIBLE
+                true
+            }
+        }
+    }
+
+    var filterCategoryChecked = mutableListOf<Boolean>()
+
+    fun updateMarker(context : Context) {
+        deleteMarkers()
+        var temp = arrayListOf<Marker>()
+        var i = 0
+
+        shopList?.let {
+            repeat(shopList.size) {
+                if (filterCategoryChecked[getCategoryNum(shopList[i].category)]) {
+                    temp += Marker().apply {
+                        position = LatLng(shopList[i].latitude, shopList[i].longitude)
+                        icon = MarkerIcons.BLACK
+                        tag = shopList[i].shop_name
+                        zIndex = i
+                    }
+                }
+                i++
+            }
+            setMarkers(temp)
+            deleteMarkers()
+            showMarkersOnMap()
+            setMarkerListener(shopList, context)
+        }
+    }
+
+    fun removeAllMarkers() {
+        getMarkers()!!.forEach { marker ->
+            marker.map = null
+        }
+        infoWindow?.close()
     }
 
     fun getApiShopList() = viewModelScope.launch {

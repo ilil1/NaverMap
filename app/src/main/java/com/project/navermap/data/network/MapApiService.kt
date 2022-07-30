@@ -1,6 +1,6 @@
 package com.project.navermap.data.network
 
-import com.project.navermap.AddressInfoResponse
+import com.project.navermap.data.response.TmapAddress.AddressInfoResponse
 import com.project.navermap.data.url.Key
 import com.project.navermap.data.url.Url
 import retrofit2.Response

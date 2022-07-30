@@ -63,24 +63,16 @@ import java.net.URLEncoder
 @AndroidEntryPoint
 class MapFragment : Fragment() , OnMapReadyCallback {
 
-    private val activityViewModel by activityViewModels<MainViewModel>()
     private val viewModel: MapViewModel by viewModels()
-    private var markets : List<ShopInfoEntity> = mutableListOf() //뷰모델에 넣어야하는지 고민
+    private val activityViewModel by activityViewModels<MainViewModel>()
 
-    private var infoWindow: InfoWindow? = null
     private lateinit var binding: FragmentMapBinding
+
+    private lateinit var filterDialog : FilterDialog
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var locationManager: LocationManager
     private lateinit var naverMap: NaverMap
-
-    private lateinit var builder: AlertDialog.Builder
-    private lateinit var dialog: AlertDialog
-    //private lateinit var dialog: Dialog
-
-    private lateinit var chkAll: CheckBox
-    private var filterCategoryOptions = mutableListOf<CheckBox>()
-    private var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
@@ -90,11 +82,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
         private const val DISTANCE = 300
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
-
-        private val PERMISSIONS = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
     }
 
     private val locationListener: LocationListener by lazy {
@@ -103,26 +90,14 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
     }
 
-    private val dialogBinding by lazy {
-        val displayRectangle = Rect()
-        requireActivity().window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
-        DialogFilterBinding.inflate(layoutInflater).apply {
-            root.minimumHeight = (displayRectangle.width() * 0.9f).toInt()
-            root.minimumHeight = (displayRectangle.height() * 0.9f).toInt()
-        }
-    }
-
     fun observeData() {
-
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
                 is MapState.Uninitialized -> {
                     viewModel.getApiShopList()
                 }
                 is MapState.Loading -> {}
-                is MapState.Success -> {
-                    markets = viewModel.getShopEntityList()!!
-                }
+                is MapState.Success -> {}
                 is MapState.Error -> {}
             }
         }
@@ -133,7 +108,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 is MainState.Loading -> {}
                 is MainState.Success -> {
                     viewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
-                    removeAllMarkers()
+                    viewModel.removeAllMarkers()
                 }
                 is MainState.Error -> {}
             }
@@ -148,7 +123,8 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         binding = FragmentMapBinding.inflate(layoutInflater)
         binding.mapView.getMapAsync(this@MapFragment)
 
-        initDialog()
+        filterDialog = FilterDialog(requireActivity())
+        filterDialog.initDialog(viewModel)
         initMap()
         observeData()
 
@@ -181,25 +157,28 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
 
         binding.btnSearchAround.setOnClickListener {
+
             try {
-                updateMarker()
+                viewModel.updateMarker(requireContext())
             } catch (ex: Exception) {
                 Toast.makeText(requireContext(), "리스트를 가져오는 중", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.btnFilter.setOnClickListener {
-            dialog = builder.show()
+            filterDialog.dialog = filterDialog.builder.show()
             //dialog.show()
         }
 
         binding.btnCloseMarkers.setOnClickListener {
-            removeAllMarkers()
+            viewModel.removeAllMarkers()
         }
 
         binding.etSearch.setOnClickListener {
             init()
-            openSearchActivityForResult()
+            startSearchActivityForResult.launch(
+                Intent(requireContext(), SearchAddressActivity::class.java)
+            )
         }
 
         return binding.root
@@ -256,34 +235,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 }.start()
             }
         }
-
-
-    private fun openSearchActivityForResult() {
-        startSearchActivityForResult.launch(
-            Intent(requireContext(), SearchAddressActivity::class.java)
-        )
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        Log.d("onRequest", "onRequestPermissionsResult")
-
-        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if (!locationSource.isActivated) { // 권한 거부됨
-                Log.d("권한 거부", "권한 거부됨")
-                naverMap.locationTrackingMode = LocationTrackingMode.None
-            } else {
-                Log.d("권한 승인", "권한 승인됨")
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현위치 버튼 컨트롤
-                //initMap()
-            }
-            return
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
 
     @SuppressLint("MissingPermission")
     private fun initMap() = with(binding) {
@@ -438,174 +389,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
     }
 
-    private fun initDialog() {
-
-        //dialog = Dialog(this)
-        //dialog.setCancelable(false)
-
-        builder = AlertDialog.Builder(requireContext())
-        builder.setCancelable(false)
-
-//        val dialog = Dialog(context)
-//        dialog.setContentView(R.layout.dialog_update)
-//        val width = WindowManager.LayoutParams.MATCH_PARENT
-//        val height = WindowManager.LayoutParams.WRAP_CONTENT
-//        dialog.window!!.setLayout(width, height)
-//        dialog.show()
-
-        chkAll = dialogBinding.all
-
-        with(dialogBinding) {
-            filterCategoryOptions.addAll(
-                arrayOf(
-                    foodBeverage, service, fashionAccessories,
-                    supermarket, fashionClothes, etc
-                )
-            )
-        }
-
-        chkAll.setOnClickListener {
-            filterCategoryOptions.forEach { checkBox ->
-                checkBox.isChecked = chkAll.isChecked
-            }
-        }
-
-        filterCategoryOptions.forEach { checkBox ->
-            filterCategoryChecked.add(true) // btnclose 할 시 ture 반환을 위해서
-            checkBox.setOnClickListener {
-                for (_checkBox in filterCategoryOptions) {
-                    if (!_checkBox.isChecked) {
-                        chkAll.isChecked = false
-                        return@setOnClickListener
-                    }
-                }
-                chkAll.isChecked = true
-            }
-        }
-
-        dialogBinding.btnCloseFilter.setOnClickListener {
-
-            var check = true
-            for (i in 0 until filterCategoryOptions.size) {
-                filterCategoryOptions[i].isChecked = filterCategoryChecked[i]
-                if (!filterCategoryOptions[i].isChecked)
-                    check = false
-            }
-            chkAll.isChecked = check
-
-            dialog.dismiss()
-            (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
-        }
-
-        dialogBinding.btnFilterReset.setOnClickListener {
-
-            filterCategoryOptions.forEach { it.isChecked = true }
-
-            var check = true
-            for (item in filterCategoryOptions)
-                if (!item.isChecked) {
-                    check = false
-                }
-
-            if (check) chkAll.isChecked = true
-        }
-
-        dialogBinding.btnFilterApply.setOnClickListener {
-
-            var noChk = true
-            for (item in filterCategoryOptions) {
-                if (item.isChecked) {
-                    noChk = false
-                    break
-                }
-            }
-
-            if (noChk) {
-                Toast.makeText(requireContext(), "적어도 하나 이상 카테고리를 선택해야 합니다.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            for (i in 0 until filterCategoryOptions.size)
-                filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
-
-            updateMarker()
-
-            dialog.dismiss()
-            (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
-        }
-
-        //dialog.setContentView(dialogBinding.root)
-
-        builder.setView(dialogBinding.root)
-        builder.create()
-    }
-
-
-
-    private fun setMarkerListener(markets: List<ShopInfoEntity>) {
-        for (marker in viewModel.getMarkers()!!) {
-
-            var tempinfoWindow = InfoWindow()
-            tempinfoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
-                override fun getText(infoWindow: InfoWindow): CharSequence {
-                    return infoWindow.marker?.tag as CharSequence
-                }
-            }
-
-            infoWindow = tempinfoWindow
-
-            marker.setOnClickListener {
-
-                if (tempinfoWindow?.marker != null) {
-                    tempinfoWindow?.close()
-                } else {
-                    tempinfoWindow?.open(marker)
-                }
-
-                // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
-                //viewPagerAdapter.registerStore(markets[marker.zIndex])
-                //binding.viewPager2.adapter = viewPagerAdapter
-                //binding.viewPager2.visibility = View.VISIBLE
-                //binding.fbtnCloseViewPager.visibility = View.VISIBLE
-                true
-            }
-        }
-    }
-
-    private fun removeAllMarkers() {
-        viewModel.getMarkers()!!.forEach { marker ->
-            marker.map = null
-        }
-        infoWindow?.close()
-    }
-
-    private fun updateMarker() {
-
-        viewModel.deleteMarkers()
-
-        var temp = arrayListOf<Marker>()
-        var i = 0
-
-        markets?.let {
-            repeat(markets.size) {
-                if (filterCategoryChecked[viewModel.getCategoryNum(markets[i].category)]) {
-                    temp += Marker().apply {
-                        position = LatLng(markets[i].latitude, markets[i].longitude)
-                        icon = MarkerIcons.BLACK
-                        tag = markets[i].shop_name
-                        zIndex = i
-                    }
-                }
-                i++
-            }
-            viewModel.setMarkers(temp)
-            viewModel.deleteMarkers()
-            viewModel.showMarkersOnMap()
-
-            setMarkerListener(markets)
-        }
-    }
-
     override fun onMapReady(map: NaverMap) {
 
         this.naverMap = map.apply {
@@ -623,7 +406,5 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         } catch (ex: Exception) {
             Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
         }
-
-        Toast.makeText(requireContext(), "맵 초기화 완료", Toast.LENGTH_LONG).show()
     }
 }

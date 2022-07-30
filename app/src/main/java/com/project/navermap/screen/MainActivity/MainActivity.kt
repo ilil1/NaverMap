@@ -34,9 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
-
         private val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
@@ -65,7 +63,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     private val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+        { permissions ->
             val responsePermissions = permissions.entries.filter {
                 it.key in PERMISSIONS
             }

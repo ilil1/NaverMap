@@ -3,7 +3,7 @@ package com.project.navermap
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-
+//기능별 클래스 분리 해야함.
 data class Address(
     @Expose
     @SerializedName("documents")

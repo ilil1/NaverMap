@@ -1,4 +1,4 @@
-package com.project.navermap
+package com.project.navermap.data.response.shop
 
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
