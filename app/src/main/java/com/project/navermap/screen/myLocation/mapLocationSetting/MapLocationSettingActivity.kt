@@ -1,4 +1,4 @@
-package com.project.navermap.screen.MainActivity.map.mapLocationSetting
+package com.project.navermap.screen.myLocation.mapLocationSetting
 
 import android.app.Activity
 import android.content.Context

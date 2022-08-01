@@ -19,7 +19,7 @@
             android:name="com.project.navermap.screen.myLocation.MyLocationActivity"
             android:exported="true" />
         <activity
-            android:name="com.project.navermap.screen.MainActivity.map.mapLocationSetting.MapLocationSettingActivity"
+            android:name="com.project.navermap.screen.myLocation.mapLocationSetting.MapLocationSettingActivity"
             android:exported="true" />
         <activity
             android:name=".screen.MainActivity.MainActivity"

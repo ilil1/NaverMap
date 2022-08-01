@@ -10,6 +10,7 @@ class ShopApiRepositoryImpl @Inject constructor(
     private val shopController: ShopController,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ShopApiRepository {
+
     override suspend fun getShopList() =
         withContext(ioDispatcher) {
             val response = shopController.getList()

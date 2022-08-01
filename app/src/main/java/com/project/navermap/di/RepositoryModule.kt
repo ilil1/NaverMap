@@ -18,11 +18,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMapDB(@ApplicationContext context: Context): MapDB =
-        Room.databaseBuilder(context, MapDB::class.java, "MapStudy.db").build()
-
-    @Provides
-    @Singleton
-    fun provideAddressHistoryDao(database: MapDB) : AddressHistoryDao = database.addressHistoryDao()
+        Room.databaseBuilder(context, MapDB::class.java, "MapStudy.db")
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
 
 //    @Singleton
 //    @Provides

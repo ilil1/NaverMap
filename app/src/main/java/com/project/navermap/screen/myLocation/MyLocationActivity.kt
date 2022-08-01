@@ -16,10 +16,10 @@ import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
-import com.project.navermap.screen.MainActivity.map.mapLocationSetting.MapLocationSettingActivity
+import com.project.navermap.screen.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class MyLocationActivity : AppCompatActivity() {
@@ -27,10 +27,9 @@ class MyLocationActivity : AppCompatActivity() {
     private val viewModel: MyLocationViewModel by viewModels()
 
     private lateinit var binding: ActivityMyLocationBinding
-    lateinit var database: MapDB
     lateinit var recentAddrAdapter: RecentAddrAdapter
 
-    var dataList : MutableList<AddressHistoryEntity> = mutableListOf()
+    private lateinit var uiScope: CoroutineScope
 
     companion object {
 
@@ -48,7 +47,7 @@ class MyLocationActivity : AppCompatActivity() {
         binding = ActivityMyLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        database = MapDB.getInstance(this)!!
+        uiScope = CoroutineScope(Dispatchers.Main)
 
         binding.btnSetLocation.setOnClickListener {
             startForResult.launch(
@@ -58,15 +57,14 @@ class MyLocationActivity : AppCompatActivity() {
         }
 
         binding.btnClear.setOnClickListener {
-            runBlocking {
+            uiScope.launch {
                 viewModel.deleteAllAddresses()
                 recentAddrAdapter.clear()
                 recentAddrAdapter.notifyDataSetChanged()
             }
         }
 
-        binding.etSearch.setOnClickListener {
-        }
+        binding.etSearch.setOnClickListener {}
 
         binding.ivBack.setOnClickListener {
             finish()
@@ -79,29 +77,9 @@ class MyLocationActivity : AppCompatActivity() {
         }
 
         binding.rvRecentAddr.layoutManager = LinearLayoutManager(
-            this@MyLocationActivity,
-            LinearLayoutManager.VERTICAL,
-            false)
+            this@MyLocationActivity, LinearLayoutManager.VERTICAL, false)
 
-        binding.rvRecentAddr.adapter = recentAddrAdapter
-
-        runBlocking {
-            //배열로 하나씩 받아서 넣어준다.
-            database.addressHistoryDao().getAllAddresses()
-            for (allAddress in viewModel.getAllAddresses()) {
-                recentAddrAdapter.datas.add(allAddress)
-            }
-        }
-    }
-
-    private fun saveRecentSearchItems(entity: MapSearchInfoEntity) = runBlocking {
-        val data = AddressHistoryEntity(
-            id = null,
-            name = entity.fullAddress,
-            lat = entity.locationLatLng.latitude,
-            lng = entity.locationLatLng.longitude
-        )
-        viewModel.insertAddress(data)
+        observeData()
     }
 
     private val startForResult =
@@ -115,10 +93,29 @@ class MyLocationActivity : AppCompatActivity() {
                 //intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
                 //setResult(Activity.RESULT_OK, intent)
 
-                saveRecentSearchItems(result as MapSearchInfoEntity)
+                viewModel.saveRecentSearchItems(result as MapSearchInfoEntity)
 
                 Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
                 //finish()//반환시에 MyLocationActivity finish()
             }
         }
+
+    private fun observeData() = with(binding) {
+
+        viewModel.AddressesData.observe(this@MyLocationActivity) {
+            when (it) {
+                is MyLocationState.Uninitialized -> {
+                    viewModel.getAllAddresses()
+                }
+                is MyLocationState.Loading -> {}
+                is MyLocationState.Success -> {
+                    for (allAddress in it.addressHistoryList!!) {
+                        recentAddrAdapter.datas.add(allAddress)
+                    }
+                    binding.rvRecentAddr.adapter = recentAddrAdapter
+                }
+                is MyLocationState.Error -> {}
+            }
+        }
+    }
 }

@@ -69,10 +69,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
 
     private lateinit var filterDialog : FilterDialog
-
     private lateinit var locationSource: FusedLocationSource
-    private lateinit var locationManager: LocationManager
-    private lateinit var naverMap: NaverMap
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
@@ -119,12 +116,13 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentMapBinding.inflate(layoutInflater)
-        binding.mapView.getMapAsync(this@MapFragment)
 
+        binding = FragmentMapBinding.inflate(layoutInflater)
+
+        binding.mapView.getMapAsync(this@MapFragment)
         filterDialog = FilterDialog(requireActivity())
         filterDialog.initDialog(viewModel)
+
         initMap()
         observeData()
 
@@ -133,8 +131,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             try {
                 viewModel.getMap()?.cameraPosition = CameraPosition(
                     LatLng(activityViewModel.getCurrentLocation().latitude,
-                        activityViewModel.getCurrentLocation().longitude),
-                    15.0)
+                        activityViewModel.getCurrentLocation().longitude), 15.0)
 
             } catch (ex: Exception) {
                 Toast.makeText(context, "CurLocation 초기화 중", Toast.LENGTH_SHORT).show()
@@ -146,8 +143,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             try {
                 viewModel.getMap()?.cameraPosition = CameraPosition(
                     LatLng(activityViewModel.getDestinationLocation().latitude,
-                        activityViewModel.getDestinationLocation().longitude),
-                    15.0)
+                        activityViewModel.getDestinationLocation().longitude), 15.0)
 
                 viewModel.updateLocation(activityViewModel.getDestinationLocation())
 
@@ -157,12 +153,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
 
         binding.btnSearchAround.setOnClickListener {
-
-            try {
-                viewModel.updateMarker(requireContext())
-            } catch (ex: Exception) {
-                Toast.makeText(requireContext(), "리스트를 가져오는 중", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.updateMarker(requireContext())
         }
 
         binding.btnFilter.setOnClickListener {
@@ -241,7 +232,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
         locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
 
-        locationManager =
+        val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
 //        locationManager.requestLocationUpdates(
@@ -255,6 +246,25 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 //            1000,
 //            1f,
 //            locationListener)
+    }
+
+    override fun onMapReady(map: NaverMap) {
+
+        val naverMap = map.apply {
+            this.locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
+            locationTrackingMode = LocationTrackingMode.NoFollow
+            uiSettings.isLocationButtonEnabled = true
+            uiSettings.isScaleBarEnabled = true
+            uiSettings.isCompassEnabled = true
+        }
+
+        viewModel.setMap(naverMap)
+
+        try {//중복코드로 리팩토링으로 제거 필요함
+            viewModel.firstupdateLocation()
+        } catch (ex: Exception) {
+            Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun init() {
@@ -386,25 +396,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             //       사용자의 내비게이션 액션 처리를 위해
             //       별도 웹뷰 array 관리를 권장함
             //   ex) childWebViewList.remove(childWebView)
-        }
-    }
-
-    override fun onMapReady(map: NaverMap) {
-
-        this.naverMap = map.apply {
-            this.locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
-            locationTrackingMode = LocationTrackingMode.NoFollow
-            uiSettings.isLocationButtonEnabled = true
-            uiSettings.isScaleBarEnabled = true
-            uiSettings.isCompassEnabled = true
-        }
-
-        viewModel.setMap(naverMap)
-
-        try {//중복코드로 리팩토링으로 제거 필요함
-            viewModel.firstupdateLocation()
-        } catch (ex: Exception) {
-            Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
         }
     }
 }

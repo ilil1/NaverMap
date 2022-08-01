@@ -30,7 +30,9 @@ constructor(
     lateinit var destLocation: LocationEntity
     private var markers = mutableListOf<Marker>()
     var infoWindow: InfoWindow? = null
+
     private var shopList: MutableList<ShopInfoEntity> = mutableListOf()
+    var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> = _data
@@ -171,7 +173,7 @@ constructor(
         }
     }
 
-    fun setMarkerListener(markets: List<ShopInfoEntity>, context : Context) {
+    fun setMarkerListener(context : Context) {
         for (marker in getMarkers()!!) {
             var tempinfoWindow = InfoWindow()
             tempinfoWindow?.adapter = object : InfoWindow.DefaultTextAdapter(context) {
@@ -189,16 +191,14 @@ constructor(
                 }
 
                 // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
-                //viewPagerAdapter.registerStore(markets[marker.zIndex])
-                //binding.viewPager2.adapter = viewPagerAdapter
-                //binding.viewPager2.visibility = View.VISIBLE
-                //binding.fbtnCloseViewPager.visibility = View.VISIBLE
+//                viewPagerAdapter.registerStore(markets[marker.zIndex])
+//                binding.viewPager2.adapter = viewPagerAdapter
+//                binding.viewPager2.visibility = View.VISIBLE
+//                binding.fbtnCloseViewPager.visibility = View.VISIBLE
                 true
             }
         }
     }
-
-    var filterCategoryChecked = mutableListOf<Boolean>()
 
     fun updateMarker(context : Context) {
         deleteMarkers()
@@ -220,7 +220,7 @@ constructor(
             setMarkers(temp)
             deleteMarkers()
             showMarkersOnMap()
-            setMarkerListener(shopList, context)
+            setMarkerListener(context)
         }
     }
 
