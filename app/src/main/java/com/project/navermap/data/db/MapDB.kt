@@ -10,6 +10,7 @@ import com.project.navermap.data.entity.AddressHistoryEntity
 @Database(entities = [AddressHistoryEntity::class], version = 1)
 abstract class MapDB : RoomDatabase() {
 
+    //hilt로 인한 레거시
     companion object {
         private var instance: MapDB? = null
         fun getInstance(_context: Context): MapDB? {

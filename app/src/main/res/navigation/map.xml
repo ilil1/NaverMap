@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.project.navermap.screen.MainActivity.map.mapFragment.MapFragment"
+        android:name="com.project.navermap.presentation.MainActivity.map.mapFragment.MapFragment"
         android:label="MapFragment" />
 
 </navigation>

@@ -1,7 +1,8 @@
-package com.project.navermap.screen.MainActivity.map.mapFragment
+package com.project.navermap.presentation.MainActivity.map.mapFragment
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,12 +19,14 @@ import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.data.repository.ShopApiRepository
+import com.project.navermap.domain.usecase.mapViewmodel.GetShopListUseCaseImpl
+import com.project.navermap.domain.usecase.mapViewmodel.ShopResult
 import kotlinx.coroutines.launch
 
 class MapViewModel
 @ViewModelInject
 constructor(
-    private val ShopApiRepositoryImpl : ShopApiRepository
+    private val getShopListUseCaseImpl : GetShopListUseCaseImpl
 ) : ViewModel() {
 
     private var naverMap: NaverMap? = null
@@ -31,8 +34,7 @@ constructor(
     private var markers = mutableListOf<Marker>()
     var infoWindow: InfoWindow? = null
 
-    private var shopList: MutableList<ShopInfoEntity> = mutableListOf()
-    var filterCategoryChecked = mutableListOf<Boolean>()
+    private var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> = _data
@@ -52,26 +54,24 @@ constructor(
             )
         }
 
+    fun SetCategoryChecked(_filterCategoryChecked : MutableList<Boolean>) {
+        filterCategoryChecked.clear()
+        filterCategoryChecked = _filterCategoryChecked
+    }
 
-    fun setMarkers(list: List<Marker>) {
-        markers.clear()
-        markers = list as MutableList
+    fun getCategoryChecked() : MutableList<Boolean> {
+        return filterCategoryChecked
+    }
+
+    fun loadShopList() = viewModelScope.launch {
+        val shopList = getShopListUseCaseImpl.getShopEntityList()
+        _data.value = MapState.Success(shopList)
     }
 
     fun setDestinationLocation(loc: LocationEntity) { destLocation = loc }
     fun getMarkers(): List<Marker>? { return markers }
     fun setMap(m: NaverMap) { naverMap = m }
     fun getMap(): NaverMap? { return naverMap }
-
-
-    fun getShopEntityList(): List<ShopInfoEntity>? {
-        when (data.value) {
-            is MapState.Success -> {
-                return (data.value as MapState.Success).shopInfoList
-            }
-        }
-        return null
-    }
 
     fun firstupdateLocation() {
         naverMap?.cameraPosition = CameraPosition(
@@ -109,6 +109,16 @@ constructor(
         val ret = EARTH_R * Math.acos(distance)
 
         return Math.round(ret)
+    }
+
+
+    fun getShopEntityList(): List<ShopInfoEntity>? {
+        when (data.value) {
+            is MapState.Success -> {
+                return (data.value as MapState.Success).shopInfoList
+            }
+        }
+        return null
     }
 
     fun getCategoryNum(category: String): Int =
@@ -200,12 +210,20 @@ constructor(
         }
     }
 
+
+    fun setMarkers(list: List<Marker>) {
+        markers.clear()
+        markers = list as MutableList
+    }
+
     fun updateMarker(context : Context) {
         deleteMarkers()
+
         var temp = arrayListOf<Marker>()
+        val shopList = getShopEntityList()!!
         var i = 0
 
-        shopList?.let {
+        shopList.let {
             repeat(shopList.size) {
                 if (filterCategoryChecked[getCategoryNum(shopList[i].category)]) {
                     temp += Marker().apply {
@@ -219,9 +237,9 @@ constructor(
             }
             setMarkers(temp)
             deleteMarkers()
-            showMarkersOnMap()
-            setMarkerListener(context)
         }
+        showMarkersOnMap()
+        setMarkerListener(context)
     }
 
     fun removeAllMarkers() {
@@ -229,32 +247,5 @@ constructor(
             marker.map = null
         }
         infoWindow?.close()
-    }
-
-    fun getApiShopList() = viewModelScope.launch {
-        val list = ShopApiRepositoryImpl.getShopList()?.shopList
-        list?.let { shopInfoResult ->
-            shopInfoResult.forEach { shopInfoResult ->
-                shopList.add(ShopInfoEntity(
-                    shop_id = shopInfoResult.shop_id,
-                    shop_name = shopInfoResult.shop_name,
-                    is_open = shopInfoResult.is_open,
-                    lot_number_address = shopInfoResult.lot_number_address,
-                    road_name_address = shopInfoResult.road_name_address,
-                    latitude = shopInfoResult.latitude,
-                    longitude = shopInfoResult.longitude,
-                    average_score = shopInfoResult.average_score,
-                    review_number = shopInfoResult.review_number,
-                    main_image = shopInfoResult.main_image,
-                    description = shopInfoResult.description,
-                    category = shopInfoResult.category,
-                    detail_category = shopInfoResult.detail_category,
-                    is_branch = shopInfoResult.is_branch,
-                    branch_name = shopInfoResult.branch_name
-                )
-                )
-            }
-            _data.value = MapState.Success(shopList)
-        }
     }
 }

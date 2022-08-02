@@ -1,4 +1,4 @@
-package com.project.navermap.screen.MainActivity.map.mapFragment
+package com.project.navermap.presentation.MainActivity.map.mapFragment
 
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.ShopInfoEntity

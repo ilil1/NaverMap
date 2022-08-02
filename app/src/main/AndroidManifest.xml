@@ -16,13 +16,13 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.project.navermap.screen.myLocation.MyLocationActivity"
+            android:name="com.project.navermap.presentation.myLocation.MyLocationActivity"
             android:exported="true" />
         <activity
-            android:name="com.project.navermap.screen.myLocation.mapLocationSetting.MapLocationSettingActivity"
+            android:name="com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity"
             android:exported="true" />
         <activity
-            android:name=".screen.MainActivity.MainActivity"
+            android:name=".presentation.MainActivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,12 +31,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.project.navermap.screen.MainActivity.map.SearchAddress.SearchAddressActivity"
+            android:name="com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="" />
+
     </application>
 
 </manifest>

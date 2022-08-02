@@ -1,16 +1,13 @@
-package com.project.navermap.screen.MainActivity
+package com.project.navermap.presentation.MainActivity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -21,7 +18,7 @@ import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.R
 import com.project.navermap.databinding.ActivityMainBinding
-import com.project.navermap.screen.myLocation.MyLocationActivity
+import com.project.navermap.presentation.myLocation.MyLocationActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 

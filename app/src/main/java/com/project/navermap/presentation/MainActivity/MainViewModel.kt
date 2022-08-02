@@ -1,17 +1,15 @@
-package com.project.navermap.screen.MainActivity
+package com.project.navermap.presentation.MainActivity
 
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.data.repository.MapApiRepository
-import com.project.navermap.screen.myLocation.MyLocationActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 

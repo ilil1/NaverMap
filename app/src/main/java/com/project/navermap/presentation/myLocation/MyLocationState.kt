@@ -1,9 +1,7 @@
-package com.project.navermap.screen.myLocation
+package com.project.navermap.presentation.myLocation
 
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.AddressHistoryEntity
-import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.screen.MainActivity.map.mapFragment.MapState
 
 sealed class MyLocationState {
     object Uninitialized : MyLocationState()

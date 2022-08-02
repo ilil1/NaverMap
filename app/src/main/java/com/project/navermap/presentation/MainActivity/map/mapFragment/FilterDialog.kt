@@ -1,8 +1,7 @@
-package com.project.navermap.screen.MainActivity.map.mapFragment
+package com.project.navermap.presentation.MainActivity.map.mapFragment
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.graphics.Rect
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -61,7 +60,8 @@ class FilterDialog(private val context : Activity) {
         }
 
         filterCategoryOptions.forEach { checkBox ->
-            viewModel.filterCategoryChecked.add(true) // btnclose 할 시 ture 반환을 위해서
+            filterCategoryChecked.add(true)
+            viewModel.SetCategoryChecked(filterCategoryChecked)// btnclose 할 시 ture 반환을 위해서
             checkBox.setOnClickListener {
                 for (_checkBox in filterCategoryOptions) {
                     if (!_checkBox.isChecked) {
@@ -77,7 +77,7 @@ class FilterDialog(private val context : Activity) {
 
             var check = true
             for (i in 0 until filterCategoryOptions.size) {
-                filterCategoryOptions[i].isChecked = viewModel.filterCategoryChecked[i]
+                filterCategoryOptions[i].isChecked = viewModel.getCategoryChecked()[i]
                 if (!filterCategoryOptions[i].isChecked)
                     check = false
             }
@@ -116,8 +116,9 @@ class FilterDialog(private val context : Activity) {
             }
 
             for (i in 0 until filterCategoryOptions.size)
-                viewModel.filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
+                filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
 
+            viewModel.SetCategoryChecked(filterCategoryChecked)
             viewModel.updateMarker(context)
 
             dialog.dismiss()

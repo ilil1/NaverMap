@@ -1,4 +1,4 @@
-package com.project.navermap.screen.myLocation
+package com.project.navermap.presentation.myLocation
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -8,12 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.data.repository.AddressHistoryRepository
-import com.project.navermap.data.repository.ShopApiRepository
-import com.project.navermap.screen.MainActivity.MainState
-import com.project.navermap.screen.MainActivity.map.mapFragment.MapState
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class MyLocationViewModel
 @ViewModelInject

@@ -1,4 +1,4 @@
-package com.project.navermap.screen.myLocation
+package com.project.navermap.presentation.myLocation
 
 import android.app.Activity
 import android.content.Context
@@ -11,12 +11,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.*
-import com.project.navermap.data.db.MapDB
-import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
-import com.project.navermap.screen.myLocation.mapLocationSetting.MapLocationSettingActivity
+import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -28,8 +26,6 @@ class MyLocationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyLocationBinding
     lateinit var recentAddrAdapter: RecentAddrAdapter
-
-    private lateinit var uiScope: CoroutineScope
 
     companion object {
 
@@ -47,8 +43,6 @@ class MyLocationActivity : AppCompatActivity() {
         binding = ActivityMyLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        uiScope = CoroutineScope(Dispatchers.Main)
-
         binding.btnSetLocation.setOnClickListener {
             startForResult.launch(
                 MapLocationSettingActivity.newIntent
@@ -57,11 +51,9 @@ class MyLocationActivity : AppCompatActivity() {
         }
 
         binding.btnClear.setOnClickListener {
-            uiScope.launch {
-                viewModel.deleteAllAddresses()
-                recentAddrAdapter.clear()
-                recentAddrAdapter.notifyDataSetChanged()
-            }
+            viewModel.deleteAllAddresses()
+            recentAddrAdapter.clear()
+            recentAddrAdapter.notifyDataSetChanged()
         }
 
         binding.etSearch.setOnClickListener {}

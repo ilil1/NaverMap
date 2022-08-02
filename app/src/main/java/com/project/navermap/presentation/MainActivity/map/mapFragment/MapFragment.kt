@@ -1,14 +1,9 @@
-package com.project.navermap.screen.MainActivity.map.mapFragment
+package com.project.navermap.presentation.MainActivity.map.mapFragment
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Rect
-import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
@@ -22,7 +17,6 @@ import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,29 +27,16 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.overlay.CircleOverlay
-import com.naver.maps.map.overlay.InfoWindow
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.*
-import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.databinding.DialogFilterBinding
 import com.project.navermap.databinding.FragmentMapBinding
-import com.project.navermap.screen.MainActivity.MainActivity
-import com.project.navermap.screen.MainActivity.MainState
-import com.project.navermap.screen.MainActivity.MainViewModel
-import com.project.navermap.screen.MainActivity.map.SearchAddress.SearchAddressActivity
-import com.project.navermap.util.RetrofitUtil
+import com.project.navermap.presentation.MainActivity.MainActivity
+import com.project.navermap.presentation.MainActivity.MainState
+import com.project.navermap.presentation.MainActivity.MainViewModel
+import com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -87,11 +68,11 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
     }
 
-    fun observeData() {
+    private fun observeData() {
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
                 is MapState.Uninitialized -> {
-                    viewModel.getApiShopList()
+                    viewModel.loadShopList()
                 }
                 is MapState.Loading -> {}
                 is MapState.Success -> {}
@@ -120,11 +101,9 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         binding = FragmentMapBinding.inflate(layoutInflater)
 
         binding.mapView.getMapAsync(this@MapFragment)
+
         filterDialog = FilterDialog(requireActivity())
         filterDialog.initDialog(viewModel)
-
-        initMap()
-        observeData()
 
         binding.btnCurLocation.setOnClickListener {
 
@@ -171,6 +150,9 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 Intent(requireContext(), SearchAddressActivity::class.java)
             )
         }
+
+        initMap()
+        observeData()
 
         return binding.root
     }
