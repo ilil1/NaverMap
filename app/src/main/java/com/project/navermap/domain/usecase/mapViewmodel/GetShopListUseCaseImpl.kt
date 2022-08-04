@@ -14,7 +14,6 @@ class GetShopListUseCaseImpl @Inject constructor(
     private val shopApiRepositoryImpl : ShopApiRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
-
     private var shopList: MutableList<ShopInfoEntity> = mutableListOf()
 
     suspend fun getApiShopList() = withContext(ioDispatcher) {
@@ -45,12 +44,7 @@ class GetShopListUseCaseImpl @Inject constructor(
         }
     }
 
-    suspend fun getShopEntityList(): List<ShopInfoEntity>? {
-        when (val result = getApiShopList()) {
-            is ShopResult.Success -> {
-                return shopList
-            }
-        }
-        return null
+    suspend fun getshopList(): List<ShopInfoEntity> {
+        return shopList
     }
 }

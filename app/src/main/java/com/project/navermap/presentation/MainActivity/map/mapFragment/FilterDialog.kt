@@ -16,7 +16,6 @@ class FilterDialog(private val context : Activity) {
 
     private lateinit var chkAll: CheckBox
     private var filterCategoryOptions = mutableListOf<CheckBox>()
-    private var filterCategoryChecked = mutableListOf<Boolean>()
 
     val dialogBinding by lazy {
         val displayRectangle = Rect()
@@ -60,8 +59,9 @@ class FilterDialog(private val context : Activity) {
         }
 
         filterCategoryOptions.forEach { checkBox ->
-            filterCategoryChecked.add(true)
-            viewModel.SetCategoryChecked(filterCategoryChecked)// btnclose 할 시 ture 반환을 위해서
+            //filterCategoryChecked.add(true)
+            //viewModel.SetCategoryChecked(filterCategoryChecked)// btnclose 할 시 ture 반환을 위해서
+            viewModel.filterCategoryChecked.add(true)
             checkBox.setOnClickListener {
                 for (_checkBox in filterCategoryOptions) {
                     if (!_checkBox.isChecked) {
@@ -77,7 +77,8 @@ class FilterDialog(private val context : Activity) {
 
             var check = true
             for (i in 0 until filterCategoryOptions.size) {
-                filterCategoryOptions[i].isChecked = viewModel.getCategoryChecked()[i]
+                //filterCategoryOptions[i].isChecked = viewModel.getCategoryChecked()[i]
+                filterCategoryOptions[i].isChecked = viewModel.filterCategoryChecked[i]
                 if (!filterCategoryOptions[i].isChecked)
                     check = false
             }
@@ -116,9 +117,9 @@ class FilterDialog(private val context : Activity) {
             }
 
             for (i in 0 until filterCategoryOptions.size)
-                filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
+                viewModel.filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
 
-            viewModel.SetCategoryChecked(filterCategoryChecked)
+            //viewModel.SetCategoryChecked(filterCategoryChecked)
             viewModel.updateMarker(context)
 
             dialog.dismiss()

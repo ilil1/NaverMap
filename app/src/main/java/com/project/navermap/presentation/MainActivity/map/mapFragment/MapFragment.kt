@@ -56,7 +56,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
 
     companion object {
-
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
         private const val DISTANCE = 300
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
@@ -86,7 +85,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 is MainState.Loading -> {}
                 is MainState.Success -> {
                     viewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
-                    viewModel.removeAllMarkers()
+                    viewModel.deleteMarkers()
                 }
                 is MainState.Error -> {}
             }
@@ -99,8 +98,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     ): View? {
 
         binding = FragmentMapBinding.inflate(layoutInflater)
-
-        binding.mapView.getMapAsync(this@MapFragment)
 
         filterDialog = FilterDialog(requireActivity())
         filterDialog.initDialog(viewModel)
@@ -141,7 +138,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
 
         binding.btnCloseMarkers.setOnClickListener {
-            viewModel.removeAllMarkers()
+            viewModel.deleteMarkers()
         }
 
         binding.etSearch.setOnClickListener {
@@ -150,10 +147,8 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 Intent(requireContext(), SearchAddressActivity::class.java)
             )
         }
-
         initMap()
-        observeData()
-
+        binding.mapView.getMapAsync(this@MapFragment)
         return binding.root
     }
 
@@ -217,18 +212,19 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-//        locationManager.requestLocationUpdates(
-//            LocationManager.GPS_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener)
-//
-//        locationManager.requestLocationUpdates(
-//            LocationManager.NETWORK_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener)
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            1000,
+            1f,
+            locationListener)
+
+        locationManager.requestLocationUpdates(
+            LocationManager.NETWORK_PROVIDER,
+            1000,
+            1f,
+            locationListener)
     }
+
 
     override fun onMapReady(map: NaverMap) {
 
@@ -241,12 +237,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
 
         viewModel.setMap(naverMap)
-
-        try {//중복코드로 리팩토링으로 제거 필요함
-            viewModel.firstupdateLocation()
-        } catch (ex: Exception) {
-            Toast.makeText(context, "위치 초기화 중", Toast.LENGTH_SHORT).show()
-        }
+        observeData()
     }
 
     private fun init() {

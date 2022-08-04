@@ -22,13 +22,4 @@ object RepositoryModule {
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()
-
-//    @Singleton
-//    @Provides
-//    fun provideMapApiRepository(
-//        mapApiService: MapApiService,
-//        @IoDispatcher ioDispatcher: CoroutineDispatcher,
-//    ): MapApiRepositoryImpl {
-//        return MapApiRepositoryImpl(mapApiService, ioDispatcher)
-//    }
 }
