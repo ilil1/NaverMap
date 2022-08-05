@@ -1,5 +1,6 @@
 package com.project.navermap.di.UseCaseModule
 
+import android.content.Context
 import com.project.navermap.data.repository.ShopApiRepository
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import com.project.navermap.domain.usecase.mapViewmodel.*
@@ -7,6 +8,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
@@ -37,9 +40,9 @@ object MapUseCaseModule {
     }
 
     @Provides
-    fun provideMarkerListenerUseCase(
+    fun provideMarkerListenerUseCase(@ApplicationContext context: Context
     ): MarkerListenerUseCaseImpl {
-        return MarkerListenerUseCaseImpl()
+        return MarkerListenerUseCaseImpl(context)
     }
 
     @Provides

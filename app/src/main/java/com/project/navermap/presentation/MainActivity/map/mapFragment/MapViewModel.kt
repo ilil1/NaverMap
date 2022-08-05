@@ -53,7 +53,7 @@ constructor(
 
     //외부DB로 가져온 상점에 카테고리별로 다른 Marker를 적용한다.
     //실제 프로덕트에서는 실시간 데이터의 갱신이 있을 수 있어서 외부DB에서
-    fun updateMarker(context : Context) = viewModelScope.launch {
+    fun updateMarker() = viewModelScope.launch {
         val shopList = getShopEntityList()
         val naverMap = getMap()
         deleteMarkers()
@@ -65,7 +65,7 @@ constructor(
         }
         deleteMarkers()
         showMarkerUseCaseImlp.showMarkersOnMap(naverMap, shopList, markers)
-        markerListenerUseCaseImpl.setMarkerListener(context, markers)
+        markerListenerUseCaseImpl.setMarkerListener(markers)
     }
 
     fun updateLocation(location: LocationEntity) {
@@ -92,6 +92,7 @@ constructor(
         }
     }
 
+    //거리 계산은 서버에서
     fun calDist(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Long {
 
         val EARTH_R = 6371000.0

@@ -129,7 +129,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         }
 
         binding.btnSearchAround.setOnClickListener {
-            viewModel.updateMarker(requireContext())
+            viewModel.updateMarker()
         }
 
         binding.btnFilter.setOnClickListener {
@@ -147,6 +147,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 Intent(requireContext(), SearchAddressActivity::class.java)
             )
         }
+
         initMap()
         binding.mapView.getMapAsync(this@MapFragment)
         return binding.root
@@ -224,7 +225,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             1f,
             locationListener)
     }
-
 
     override fun onMapReady(map: NaverMap) {
 

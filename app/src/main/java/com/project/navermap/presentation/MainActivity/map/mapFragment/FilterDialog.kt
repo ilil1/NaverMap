@@ -7,6 +7,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.Toast
 import com.project.navermap.databinding.DialogFilterBinding
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ApplicationComponent
+
 
 class FilterDialog(private val context : Activity) {
 
@@ -25,7 +30,7 @@ class FilterDialog(private val context : Activity) {
             root.minimumHeight = (displayRectangle.height() * 0.9f).toInt()
         }
     }
-    //
+
     fun initDialog(viewModel :MapViewModel) {
 
         //dialog = Dialog(this)
@@ -119,8 +124,7 @@ class FilterDialog(private val context : Activity) {
             for (i in 0 until filterCategoryOptions.size)
                 viewModel.filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
 
-            //viewModel.SetCategoryChecked(filterCategoryChecked)
-            viewModel.updateMarker(context)
+            viewModel.updateMarker()
 
             dialog.dismiss()
             (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)

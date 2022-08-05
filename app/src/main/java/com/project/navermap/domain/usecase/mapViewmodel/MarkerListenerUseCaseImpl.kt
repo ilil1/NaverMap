@@ -7,11 +7,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class MarkerListenerUseCaseImpl @Inject constructor(
+    private val context: Context
 ) {
 
     private var infoWindow: InfoWindow? = null
 
-    fun setMarkerListener(context : Context, markers : List<Marker>) {
+    fun setMarkerListener(markers : List<Marker>) {
         for (marker in markers) {
             val tempInfoWindow = InfoWindow()
             tempInfoWindow.adapter = object : InfoWindow.DefaultTextAdapter(context) {
