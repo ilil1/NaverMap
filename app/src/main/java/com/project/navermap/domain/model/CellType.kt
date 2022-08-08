@@ -1,0 +1,19 @@
+package com.project.navermap.domain.model
+
+
+enum class CellType {
+    HOME_DETAIL_ITEM_CELL,
+    HOME_MAIN_MARKET_CELL,
+    HOME_MAIN_ITEM_CELL,
+    HOME_TOWN_MARKET_CELL,
+    HOME_ITEM_CELL,
+    CUSTOMER_SERVICE_CELL,
+    SUGGEST_CELL,
+    LIKE_MARKET_CELL,
+    LIKE_ITEM_CELL,
+    MAP_ITEM_CELL,
+    CHATTING_CELL,
+    STORE_CELL,
+    HOME_REVIEW_ITEM_CELL,
+    RESTAURANT_CELL
+}

@@ -71,7 +71,7 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
                 is MapState.Uninitialized -> {
-                    viewModel.loadShopList()
+                    //viewModel.loadShopList()
                 }
                 is MapState.Loading -> {}
                 is MapState.Success -> {}

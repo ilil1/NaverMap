@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
 
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
+
         val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION

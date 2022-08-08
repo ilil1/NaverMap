@@ -14,6 +14,7 @@ import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
+import com.project.navermap.presentation.MainActivity.MainActivity
 import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,7 @@ class MyLocationActivity : AppCompatActivity() {
 
         fun newIntent(context: Context, mapSearchInfoEntity: MapSearchInfoEntity) =
             Intent(context, MyLocationActivity::class.java).apply {
-                putExtra(MY_LOCATION_KEY, mapSearchInfoEntity)
+                putExtra(MainActivity.MY_LOCATION_KEY, mapSearchInfoEntity)
             }
     }
 
@@ -46,7 +47,7 @@ class MyLocationActivity : AppCompatActivity() {
         binding.btnSetLocation.setOnClickListener {
             startForResult.launch(
                 MapLocationSettingActivity.newIntent
-                (this, intent.getParcelableExtra(MY_LOCATION_KEY)!!)
+                (this, intent.getParcelableExtra(MainActivity.MY_LOCATION_KEY)!!)
             )
         }
 

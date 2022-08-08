@@ -8,6 +8,12 @@
         android:id="@+id/chat"
         android:icon="@drawable/chat"
         android:title="채팅" />
+
+    <item
+        android:id="@+id/store"
+        android:icon="@drawable/store"
+        android:title="가게" />
+
     <item
         android:id="@+id/map"
         android:icon="@drawable/mapicon"

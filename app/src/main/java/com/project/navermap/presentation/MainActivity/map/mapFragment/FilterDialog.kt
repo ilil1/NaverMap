@@ -10,7 +10,6 @@ import com.project.navermap.databinding.DialogFilterBinding
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.components.ApplicationComponent
 
 
 class FilterDialog(private val context : Activity) {

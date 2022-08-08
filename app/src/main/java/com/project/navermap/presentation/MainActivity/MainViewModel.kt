@@ -4,18 +4,20 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.data.repository.MapApiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
+@HiltViewModel
 class MainViewModel
-@ViewModelInject
+@Inject
 constructor(
     private val mapApiRepositoryImpl: MapApiRepository
 ) : ViewModel() {

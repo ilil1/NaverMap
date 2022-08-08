@@ -3,7 +3,6 @@ package com.project.navermap.presentation.MainActivity.map.mapFragment
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,10 +16,13 @@ import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.domain.usecase.mapViewmodel.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@HiltViewModel
 class MapViewModel
-@ViewModelInject
+@Inject
 constructor(
     private val getShopListUseCaseImpl : GetShopListUseCaseImpl,
     private val getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl,

@@ -1,6 +1,5 @@
 package com.project.navermap.presentation.myLocation
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.data.repository.AddressHistoryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@HiltViewModel
 class MyLocationViewModel
-@ViewModelInject
+@Inject
 constructor(
     private val addressHistoryRepository : AddressHistoryRepository
 ) : ViewModel() {

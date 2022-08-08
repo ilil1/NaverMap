@@ -1,15 +1,17 @@
 package com.project.navermap.di
 
 import com.project.navermap.BuildConfig
+import com.project.navermap.data.network.FoodApiService
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.data.network.ShopController
 import com.project.navermap.data.url.Url
+import com.project.navermap.di.annotation.networkmodule.FoodRetrofitInstance
 import com.project.navermap.di.annotation.networkmodule.ShopRetrofitInstance
 import com.project.navermap.di.annotation.networkmodule.TmapRetrofitInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,7 +20,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
@@ -71,6 +73,20 @@ object NetworkModule {
                 .build()
     }
 
+    @FoodRetrofitInstance
+    @Provides
+    @Singleton
+    fun provideFoodRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Url.FOOD_URL)
+            .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient)
+            .build()
+    }
+
     @Provides
     @Singleton
     fun provideMapApiService(@TmapRetrofitInstance retrofit: Retrofit): MapApiService {
@@ -81,5 +97,11 @@ object NetworkModule {
     @Singleton
     fun provideShopController(@ShopRetrofitInstance retrofit: Retrofit): ShopController {
         return retrofit.create(ShopController::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFoodController(@FoodRetrofitInstance retrofit: Retrofit): FoodApiService {
+        return retrofit.create(FoodApiService::class.java)
     }
 }
