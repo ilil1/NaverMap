@@ -1,9 +1,8 @@
-package com.project.navermap.di
+package com.project.navermap.di.ModuleComponent.SingletonComponent
 
 import android.content.Context
 import androidx.room.Room
 import com.project.navermap.data.db.MapDB
-import com.project.navermap.data.db.dao.AddressHistoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+object DatabaseModule {
 
     @Provides
     @Singleton

@@ -3,6 +3,8 @@ package com.project.navermap.domain.usecase.mapViewmodel
 import android.content.Context
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

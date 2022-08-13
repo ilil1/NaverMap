@@ -8,7 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import javax.inject.Inject
 
-class DefaultResourcesProvider @Inject constructor(
+class ResourcesProviderImpl @Inject constructor(
     private val context: Context
 ) : ResourcesProvider {
 

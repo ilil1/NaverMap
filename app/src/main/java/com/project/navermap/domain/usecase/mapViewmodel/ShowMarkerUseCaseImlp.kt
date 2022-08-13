@@ -10,8 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class ShowMarkerUseCaseImlp @Inject constructor(
-    private val getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl,
-    private val ioDispatcher: CoroutineDispatcher
+    private val getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl
 ) {
     /**
      * 네이버 지도상에 마커를 표시

@@ -1,4 +1,4 @@
-package com.project.navermap.di
+package com.project.navermap.di.ModuleComponent.SingletonComponent
 
 import com.project.navermap.BuildConfig
 import com.project.navermap.data.network.FoodApiService

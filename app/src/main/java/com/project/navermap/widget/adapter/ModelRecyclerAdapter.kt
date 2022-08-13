@@ -7,7 +7,7 @@ import com.project.navermap.MapApplication
 import com.project.navermap.domain.model.CellType
 import com.project.navermap.domain.model.Model
 import com.project.navermap.util.mapper.ViewHolderMapper
-import com.project.navermap.util.provider.DefaultResourcesProvider
+import com.project.navermap.util.provider.ResourcesProviderImpl
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.listener.AdapterListener
 import com.project.navermap.widget.adapter.viewholder.ModelViewHolder
@@ -17,7 +17,7 @@ import javax.inject.Inject
 open class ModelRecyclerAdapter<M : Model, VM : ViewModel> @Inject constructor(
     private var modelList: List<Model>,
     private val viewModel: VM,
-    private val resourcesProvider: ResourcesProvider = DefaultResourcesProvider(MapApplication.appContext!!),
+    private val resourcesProvider: ResourcesProvider = ResourcesProviderImpl(MapApplication.appContext!!),
     private val adapterListener: AdapterListener
 ) : ListAdapter<Model, ModelViewHolder<M>>(Model.DIFF_CALLBACK) {
 

@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DefaultRestaurantRepository @Inject constructor(
+class RestaurantRepositoryImpl @Inject constructor(
     private val mapApiService: MapApiService,
     private val resourcesProvider: ResourcesProvider,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
