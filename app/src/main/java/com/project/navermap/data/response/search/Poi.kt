@@ -8,9 +8,9 @@ data class Poi(
     //POI 에 대한 전화번호
     val telNo: String? = null,
     //시설물 입구 위도 좌표
-    val frontLat: Float = 0.0f,
+    val frontLat: Double = 0.0,
     //시설물 입구 경도 좌표
-    val frontLon: Float = 0.0f,
+    val frontLon: Double = 0.0,
     //중심점 위도 좌표
     val noorLat: Float = 0.0f,
     //중심점 경도 좌표

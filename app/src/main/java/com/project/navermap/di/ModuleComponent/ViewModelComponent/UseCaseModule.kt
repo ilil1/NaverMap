@@ -2,8 +2,11 @@ package com.project.navermap.di.ModuleComponent.ViewModelComponent
 
 import android.content.Context
 import com.project.navermap.data.repository.ShopApiRepository
+import com.project.navermap.data.repository.restaurant.RestaurantRepository
+import com.project.navermap.data.repository.restaurant.RestaurantRepositoryImpl
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import com.project.navermap.domain.usecase.mapViewmodel.*
+import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

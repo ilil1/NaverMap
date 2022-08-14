@@ -14,5 +14,5 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
 @InstallIn(FragmentComponent::class)
-object UseCaseModule {
+object CommonModule {
 }

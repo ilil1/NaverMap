@@ -15,6 +15,8 @@ data class RestaurantModel(
     val deliveryTimeRange: Pair<Int, Int>,
     val deliveryTipRange: Pair<Int, Int>,
     val restaurantTelNumber: String?,
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
 ) : Model(id, type) {
 
     fun toEntity() = RestaurantEntity(

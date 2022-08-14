@@ -25,8 +25,5 @@ abstract class RepositoryBindModule {
         shopApiRepositoryImpl: ShopApiRepositoryImpl
     ): ShopApiRepository
 
-    @Binds
-    abstract fun bindFoodApiRepository(
-        restaurantRepositoryImpl: RestaurantRepositoryImpl
-    ): RestaurantRepository
+
 }

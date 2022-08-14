@@ -36,6 +36,8 @@ import com.project.navermap.presentation.MainActivity.MainActivity
 import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity
+import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.HttpURLConnection
 import java.net.URL
@@ -84,6 +86,11 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 is MainState.Uninitialized -> {}
                 is MainState.Loading -> {}
                 is MainState.Success -> {
+                    val restaurantCategories = RestaurantCategory.values()
+                    val latlang = it.mapSearchInfoEntity.locationLatLng
+                    restaurantCategories.map {
+                        viewModel.loadRestaurantList(it, latlang)
+                    }
                     viewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
                     viewModel.deleteMarkers()
                 }

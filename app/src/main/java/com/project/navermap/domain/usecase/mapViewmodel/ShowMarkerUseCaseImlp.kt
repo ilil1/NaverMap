@@ -6,6 +6,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.project.navermap.R
 import com.project.navermap.data.entity.ShopInfoEntity
+import com.project.navermap.domain.model.RestaurantModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
@@ -15,23 +16,28 @@ class ShowMarkerUseCaseImlp @Inject constructor(
     /**
      * 네이버 지도상에 마커를 표시
      */
-    fun showMarkersOnMap(naverMap: NaverMap?, shopList: List<ShopInfoEntity>?, markers : List<Marker>) {
+    fun showMarkersOnMap(naverMap: NaverMap?,
+                         shopList: List<RestaurantModel>?,
+                         markers : List<Marker>) {
+
         if (markers.isNullOrEmpty())
             return
 
         for (marker in markers) {
             marker.map = naverMap
-            setMarkerIconAndColor(marker, getCategoryNum(shopList?.get(marker.zIndex)!!.category))
+            marker.icon = OverlayImage.fromResource(R.drawable.marker_m)
+            marker.iconTintColor = Color.parseColor("#46F5FF")
+            //setMarkerIconAndColor(marker, getCategoryNum(shopList?.get(marker.zIndex)!!.restaurantCategory.toString()))
         }
     }
 
     private fun getCategoryNum(category: String): Int =
         when (category) {
-            "FOOD_BEVERAGE" -> 0
-            "SERVICE" -> 1
-            "ACCESSORY" -> 2
-            "MART" -> 3
-            "FASHION" -> 4
+            "ALL" -> 0
+            "KOREAN_FOOD" -> 1
+            "DUMPLING_FOOD" -> 2
+            "CAFE_DESSERT" -> 3
+            "JAPANESE_FOOD" -> 4
             else -> 5
         }
 
@@ -63,4 +69,24 @@ class ShowMarkerUseCaseImlp @Inject constructor(
             }
         }
     }
+
+//    fun showMarkersOnMap(naverMap: NaverMap?, shopList: List<ShopInfoEntity>?, markers : List<Marker>) {
+//        if (markers.isNullOrEmpty())
+//            return
+//
+//        for (marker in markers) {
+//            marker.map = naverMap
+//            setMarkerIconAndColor(marker, getCategoryNum(shopList?.get(marker.zIndex)!!.category))
+//        }
+//    }
+//
+//    private fun getCategoryNum(category: String): Int =
+//        when (category) {
+//            "FOOD_BEVERAGE" -> 0
+//            "SERVICE" -> 1
+//            "ACCESSORY" -> 2
+//            "MART" -> 3
+//            "FASHION" -> 4
+//            else -> 5
+//        }
 }

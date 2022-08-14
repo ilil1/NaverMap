@@ -16,5 +16,7 @@ data class RestaurantEntity(
     val reviewCount: Int,
     val deliveryTimeRange: Pair<Int, Int>,
     val deliveryTipRange: Pair<Int, Int>,
-    val restaurantTelNumber: String?
+    val restaurantTelNumber: String?,
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
 ):  Parcelable

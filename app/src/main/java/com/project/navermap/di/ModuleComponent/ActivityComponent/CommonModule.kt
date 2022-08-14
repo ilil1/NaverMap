@@ -6,6 +6,6 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object UseCaseModule {
+object CommonModule {
 
 }

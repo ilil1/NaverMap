@@ -17,7 +17,9 @@ import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
 import com.project.navermap.widget.RestaurantListFragmentPagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StoreFragment : Fragment() {
 
     private val activityViewModel by activityViewModels<MainViewModel>()

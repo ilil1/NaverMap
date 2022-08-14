@@ -7,6 +7,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.data.repository.ShopApiRepository
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.MainActivity.map.mapFragment.MapState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -22,11 +23,11 @@ class GetUpdateMarkerUseCaseImpl @Inject constructor(
 
     private fun getCategoryNum(category: String): Int =
         when (category) {
-            "FOOD_BEVERAGE" -> 0
-            "SERVICE" -> 1
-            "ACCESSORY" -> 2
-            "MART" -> 3
-            "FASHION" -> 4
+            "ALL" -> 0
+            "KOREAN_FOOD" -> 1
+            "DUMPLING_FOOD" -> 2
+            "CAFE_DESSERT" -> 3
+            "JAPANESE_FOOD" -> 4
             else -> 5
         }
 
@@ -41,18 +42,18 @@ class GetUpdateMarkerUseCaseImpl @Inject constructor(
 
     suspend fun updateMarker(
         filterCategoryChecked : MutableList<Boolean>,
-        shopList: List<ShopInfoEntity>?) = withContext(ioDispatcher) {
+        shopList: List<RestaurantModel>?) = withContext(ioDispatcher) {
 
         var temp = arrayListOf<Marker>()
         var i = 0
 
         shopList?.let {
             repeat(shopList.size) {
-                if (filterCategoryChecked[getCategoryNum(shopList[i].category)]) {
+                if (filterCategoryChecked[getCategoryNum(shopList[i].restaurantCategory.toString())]) {
                     temp += Marker().apply {
                         position = LatLng(shopList[i].latitude, shopList[i].longitude)
                         icon = MarkerIcons.BLACK
-                        tag = shopList[i].shop_name
+                        tag = shopList[i].restaurantTitle
                         zIndex = i
                     }
                 }
@@ -62,4 +63,47 @@ class GetUpdateMarkerUseCaseImpl @Inject constructor(
         }
         MarkerResult.Success
     }
+
+
+//    private fun getCategoryNum(category: String): Int =
+//        when (category) {
+//            "FOOD_BEVERAGE" -> 0
+//            "SERVICE" -> 1
+//            "ACCESSORY" -> 2
+//            "MART" -> 3
+//            "FASHION" -> 4
+//            else -> 5
+//        }
+//
+//    fun setMarkers(list: List<Marker>) {
+//        markers.clear()
+//        markers = list as MutableList
+//    }
+//
+//    fun getMarkers() : List<Marker> {
+//        return markers
+//    }
+//    suspend fun updateMarker(
+//        filterCategoryChecked : MutableList<Boolean>,
+//        shopList: List<ShopInfoEntity>?) = withContext(ioDispatcher) {
+//
+//        var temp = arrayListOf<Marker>()
+//        var i = 0
+//
+//        shopList?.let {
+//            repeat(shopList.size) {
+//                if (filterCategoryChecked[getCategoryNum(shopList[i].category)]) {
+//                    temp += Marker().apply {
+//                        position = LatLng(shopList[i].latitude, shopList[i].longitude)
+//                        icon = MarkerIcons.BLACK
+//                        tag = shopList[i].shop_name
+//                        zIndex = i
+//                    }
+//                }
+//                i++
+//            }
+//            setMarkers(temp)
+//        }
+//        MarkerResult.Success
+//    }
 }

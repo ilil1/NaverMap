@@ -15,7 +15,11 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.ShopInfoEntity
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.usecase.mapViewmodel.*
+import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
+import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
+import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +28,7 @@ import javax.inject.Inject
 class MapViewModel
 @Inject
 constructor(
+    private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
     private val getShopListUseCaseImpl : GetShopListUseCaseImpl,
     private val getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl,
     private val showMarkerUseCaseImlp : ShowMarkerUseCaseImlp,
@@ -43,12 +48,20 @@ constructor(
     fun setMap(m: NaverMap) { naverMap = m }
     fun getMap(): NaverMap? { return naverMap }
 
+    private var _restaurantListLiveData = MutableLiveData<List<RestaurantModel>>()
+    val restaurantListLiveData: LiveData<List<RestaurantModel>> get() = _restaurantListLiveData
+
+    var restaurantInfoList: List<RestaurantModel> = mutableListOf()
+
     //상점을 외부DB로 부터 가져온다
-    fun loadShopList() = viewModelScope.launch {
-        when (val result = getShopListUseCaseImpl.getApiShopList()) {
-            is ShopResult.Success -> {
-                val it = getShopListUseCaseImpl.getshopList()
-                _data.value = MapState.Success(it)
+    fun loadRestaurantList(restaurantCategory : RestaurantCategory,
+                           location: LocationEntity) = viewModelScope.launch {
+        when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, location)) {
+            is RestaurantResult.Success -> {
+                val it = getRestaurantListUseCaseImpl.getRestaurantList()
+                //_data.value = MapState.Success(it)
+                restaurantInfoList = it
+                Log.d("_restaurantListLiveData", _restaurantListLiveData.value.toString())
             }
         }
     }
@@ -56,7 +69,7 @@ constructor(
     //외부DB로 가져온 상점에 카테고리별로 다른 Marker를 적용한다.
     //실제 프로덕트에서는 실시간 데이터의 갱신이 있을 수 있어서 외부DB에서
     fun updateMarker() = viewModelScope.launch {
-        val shopList = getShopEntityList()
+        val shopList = restaurantInfoList
         val naverMap = getMap()
         deleteMarkers()
         when (val result = getUpdateMarkerUseCaseImpl.updateMarker(filterCategoryChecked, shopList)) {
@@ -109,4 +122,16 @@ constructor(
 
         return Math.round(ret)
     }
+
+//상점을 외부DB로 부터 가져온다
+//    fun loadShopList() = viewModelScope.launch {
+//        when (val result = getShopListUseCaseImpl.getApiShopList()) {
+//            is ShopResult.Success -> {
+//                val it = getShopListUseCaseImpl.getshopList()
+//                _data.value = MapState.Success(it)
+//                Log.d("MapState.Success(it)", it.toString())
+//            }
+//        }
+//    }
+
 }

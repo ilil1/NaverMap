@@ -31,6 +31,7 @@ class RestaurantRepositoryImpl @Inject constructor(
             searchtypCd = "A",
             reqCoordType = "WGS84GEO"
         )
+
         if (response.isSuccessful) {
             response.body()?.searchPoiInfo?.pois?.poi?.mapIndexed { index, poi ->
                 RestaurantEntity(
@@ -43,7 +44,9 @@ class RestaurantRepositoryImpl @Inject constructor(
                     reviewCount = (0 until 200).random(),
                     deliveryTimeRange = Pair((0..20).random(), (40..60).random()),
                     deliveryTipRange = Pair((0..1000).random(), (2000..4000).random()),
-                    restaurantTelNumber = poi.telNo
+                    restaurantTelNumber = poi.telNo,
+                    latitude = poi.frontLat.toDouble(),
+                    longitude = poi.frontLon.toDouble()
                 )
             } ?: listOf()
         } else {
