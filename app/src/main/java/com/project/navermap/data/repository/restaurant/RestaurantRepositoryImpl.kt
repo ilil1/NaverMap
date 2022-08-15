@@ -27,7 +27,7 @@ class RestaurantRepositoryImpl @Inject constructor(
             centerLon = locationLatLngEntity.longitude.toString(),
             searchType = "name",
             radius = "1",
-            resCoordType = "EPSG3857",
+            resCoordType = "",
             searchtypCd = "A",
             reqCoordType = "WGS84GEO"
         )

@@ -2,6 +2,7 @@ package com.project.navermap.presentation.MainActivity.map.mapFragment
 
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.ShopInfoEntity
+import com.project.navermap.domain.model.RestaurantModel
 
 
 sealed class MapState {
@@ -9,7 +10,7 @@ sealed class MapState {
     object Loading : MapState()
 
     data class Success(
-        val shopInfoList: List<ShopInfoEntity>?
+        val restaurantInfoList: List<RestaurantModel>?
     ) : MapState()
 
     data class Error(

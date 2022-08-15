@@ -1,12 +1,9 @@
-package com.project.navermap.domain.usecase.mapViewmodel
+package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
 
-import androidx.lifecycle.viewModelScope
 import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.data.repository.ShopApiRepository
-import com.project.navermap.presentation.MainActivity.MainState
-import com.project.navermap.presentation.MainActivity.map.mapFragment.MapState
+import com.project.navermap.domain.usecase.mapViewmodel.ShopResult
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -16,6 +13,7 @@ class GetShopListUseCaseImpl @Inject constructor(
 ) {
     private var shopList: MutableList<ShopInfoEntity> = mutableListOf()
 
+//레거시
     suspend fun getApiShopList() = withContext(ioDispatcher) {
         val list = shopApiRepositoryImpl.getShopList()?.shopList
         list?.let { shopInfoResult ->

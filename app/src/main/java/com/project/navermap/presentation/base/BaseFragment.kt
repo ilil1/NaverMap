@@ -18,6 +18,7 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = getViewBinding()
+        observeData()
         return binding.root
     }
 
@@ -28,7 +29,6 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
     open fun initState() {
         initViews()
-        observeData()
     }
 
     open fun initViews() = Unit

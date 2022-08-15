@@ -25,12 +25,12 @@ class RestaurantListFragment : Fragment() {
     private val restaurantCategory
     by lazy { arguments?.getSerializable(RESTAURANT_CATEGORY_KEY) as RestaurantCategory }
 
-    private val locationEntity
+    val locationEntity
     by lazy<LocationEntity> { arguments?.getParcelable(LOCATION_KEY)!! }
 
     @Inject lateinit var ViewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
 
-    private val viewModel by viewModels<RestaurantListViewModel> {
+    val viewModel by viewModels<RestaurantListViewModel> {
         RestaurantListViewModel.provideFactory(ViewModelFactory, restaurantCategory, locationEntity)
     }
 

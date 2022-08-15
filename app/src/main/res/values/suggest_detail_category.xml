@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="suggest_detail_season_spring_filter">필터청소</string>
+    <string name="suggest_detail_season_spring_airconditioner">에어컨 수리</string>
+    <string name="suggest_detail_season_spring_carwash">방문 세차</string>
+    <string name="suggest_detail_season_spring_cloth">방문 세탁</string>
+
+    <string name="suggest_detail_fix_house">집 수리</string>
+    <string name="suggest_detail_fix_electrowire">배선 수리</string>
+    <string name="suggest_detail_fix_homeappliances">가전제품 수리</string>
+    <string name="suggest_detail_fix_furniture">가구 수리</string>
+    <string name="suggest_detail_fix_toilet">화장실 수리</string>
+    <string name="suggest_detail_fix_door">문 수리</string>
+
+    <string name="suggest_detail_anniversary_flower">꽃집</string>
+    <string name="suggest_detail_anniversary_cake">케이크</string>
+    <string name="suggest_detail_anniversary_room">파티룸</string>
+    <string name="suggest_detail_anniversary_toy">장난감 가게</string>
+    <string name="suggest_detail_anniversary_food">레스토랑</string>
+    <string name="suggest_detail_anniversary_jewely">쥬얼리</string>
+
+    <string name="suggest_detail_birth_perfume">향수</string>
+    <string name="suggest_detail_birth_resell">리셀 매장</string>
+    <string name="suggest_detail_birth_it">전자기기</string>
+    <string name="suggest_detail_birth_health">건강</string>
+
+
+
+    <!--  type 형-->
+    <string name="suggest_detail_season_spring_filter_type">필터청소</string>
+    <string name="suggest_detail_season_spring_airconditioner_type">에어컨 수리</string>
+    <string name="suggest_detail_season_spring_carwash_type">방문 세차</string>
+    <string name="suggest_detail_season_spring_cloth_type">방문 세탁</string>
+
+    <string name="suggest_detail_fix_house_type">집 수리</string>
+    <string name="suggest_detail_fix_electrowire_type">배선 수리</string>
+    <string name="suggest_detail_fix_homeappliances_type">가전제품 수리</string>
+    <string name="suggest_detail_fix_furniture_type">가구 수리</string>
+    <string name="suggest_detail_fix_toilet_type">화장실 수리</string>
+    <string name="suggest_detail_fix_door_type">문 수리</string>
+
+    <string name="suggest_detail_anniversary_flower_type">꽃집</string>
+    <string name="suggest_detail_anniversary_cake_type">케이크</string>
+    <string name="suggest_detail_anniversary_room_type">파티룸</string>
+    <string name="suggest_detail_anniversary_toy_type">장난감 가게</string>
+    <string name="suggest_detail_anniversary_food_type">레스토랑</string>
+    <string name="suggest_detail_anniversary_jewely_type">쥬얼리</string>
+
+    <string name="suggest_detail_birth_perfume_type">향수</string>
+    <string name="suggest_detail_birth_resell_type">리셀 매장</string>
+    <string name="suggest_detail_birth_it_type">전자기기</string>
+    <string name="suggest_detail_birth_health_type">건강</string>
+</resources>

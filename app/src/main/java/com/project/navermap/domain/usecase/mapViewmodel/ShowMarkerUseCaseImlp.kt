@@ -17,7 +17,7 @@ class ShowMarkerUseCaseImlp @Inject constructor(
      * 네이버 지도상에 마커를 표시
      */
     fun showMarkersOnMap(naverMap: NaverMap?,
-                         shopList: List<RestaurantModel>?,
+                         restaurantList: List<RestaurantModel>?,
                          markers : List<Marker>) {
 
         if (markers.isNullOrEmpty())
@@ -25,9 +25,8 @@ class ShowMarkerUseCaseImlp @Inject constructor(
 
         for (marker in markers) {
             marker.map = naverMap
-            marker.icon = OverlayImage.fromResource(R.drawable.marker_m)
-            marker.iconTintColor = Color.parseColor("#46F5FF")
-            //setMarkerIconAndColor(marker, getCategoryNum(shopList?.get(marker.zIndex)!!.restaurantCategory.toString()))
+            setMarkerIconAndColor(marker,
+                getCategoryNum(restaurantList?.get(marker.zIndex)!!.restaurantCategory.toString()))
         }
     }
 
@@ -69,24 +68,4 @@ class ShowMarkerUseCaseImlp @Inject constructor(
             }
         }
     }
-
-//    fun showMarkersOnMap(naverMap: NaverMap?, shopList: List<ShopInfoEntity>?, markers : List<Marker>) {
-//        if (markers.isNullOrEmpty())
-//            return
-//
-//        for (marker in markers) {
-//            marker.map = naverMap
-//            setMarkerIconAndColor(marker, getCategoryNum(shopList?.get(marker.zIndex)!!.category))
-//        }
-//    }
-//
-//    private fun getCategoryNum(category: String): Int =
-//        when (category) {
-//            "FOOD_BEVERAGE" -> 0
-//            "SERVICE" -> 1
-//            "ACCESSORY" -> 2
-//            "MART" -> 3
-//            "FASHION" -> 4
-//            else -> 5
-//        }
 }

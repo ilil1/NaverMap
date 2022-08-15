@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="hobby">취미</string>
+    <string name="season_spring">봄</string>
+    <string name="anniversary">기념일</string>
+    <string name="fix">수리 및 리모델링</string>
+    <string name="birth">생일</string>
+
+    <string name="hobby_type">취미</string>
+    <string name="season_spring_type">봄</string>
+    <string name="anniversary_type">기념일</string>
+    <string name="fix_type">수리 및 리모델링</string>
+    <string name="birth_type">생일</string>
+
+</resources>

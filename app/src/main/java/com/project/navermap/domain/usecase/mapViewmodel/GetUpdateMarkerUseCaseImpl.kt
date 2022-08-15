@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-//일단은 이렇게 UseCase를 구성하지만 서버로 비즈니스 로직을 옮겨야함.
 class GetUpdateMarkerUseCaseImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) {
@@ -42,18 +41,18 @@ class GetUpdateMarkerUseCaseImpl @Inject constructor(
 
     suspend fun updateMarker(
         filterCategoryChecked : MutableList<Boolean>,
-        shopList: List<RestaurantModel>?) = withContext(ioDispatcher) {
+        restaurantList: List<RestaurantModel>?) = withContext(ioDispatcher) {
 
         var temp = arrayListOf<Marker>()
         var i = 0
 
-        shopList?.let {
-            repeat(shopList.size) {
-                if (filterCategoryChecked[getCategoryNum(shopList[i].restaurantCategory.toString())]) {
+        restaurantList?.let {
+            repeat(restaurantList.size) {
+                if (filterCategoryChecked[getCategoryNum(restaurantList[i].restaurantCategory.toString())]) {
                     temp += Marker().apply {
-                        position = LatLng(shopList[i].latitude, shopList[i].longitude)
+                        position = LatLng(restaurantList[i].latitude, restaurantList[i].longitude)
                         icon = MarkerIcons.BLACK
-                        tag = shopList[i].restaurantTitle
+                        tag = restaurantList[i].restaurantTitle
                         zIndex = i
                     }
                 }
@@ -63,47 +62,4 @@ class GetUpdateMarkerUseCaseImpl @Inject constructor(
         }
         MarkerResult.Success
     }
-
-
-//    private fun getCategoryNum(category: String): Int =
-//        when (category) {
-//            "FOOD_BEVERAGE" -> 0
-//            "SERVICE" -> 1
-//            "ACCESSORY" -> 2
-//            "MART" -> 3
-//            "FASHION" -> 4
-//            else -> 5
-//        }
-//
-//    fun setMarkers(list: List<Marker>) {
-//        markers.clear()
-//        markers = list as MutableList
-//    }
-//
-//    fun getMarkers() : List<Marker> {
-//        return markers
-//    }
-//    suspend fun updateMarker(
-//        filterCategoryChecked : MutableList<Boolean>,
-//        shopList: List<ShopInfoEntity>?) = withContext(ioDispatcher) {
-//
-//        var temp = arrayListOf<Marker>()
-//        var i = 0
-//
-//        shopList?.let {
-//            repeat(shopList.size) {
-//                if (filterCategoryChecked[getCategoryNum(shopList[i].category)]) {
-//                    temp += Marker().apply {
-//                        position = LatLng(shopList[i].latitude, shopList[i].longitude)
-//                        icon = MarkerIcons.BLACK
-//                        tag = shopList[i].shop_name
-//                        zIndex = i
-//                    }
-//                }
-//                i++
-//            }
-//            setMarkers(temp)
-//        }
-//        MarkerResult.Success
-//    }
 }

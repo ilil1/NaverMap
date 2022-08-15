@@ -73,11 +73,11 @@ class StoreFragment : Fragment() {
             }.attach()
         }
 
-//        if (locationLatLng != viewPagerAdapter.locationLatLng) {
-//            viewPagerAdapter.locationLatLng = locationLatLng
-//            viewPagerAdapter.fragmentList.forEach {
-//                it.viewModel.setLocationLatLng(locationLatLng)
-//            }
-//        }
+        if (locationLatLng != viewPagerAdapter.locationLatLng) {
+            viewPagerAdapter.locationLatLng = locationLatLng
+            viewPagerAdapter.fragmentList.forEach {
+                it.viewModel.setLocationLatLng(locationLatLng)
+            }
+        }
     }
 }

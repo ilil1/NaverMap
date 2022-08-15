@@ -8,10 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.data.repository.MapApiRepository
-import com.project.navermap.presentation.MainActivity.MainState
+import com.project.navermap.data.repository.map.MapApiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
