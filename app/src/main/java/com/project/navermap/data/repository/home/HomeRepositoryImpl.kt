@@ -8,7 +8,7 @@ import com.project.navermap.domain.model.category.HomeListCategory
 import com.project.navermap.domain.model.category.HomeListDetailCategory
 import javax.inject.Inject
 
-class DefaultHomeRepository @Inject constructor(
+class HomeRepositoryImpl @Inject constructor(
 
 ) : HomeRepository {
     override fun getAllMarketList(): List<TownMarketModel> {
@@ -225,7 +225,6 @@ class DefaultHomeRepository @Inject constructor(
         }
     }
 
-    // TODO 22.01.25 임시로 만든 Method 나중에 제대로 구현
     override fun getAllNewSaleItems(): List<HomeItemModel> {
         val result = mutableListOf<HomeItemModel>()
         val categories = HomeListCategory.values().drop(1)

@@ -11,6 +11,7 @@ import com.project.navermap.presentation.base.BaseViewModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.viewholder.*
 
+//ViewHolderMapper를 상속받아서 Mapper를 화면 단위로 나눠서 관리해야함.
 
 object ViewHolderMapper {
     @Suppress("UNCHECKED_CAST")
@@ -64,13 +65,18 @@ object ViewHolderMapper {
                 )
             }
 
+            CHATTING_CELL -> ChatViewHolder(
+                ViewholderChatlistBinding.inflate(inflater,parent,false),
+                viewModel,
+                resourcesProvider
+            )
+
             HOME_DETAIL_ITEM_CELL -> TODO()
             HOME_MAIN_ITEM_CELL -> TODO()
             CUSTOMER_SERVICE_CELL -> TODO()
             LIKE_MARKET_CELL -> TODO()
             LIKE_ITEM_CELL -> TODO()
             MAP_ITEM_CELL -> TODO()
-            CHATTING_CELL -> TODO()
             STORE_CELL -> TODO()
             HOME_REVIEW_ITEM_CELL -> TODO()
         }

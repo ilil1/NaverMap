@@ -1,16 +1,10 @@
 package com.project.navermap.domain.usecase.mapViewmodel
 
-import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.MarkerIcons
-import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.data.repository.ShopApiRepository
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.map.mapFragment.MapState
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

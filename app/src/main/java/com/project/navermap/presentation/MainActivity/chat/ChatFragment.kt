@@ -5,30 +5,71 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import com.project.navermap.R
+import com.project.navermap.data.entity.ChatEntity
+import com.project.navermap.databinding.FragmentChatBinding
+import com.project.navermap.domain.model.ChatModel
+import com.project.navermap.presentation.MainActivity.home.HomeViewModel
+import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.widget.adapter.ModelRecyclerAdapter
+import com.project.navermap.widget.adapter.listener.ChatModelListener
+import dagger.hilt.android.AndroidEntryPoint
 
-class ChatFragment : Fragment() {
+@AndroidEntryPoint
+class ChatFragment : BaseFragment<FragmentChatBinding>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
+    private val viewModel: ChatViewModel by viewModels()
+
+    override fun getViewBinding(): FragmentChatBinding =
+        FragmentChatBinding.inflate(layoutInflater)
+
+    private val chatadapter by lazy {
+        ModelRecyclerAdapter<ChatModel, ChatViewModel>(
+            listOf(),
+            viewModel,
+            adapterListener = object : ChatModelListener {
+                override fun onClickItem(model: ChatModel) {
+
+                    val data = ChatEntity(model.StoreName)
+                    val bundle = Bundle()
+                    bundle.putParcelable("data", data)
+
+                    view?.let { it1 ->
+                        Navigation.findNavController(it1)
+                            .navigate(R.id.action_chatFragment_to_chatDetailFragment,bundle)
+                    }
+                }
+            }
+        )
+    }
+
+    override fun initState() = with(viewModel) {
+        fetchData()
+        super.initState()
+    }
+
+    override fun initViews() {
+        super.initViews()
+
+        binding.chatRecy.adapter = chatadapter
+        binding.chatRecy.layoutManager =  GridLayoutManager(
+            requireContext(),
+            1,
+            GridLayoutManager.VERTICAL,
+            false
+        )
+
+        binding.back.setOnClickListener {
+            activity?.finish()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ChatFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
+    override fun observeData() = with(viewModel) {
+        chatListData.observe(viewLifecycleOwner) {
+            chatadapter.submitList(it)
+        }
     }
 }

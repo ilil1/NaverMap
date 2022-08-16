@@ -2,8 +2,8 @@ package com.project.navermap.di.ModuleComponent.ActivityComponent
 
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.map.MapApiRepositoryImpl
-import com.project.navermap.data.repository.ShopApiRepository
-import com.project.navermap.data.repository.ShopApiRepositoryImpl
+import com.project.navermap.data.repository.shop.ShopApiRepository
+import com.project.navermap.data.repository.shop.ShopApiRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,4 +1,6 @@
 package com.project.navermap.presentation.MainActivity.store
 
-class StoreViewModel {
+import androidx.lifecycle.ViewModel
+
+class StoreViewModel : ViewModel() {
 }

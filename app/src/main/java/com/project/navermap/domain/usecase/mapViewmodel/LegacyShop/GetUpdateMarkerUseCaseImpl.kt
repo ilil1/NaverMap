@@ -1,19 +1,5 @@
 package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
 
-import android.content.Context
-import androidx.lifecycle.viewModelScope
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.util.MarkerIcons
-import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.data.repository.ShopApiRepository
-import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.map.mapFragment.MapState
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
-
 //일단은 이렇게 UseCase를 구성하지만 서버로 비즈니스 로직을 옮겨야함.
 //class GetUpdateMarkerUseCaseImpl @Inject constructor(
 //    private val ioDispatcher: CoroutineDispatcher

@@ -1,4 +1,4 @@
-package com.project.navermap.data.repository
+package com.project.navermap.data.repository.shop
 
 import com.project.navermap.data.network.ShopController
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher

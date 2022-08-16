@@ -1,7 +1,7 @@
 package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
 
 import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.data.repository.ShopApiRepository
+import com.project.navermap.data.repository.shop.ShopApiRepository
 import com.project.navermap.domain.usecase.mapViewmodel.ShopResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

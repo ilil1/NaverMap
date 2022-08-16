@@ -1,4 +1,4 @@
-package com.project.navermap.data.repository
+package com.project.navermap.data.repository.shop
 
 import com.project.navermap.data.response.shop.ShopInfo
 

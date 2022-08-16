@@ -4,8 +4,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class AddressInfo(
-    @SerializedName("fullAddress")
-    @Expose val fullAddress: String?,
+    @SerializedName("fullAddress") // snake case
+    @Expose val fullAddress: String?,// camel case
     @SerializedName("addressType")
     @Expose val addressType: String?,
     @SerializedName("city_do")

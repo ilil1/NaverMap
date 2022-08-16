@@ -11,6 +11,7 @@
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/ic_star.xml" value="0.13489583333333333" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/image.xml" value="0.13489583333333333" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/radius.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/radius_btn_chat.xml" value="0.26979166666666665" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/radius_myinfo.xml" value="0.26979166666666665" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/viewholder_town_market_closed_shape.xml" value="0.13489583333333333" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/drawable/viewholder_town_market_open_shape.xml" value="0.13489583333333333" />
@@ -20,12 +21,14 @@
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/activity_search_address.xml" value="0.176" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/dialog_filter.xml" value="0.15353260869565216" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/fragment_chat.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/fragment_chat_detail.xml" value="0.2269021739130435" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/fragment_home.xml" value="0.2" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/fragment_list.xml" value="0.14739583333333334" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/fragment_map.xml" value="0.152" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/fragment_store.xml" value="0.176" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/recycler_recent_addr_item.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/slide_item_container.xml" value="0.2318840579710145" />
+        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_chatlist.xml" value="0.1109375" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_home_item.xml" value="0.176" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_nearby_market.xml" value="0.11875" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_restaurant.xml" value="0.4" />

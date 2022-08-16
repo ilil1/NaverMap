@@ -7,7 +7,7 @@ import com.project.navermap.domain.model.SuggestItemModel
 import com.project.navermap.domain.model.category.SuggestCategory
 import javax.inject.Inject
 
-class DefaultSuggestRepository @Inject constructor(
+class SuggestRepositoryImpl @Inject constructor(
 
 ) : SuggestRepository {
 

@@ -15,8 +15,6 @@ class GetRestaurantListUseCaseImpl @Inject constructor(
     private val restaurantRepositoryImpl: RestaurantRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
-
-    //private var _restaurantList: List<RestaurantModel> = mutableListOf()
     private var _restaurantList: MutableList<RestaurantModel> = mutableListOf()
 
     suspend fun fetchData(restaurantCategory : RestaurantCategory,
@@ -38,23 +36,6 @@ class GetRestaurantListUseCaseImpl @Inject constructor(
                 restaurantList.sortedByDescending { it.grade }
             }
         }
-
-//        _restaurantList = sortedList.map {
-//            RestaurantModel(
-//                id = it.id,
-//                restaurantInfoId = it.restaurantInfoId,
-//                restaurantCategory = it.restaurantCategory,
-//                restaurantTitle = it.restaurantTitle,
-//                restaurantImageUrl = it.restaurantImageUrl,
-//                grade = it.grade,
-//                reviewCount = it.reviewCount,
-//                deliveryTimeRange = it.deliveryTimeRange,
-//                deliveryTipRange = it.deliveryTipRange,
-//                restaurantTelNumber = it.restaurantTelNumber,
-//                latitude = it.latitude,
-//                longitude = it.longitude
-//            )
-//        }
 
         sortedList.map {
             _restaurantList.add(

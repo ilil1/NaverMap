@@ -1,7 +1,9 @@
 package com.project.navermap.di.ModuleComponent.SingletonComponent
 
-import com.example.YUmarket.data.repository.suggest.DefaultSuggestRepository
-import com.project.navermap.data.repository.home.DefaultHomeRepository
+import com.example.YUmarket.data.repository.suggest.SuggestRepositoryImpl
+import com.project.navermap.data.repository.chat.ChatRepository
+import com.project.navermap.data.repository.chat.DefaultChatRepository
+import com.project.navermap.data.repository.home.HomeRepositoryImpl
 import com.project.navermap.data.repository.home.HomeRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepositoryImpl
@@ -29,11 +31,16 @@ abstract class RepositoryBindModule {
 
     @Binds
     abstract fun bindSuggestRepository(
-        defaultSuggestRepository: DefaultSuggestRepository
+        suggestRepositoryImpl: SuggestRepositoryImpl
     ): SuggestRepository
 
     @Binds
     abstract fun bindHomeRepository(
-        defaultHomeRepository: DefaultHomeRepository
+        homeRepositoryImpl: HomeRepositoryImpl
     ): HomeRepository
+
+    @Binds
+    abstract fun bindChatRepository(
+        defaultChatRepository: DefaultChatRepository
+    ): ChatRepository
 }

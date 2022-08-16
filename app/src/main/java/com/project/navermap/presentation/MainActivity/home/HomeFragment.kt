@@ -99,7 +99,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         marketData.observe(viewLifecycleOwner) {
             when (it) {
-
                 is HomeMainState.Uninitialized -> {}
                 is HomeMainState.Loading -> {}
                 is HomeMainState.Success<*> -> {
@@ -112,20 +111,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
                 else -> Unit
             }
         }
         suggestData.observe(viewLifecycleOwner) {
             when (it) {
-
                 is HomeMainState.Uninitialized -> {}
                 is HomeMainState.Loading -> {}
                 is HomeMainState.ListLoaded -> {}
                 is HomeMainState.Success<*> -> {
                     suggestAdapter.submitList(it.modelList)
                 }
-
                 is HomeMainState.Error -> {
                     Toast.makeText(
                         context,
@@ -139,11 +135,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             when (it) {
 
                 is HomeMainState.Uninitialized -> {}
-
                 is HomeMainState.Loading -> {}
-
                 is HomeMainState.ListLoaded -> {}
-
                 is HomeMainState.Success<*> -> {
                     seasonAdapter.submitList(it.modelList)
                 }
@@ -162,15 +155,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             when (it) {
 
                 is HomeMainState.Uninitialized -> {}
-
                 is HomeMainState.Loading -> {}
-
                 is HomeMainState.ListLoaded -> {}
-
                 is HomeMainState.Success<*> -> {
                     annivalAdapter.submitList(it.modelList)
                 }
-
                 is HomeMainState.Error -> {
                     Toast.makeText(
                         context,
@@ -190,21 +179,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun initViews() {
 
         super.initViews()
+
         viewPager2 = binding.pager
 
-        val slideritems: MutableList<SliderItemModel> = ArrayList()
+        val slideritems: MutableList<SliderItemModel> = mutableListOf()
 
         for (i: Int in 1..4) {
             slideritems.add(SliderItemModel(R.drawable.testimage3))
         }
 
         viewPager2.adapter = SliderAdater(slideritems, viewPager2)
-
-        viewPager2.setLayoutParams(
-            LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
+        viewPager2.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
         )
 
         viewPager2.clipToPadding = false
