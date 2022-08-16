@@ -5,22 +5,26 @@ import android.annotation.SuppressLint
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.*
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.ui.setupWithNavController
+import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.R
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.presentation.myLocation.MyLocationActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
+import javax.inject.Provider
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -41,23 +45,18 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var myLocationListener: MyLocationListener
 
-    private val navController by lazy {
-        val hostContainer =
-            supportFragmentManager
-                .findFragmentById(R.id.fragmentContainer)
-                    as NavHost
-
-        hostContainer.navController
-    }
+    @Inject
+    lateinit var navControllerProvider: Provider<NavController>
+    private val navController get() = navControllerProvider.get()
 
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { results ->
-            results.data?.getParcelableExtra<MapSearchInfoEntity>(MyLocationActivity.MY_LOCATION_KEY)?.let {
-                    mapSearchInfoEntity ->
+            results.data?.getParcelableExtra<MapSearchInfoEntity>(MyLocationActivity.MY_LOCATION_KEY)
+                ?.let { mapSearchInfoEntity ->
                     viewModel.getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
                     viewModel.setDestinationLocation(mapSearchInfoEntity.locationLatLng)
-            }
+                }
         }
 
     private val permissionLauncher =
@@ -97,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.locationData.observe(this@MainActivity) {
             when (it) {
                 is MainState.Uninitialized -> {
-                    if(viewModel.getMyLocation(this@MainActivity)) {
+                    if (viewModel.getMyLocation(this@MainActivity)) {
                         permissionLauncher.launch(PERMISSIONS)
                     }
                 }
