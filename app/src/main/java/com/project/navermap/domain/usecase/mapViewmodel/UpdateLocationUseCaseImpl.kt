@@ -10,8 +10,7 @@ import com.project.navermap.data.entity.LocationEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
-class UpdateLocationUseCaseImpl @Inject constructor(
-) {
+class UpdateLocationUseCaseImpl {
     private lateinit var destLocation: LocationEntity
     private var destMarker: Marker = Marker(
         MarkerIcons.BLACK

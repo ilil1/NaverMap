@@ -1,52 +1,30 @@
 package com.project.navermap.di.ModuleComponent.ViewModelComponent
 
-import android.content.Context
+import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.data.repository.shop.ShopApiRepository
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
-import com.project.navermap.domain.usecase.mapViewmodel.*
+import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import com.project.navermap.domain.usecase.mapViewmodel.LegacyShop.GetShopListUseCaseImpl
+import com.project.navermap.domain.usecase.mapViewmodel.UpdateLocationUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
 @InstallIn(ViewModelComponent::class)
 object UseCaseModule {
-
     @Provides
     fun provideShopListUseCase(
-        shopApiRepositoryImpl : ShopApiRepository,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher,
-    ): GetShopListUseCaseImpl {
-        return GetShopListUseCaseImpl(shopApiRepositoryImpl, ioDispatcher)
-    }
-
-    @Provides
-    fun provideUpdateLocationUseCase(
-    ): UpdateLocationUseCaseImpl {
-        return UpdateLocationUseCaseImpl()
-    }
-
-    @Provides
-    fun provideUpdateMarkerUseCase(
+        shopApiRepositoryImpl: ShopApiRepository,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): GetUpdateMarkerUseCaseImpl {
-        return GetUpdateMarkerUseCaseImpl(ioDispatcher)
-    }
+    ) = GetShopListUseCaseImpl(shopApiRepositoryImpl, ioDispatcher)
 
     @Provides
-    fun provideShowMarkerUseCase(
-        getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl
-    ): ShowMarkerUseCaseImlp {
-        return ShowMarkerUseCaseImlp(getUpdateMarkerUseCaseImpl)
-    }
+    fun provideUpdateLocationUseCase() = UpdateLocationUseCaseImpl()
 
     @Provides
-    fun provideMarkerListenerUseCase(@ApplicationContext context: Context
-    ): MarkerListenerUseCaseImpl {
-        return MarkerListenerUseCaseImpl(context)
-    }
+    fun provideGetItemsByRestaurantIdUseCase(repository: RestaurantRepository) =
+        GetItemsByRestaurantIdUseCase(repository)
 }
