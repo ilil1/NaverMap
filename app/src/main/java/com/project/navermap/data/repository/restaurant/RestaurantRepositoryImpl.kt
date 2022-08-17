@@ -1,9 +1,12 @@
 package com.project.navermap.data.repository.restaurant
 
+import android.util.Log
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
+import com.project.navermap.data.network.FoodApiService
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
+import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +15,7 @@ import javax.inject.Inject
 
 class RestaurantRepositoryImpl @Inject constructor(
     private val mapApiService: MapApiService,
+    private val foodApiService: FoodApiService,
     private val resourcesProvider: ResourcesProvider,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : RestaurantRepository {
@@ -31,7 +35,6 @@ class RestaurantRepositoryImpl @Inject constructor(
             searchtypCd = "A",
             reqCoordType = "WGS84GEO"
         )
-
         if (response.isSuccessful) {
             response.body()?.searchPoiInfo?.pois?.poi?.mapIndexed { index, poi ->
                 RestaurantEntity(
@@ -51,6 +54,17 @@ class RestaurantRepositoryImpl @Inject constructor(
             } ?: listOf()
         } else {
             listOf()
+        }
+    }
+
+    override suspend fun getItemsByRestaurantId(id: Long) = withContext(ioDispatcher) {
+        val response = foodApiService.getRestaurantFoods(id)
+        if (response.isSuccessful) {
+            response.body()!!.map {
+                it.toModel(id)
+            }
+        } else {
+            emptyList()
         }
     }
 }

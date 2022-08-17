@@ -5,15 +5,14 @@ import com.project.navermap.data.repository.shop.ShopApiRepository
 import com.project.navermap.domain.usecase.mapViewmodel.ShopResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class GetShopListUseCaseImpl @Inject constructor(
-    private val shopApiRepositoryImpl : ShopApiRepository,
+class GetShopListUseCaseImpl(
+    private val shopApiRepositoryImpl: ShopApiRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
     private var shopList: MutableList<ShopInfoEntity> = mutableListOf()
 
-//레거시
+    //레거시
     suspend fun getApiShopList() = withContext(ioDispatcher) {
         val list = shopApiRepositoryImpl.getShopList()?.shopList
         list?.let { shopInfoResult ->
@@ -40,9 +39,5 @@ class GetShopListUseCaseImpl @Inject constructor(
             }
             ShopResult.Success
         }
-    }
-
-    suspend fun getshopList(): List<ShopInfoEntity> {
-        return shopList
     }
 }

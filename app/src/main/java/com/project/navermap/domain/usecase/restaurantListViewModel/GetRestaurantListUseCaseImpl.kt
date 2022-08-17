@@ -1,24 +1,23 @@
 package com.project.navermap.domain.usecase.restaurantListViewModel
 
 import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.domain.usecase.mapViewmodel.ShopResult
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestautantFilterOrder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class GetRestaurantListUseCaseImpl @Inject constructor(
+class GetRestaurantListUseCaseImpl(
     private val restaurantRepositoryImpl: RestaurantRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
-    private var _restaurantList: MutableList<RestaurantModel> = mutableListOf()
+    private val _restaurantList: MutableList<RestaurantModel> = mutableListOf()
 
-    suspend fun fetchData(restaurantCategory : RestaurantCategory,
-                          locationEntity : LocationEntity) = withContext(ioDispatcher) {
+    suspend fun fetchData(
+        restaurantCategory: RestaurantCategory,
+        locationEntity: LocationEntity
+    ) = withContext(ioDispatcher) {
 
         val restaurantList = restaurantRepositoryImpl.getList(restaurantCategory, locationEntity)
 
@@ -55,10 +54,7 @@ class GetRestaurantListUseCaseImpl @Inject constructor(
                 )
             )
         }
-        RestaurantResult.Success
-    }
 
-    suspend fun getRestaurantList(): List<RestaurantModel> {
-        return _restaurantList
+        RestaurantResult.Success(data = _restaurantList)
     }
 }

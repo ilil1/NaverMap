@@ -7,7 +7,6 @@ import com.project.navermap.databinding.*
 import com.project.navermap.domain.model.CellType
 import com.project.navermap.domain.model.CellType.*
 import com.project.navermap.domain.model.Model
-import com.project.navermap.presentation.base.BaseViewModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.viewholder.*
 
@@ -66,7 +65,7 @@ object ViewHolderMapper {
             }
 
             CHATTING_CELL -> ChatViewHolder(
-                ViewholderChatlistBinding.inflate(inflater,parent,false),
+                ViewholderChatlistBinding.inflate(inflater, parent, false),
                 viewModel,
                 resourcesProvider
             )
@@ -79,6 +78,12 @@ object ViewHolderMapper {
             MAP_ITEM_CELL -> TODO()
             STORE_CELL -> TODO()
             HOME_REVIEW_ITEM_CELL -> TODO()
+
+            FOOD_CELL -> MapViewPagerViewHolder(
+                ViewholderMapViewpagerBinding.inflate(inflater, parent, false),
+                viewModel,
+                resourcesProvider
+            )
         }
         return viewHolder as ModelViewHolder<M>
     }

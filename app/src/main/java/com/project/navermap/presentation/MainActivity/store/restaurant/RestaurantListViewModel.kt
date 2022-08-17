@@ -46,8 +46,8 @@ class RestaurantListViewModel @AssistedInject constructor(
     fun fetchData(): Job = viewModelScope.launch {
         when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, locationEntity)) {
             is RestaurantResult.Success -> {
-                val it = getRestaurantListUseCaseImpl.getRestaurantList()
-                _restaurantListLiveData.value = it
+//                val it = getRestaurantListUseCaseImpl.getRestaurantList()
+                _restaurantListLiveData.value = result.data
             }
         }
     }

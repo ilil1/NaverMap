@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Message
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,36 +21,71 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.InfoWindow
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.FragmentMapBinding
+import com.project.navermap.domain.model.FoodModel
+import com.project.navermap.domain.model.RestaurantModel
+import com.project.navermap.extensions.deleteOnMap
+import com.project.navermap.extensions.showOnMap
 import com.project.navermap.presentation.MainActivity.MainActivity
 import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity
+import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerFactory
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
+import com.project.navermap.util.provider.ResourcesProvider
+import com.project.navermap.widget.adapter.ModelRecyclerAdapter
+import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MapFragment : Fragment() , OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val viewModel: MapViewModel by viewModels()
     private val activityViewModel by activityViewModels<MainViewModel>()
 
     private lateinit var binding: FragmentMapBinding
 
-    private lateinit var filterDialog : FilterDialog
+    private lateinit var naverMap: NaverMap
+    private var markers = emptyList<Marker>()
+
+    @Inject
+    lateinit var markerFactory: MarkerFactory
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
+
+    private var infoWindow: InfoWindow? = null
+
+    private val viewPagerAdapter by lazy {
+        ModelRecyclerAdapter<FoodModel, MapViewModel>(
+            emptyList(), viewModel, resourcesProvider,
+            object : MapItemListAdapterListener {
+                override fun onClickItem(foodModel: FoodModel) {
+                    // TODO: start activity
+                }
+            }
+        )
+    }
+
+    private lateinit var filterDialog: FilterDialog
     private lateinit var locationSource: FusedLocationSource
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
@@ -73,12 +107,16 @@ class MapFragment : Fragment() , OnMapReadyCallback {
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
                 is MapState.Uninitialized -> {
-                    //viewModel.loadShopList()
+//                    viewModel.loadShopList()
                 }
                 is MapState.Loading -> {}
-                is MapState.Success -> {}
+                is MapState.Success -> updateMarkers(it.restaurantInfoList)
                 is MapState.Error -> {}
             }
+        }
+
+        viewModel.items.observe(viewLifecycleOwner) {
+            viewPagerAdapter.submitList(it)
         }
 
         activityViewModel.locationData.observe(viewLifecycleOwner) {
@@ -86,14 +124,10 @@ class MapFragment : Fragment() , OnMapReadyCallback {
                 is MainState.Uninitialized -> {}
                 is MainState.Loading -> {}
                 is MainState.Success -> {
-                    val restaurantCategories = RestaurantCategory.values()
-                    val latlang = it.mapSearchInfoEntity.locationLatLng
-                    restaurantCategories.map {
-                        viewModel.loadRestaurantList(it, latlang)
-                    }
-                    viewModel.updateLocation(it.mapSearchInfoEntity.locationLatLng)
-                    viewModel.deleteMarkers()
+                    val latlng = it.mapSearchInfoEntity.locationLatLng
+                    viewModel.loadRestaurantList(RestaurantCategory.ALL, latlng)
                 }
+
                 is MainState.Error -> {}
             }
         }
@@ -102,63 +136,108 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         binding = FragmentMapBinding.inflate(layoutInflater)
 
         filterDialog = FilterDialog(requireActivity())
         filterDialog.initDialog(viewModel)
 
-        binding.btnCurLocation.setOnClickListener {
+        setupClickListeners()
 
+        initMap()
+        binding.mapView.getMapAsync(this@MapFragment)
+        binding.viewPager2.adapter = viewPagerAdapter
+        return binding.root
+    }
+
+    private fun setupClickListeners() = with(binding) {
+        btnCurLocation.setOnClickListener {
             try {
-                viewModel.getMap()?.cameraPosition = CameraPosition(
-                    LatLng(activityViewModel.getCurrentLocation().latitude,
-                        activityViewModel.getCurrentLocation().longitude), 15.0)
+                naverMap.cameraPosition = CameraPosition(
+                    LatLng(
+                        activityViewModel.getCurrentLocation().latitude,
+                        activityViewModel.getCurrentLocation().longitude
+                    ), 15.0
+                )
 
             } catch (ex: Exception) {
                 Toast.makeText(context, "CurLocation 초기화 중", Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding.btnDestLocation.setOnClickListener {
-
+        btnDestLocation.setOnClickListener {
             try {
-                viewModel.getMap()?.cameraPosition = CameraPosition(
-                    LatLng(activityViewModel.getDestinationLocation().latitude,
-                        activityViewModel.getDestinationLocation().longitude), 15.0)
+                naverMap.cameraPosition = CameraPosition(
+                    LatLng(
+                        activityViewModel.getDestinationLocation().latitude,
+                        activityViewModel.getDestinationLocation().longitude
+                    ), 15.0
+                )
 
-                viewModel.updateLocation(activityViewModel.getDestinationLocation())
+                // TODO: update location
+//                viewModel.updateLocation(activityViewModel.getDestinationLocation())
 
             } catch (ex: Exception) {
                 Toast.makeText(context, "DestLocation 초기화 중", Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding.btnSearchAround.setOnClickListener {
-            viewModel.updateMarker()
+        btnSearchAround.setOnClickListener {
+            // TODO: update location
+//            viewModel.updateMarker()
         }
 
-        binding.btnFilter.setOnClickListener {
+        btnFilter.setOnClickListener {
             filterDialog.dialog = filterDialog.builder.show()
-            //dialog.show()
+            viewModel.loadRestaurantList(
+                RestaurantCategory.ALL,
+                (activityViewModel.locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng
+            )
         }
 
-        binding.btnCloseMarkers.setOnClickListener {
-            viewModel.deleteMarkers()
+        btnCloseMarkers.setOnClickListener {
+            markers.deleteOnMap()
         }
 
-        binding.etSearch.setOnClickListener {
+        etSearch.setOnClickListener {
             init()
             startSearchActivityForResult.launch(
                 Intent(requireContext(), SearchAddressActivity::class.java)
             )
         }
-
-        initMap()
-        binding.mapView.getMapAsync(this@MapFragment)
-        return binding.root
     }
+
+    private fun updateMarkers(restaurantInfoList: List<RestaurantModel>) {
+        markers.deleteOnMap()
+        markers = restaurantInfoList.mapIndexed { index, it ->
+            markerFactory.createMarker(
+                position = LatLng(it.latitude, it.longitude),
+                category = it.restaurantCategory,
+                tag = it.restaurantTitle,
+                zIndex = index
+            ).apply {
+                setOnClickListener {
+                    this@MapFragment.infoWindow?.close()
+
+                    this@MapFragment.infoWindow = InfoWindow()
+                    this@MapFragment.infoWindow?.adapter =
+                        object : InfoWindow.DefaultTextAdapter(requireContext()) {
+                            override fun getText(infoWindow: InfoWindow): CharSequence {
+                                return infoWindow.marker?.tag as CharSequence
+                            }
+                        }
+                    this@MapFragment.infoWindow?.open(this)
+
+                    viewModel.loadRestaurantItems(restaurantInfoList[zIndex].restaurantInfoId)
+                    // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
+                    binding.viewPager2.visibility = View.VISIBLE
+                    binding.fbtnCloseViewPager.visibility = View.VISIBLE
+                    true
+                }
+            }
+        }.also { it.showOnMap(naverMap) }
+    }
+
 
     private val startSearchActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -214,7 +293,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun initMap() = with(binding) {
-
         locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
 
         val locationManager =
@@ -224,44 +302,43 @@ class MapFragment : Fragment() , OnMapReadyCallback {
             LocationManager.GPS_PROVIDER,
             1000,
             1f,
-            locationListener)
+            locationListener
+        )
 
         locationManager.requestLocationUpdates(
             LocationManager.NETWORK_PROVIDER,
             1000,
             1f,
-            locationListener)
+            locationListener
+        )
     }
 
     override fun onMapReady(map: NaverMap) {
-
-        val naverMap = map.apply {
-            this.locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
+        naverMap = map.apply {
+            locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
             locationTrackingMode = LocationTrackingMode.NoFollow
             uiSettings.isLocationButtonEnabled = true
             uiSettings.isScaleBarEnabled = true
             uiSettings.isCompassEnabled = true
         }
 
-        viewModel.setMap(naverMap)
         observeData()
     }
 
-    private fun init() {
-
+    private fun init() = with(binding.webViewAddress) {
 //        webViewAddress = // 메인 웹뷰
 //        webViewLayout = // 웹뷰가 속한 레이아웃
 //        공통 설정
 
-        binding.webViewAddress.settings.run {
+        settings.apply {
             javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
             javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
             setSupportMultipleWindows(true)
         }
 
-        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
-        binding.webViewAddress.loadUrl("")
-        binding.webViewAddress.webChromeClient = webChromeClient
+        addJavascriptInterface(AndroidBridge(), "TestApp")
+        loadUrl("")
+        webChromeClient = this@MapFragment.webChromeClient
     }
 
     private inner class AndroidBridge {

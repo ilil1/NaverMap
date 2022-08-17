@@ -1,6 +1,6 @@
 package com.project.navermap.data.response.restaurant
 
-import com.project.navermap.data.entity.restaurant.RestaurantFoodEntity
+import com.project.navermap.domain.model.FoodModel
 
 data class RestaurantFoodResponse(
     val id: String,
@@ -9,14 +9,12 @@ data class RestaurantFoodResponse(
     val price: String,
     val imageUrl: String
 ) {
-
-    fun toEntity(restaurantId: Long, restaurantTitle: String) = RestaurantFoodEntity(
-        id = id,
+    fun toModel(restaurantId: Long) = FoodModel(
+        id = id.toLong(),
         title = title,
         description = description,
-        price = price.toDouble().toInt(),
+        price = price,
         imageUrl = imageUrl,
-        restaurantId = restaurantId,
-        restaurantTitle = restaurantTitle
+        restaurantId = restaurantId
     )
 }

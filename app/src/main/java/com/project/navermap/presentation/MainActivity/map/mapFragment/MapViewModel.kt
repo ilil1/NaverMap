@@ -1,21 +1,13 @@
 package com.project.navermap.presentation.MainActivity.map.mapFragment
 
-import android.content.Context
-import android.graphics.Color
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.overlay.InfoWindow
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.domain.model.RestaurantModel
+import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.usecase.mapViewmodel.*
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
@@ -29,74 +21,40 @@ class MapViewModel
 @Inject
 constructor(
     private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
-    private val getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl,
-    private val showMarkerUseCaseImlp : ShowMarkerUseCaseImlp,
-    private val markerListenerUseCaseImpl : MarkerListenerUseCaseImpl,
-    private val updateLocationUseCaseImpl : UpdateLocationUseCaseImpl
+    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase,
+    private val updateLocationUseCaseImpl: UpdateLocationUseCaseImpl
 ) : ViewModel() {
 
-    private var naverMap: NaverMap? = null
-    private var markers = mutableListOf<Marker>()
     lateinit var destLocation: LocationEntity
     var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> = _data
 
-    fun setDestinationLocation(loc: LocationEntity) { destLocation = loc }
-    fun setMap(m: NaverMap) { naverMap = m }
-    fun getMap(): NaverMap? { return naverMap }
+    private val _items = MutableLiveData<List<FoodModel>>(emptyList())
+    val items: LiveData<List<FoodModel>> get() = _items
+
+    fun setDestinationLocation(loc: LocationEntity) {
+        destLocation = loc
+    }
 
     //상점을 외부DB로 부터 가져온다
-    fun loadRestaurantList(restaurantCategory : RestaurantCategory,
-                           location: LocationEntity) = viewModelScope.launch {
+    fun loadRestaurantList(
+        restaurantCategory: RestaurantCategory,
+        location: LocationEntity
+    ) = viewModelScope.launch {
         when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, location)) {
             is RestaurantResult.Success -> {
-                val it = getRestaurantListUseCaseImpl.getRestaurantList()
-                _data.value = MapState.Success(it)
+                _data.postValue(MapState.Success(result.data))
             }
         }
     }
 
-    //외부DB로 가져온 상점에 카테고리별로 다른 Marker를 적용한다.
-    //실제 프로덕트에서는 실시간 데이터의 갱신이 있을 수 있어서 외부DB에서
-    fun updateMarker() = viewModelScope.launch {
-        val restaurantList = getShopEntityList()
-        val naverMap = getMap()
-        deleteMarkers()
-        when (val result = getUpdateMarkerUseCaseImpl.updateMarker(filterCategoryChecked, restaurantList)) {
-            is MarkerResult.Success -> {
-                val it = getUpdateMarkerUseCaseImpl.getMarkers()
-                markers = it as MutableList<Marker>
-            }
-        }
-        deleteMarkers()
-        showMarkerUseCaseImlp.showMarkersOnMap(naverMap, restaurantList, markers)
-        markerListenerUseCaseImpl.setMarkerListener(markers)
-    }
-
-    fun updateLocation(location: LocationEntity) {
-        deleteMarkers()
-        val naverMap = getMap()
-        // 위치 업데이트 될 때마다 목적지 마커 초기화
-        updateLocationUseCaseImpl.updateLocation(location, naverMap)
-    }
-
-    fun getShopEntityList(): List<RestaurantModel>? {
-        when (data.value) {
-            is MapState.Success -> {
-                return (data.value as MapState.Success).restaurantInfoList
-            }
-        }
-        return null
-    }
-
-    fun deleteMarkers() {
-        if (markers.isNullOrEmpty())
-            return
-        for (marker in markers) {
-            marker.map = null
-        }
+    @SuppressLint("NullSafeMutableLiveData")
+    fun loadRestaurantItems(
+        restaurantId: Long
+    ) = viewModelScope.launch {
+        _items.value = getItemsByRestaurantIdUseCase(restaurantId)
     }
 
     //거리 계산은 서버에서

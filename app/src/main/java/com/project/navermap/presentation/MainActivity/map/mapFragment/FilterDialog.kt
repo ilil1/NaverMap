@@ -123,7 +123,8 @@ class FilterDialog(private val context : Activity) {
             for (i in 0 until filterCategoryOptions.size)
                 viewModel.filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
 
-            viewModel.updateMarker()
+            // TODO: update marker
+//            viewModel.updateMarker()
 
             dialog.dismiss()
             (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)
