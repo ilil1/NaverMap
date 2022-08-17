@@ -47,10 +47,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun getViewBinding(): FragmentHomeBinding =
         FragmentHomeBinding.inflate(layoutInflater)
 
-    private val sliderRunnable = Runnable {
-        viewPager2.currentItem = viewPager2.currentItem + 1
-    }
-
     private val nearbyMarketAdapter by lazy {
         ModelRecyclerAdapter<TownMarketModel, HomeViewModel>(
             listOf(),
@@ -196,18 +192,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         viewPager2.clipToPadding = false
         viewPager2.offscreenPageLimit = 4
-        viewPager2.clipChildren = false
-
+        viewPager2.clipChildren = false //한개만 보이게
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
-        val compositePageTransformer = CompositePageTransformer()
-        compositePageTransformer.addTransformer(MarginPageTransformer(30))
-        compositePageTransformer.addTransformer { page, position ->
-            val r = 1 - Math.abs(position)
-            page.scaleY = 0.85f + r * 0.25f
+        val sliderRunnable = Runnable {
+            viewPager2.currentItem = viewPager2.currentItem + 1
         }
-
-        viewPager2.setPageTransformer(compositePageTransformer)
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -215,7 +205,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 sliderHandler.removeCallbacks(sliderRunnable)
                 sliderHandler.postDelayed(sliderRunnable, 3000)
             }
-
         })
 
         with(binding) {
@@ -231,38 +220,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             )
 
             popular.text = spannable
+
             // 근처 마켓 RecyclerView 설정
             nearbyMarketRecyclerView.adapter = nearbyMarketAdapter
-
-            // 인기있는 취미
-            popularRecycler.adapter = suggestAdapter
-
-            popularRecycler.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-            annivalRecyclerView.adapter = annivalAdapter
-
-            annivalRecyclerView.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-            // 계절별 인기있는
-
-            seasonRecycler.adapter = seasonAdapter
-
-            seasonRecycler.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-
-            // 한줄에 2개씩 띄우도록 설정(spanCount)
             nearbyMarketRecyclerView.layoutManager = GridLayoutManager(
                 requireContext(),
                 1,
@@ -270,6 +230,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 false
             )
 
+            // 인기있는 취미
+            popularRecycler.adapter = suggestAdapter
+            popularRecycler.layoutManager = GridLayoutManager(
+                requireContext(),
+                1,
+                GridLayoutManager.HORIZONTAL,
+                false
+            )
+
+            annivalRecyclerView.adapter = annivalAdapter
+            annivalRecyclerView.layoutManager = GridLayoutManager(
+                requireContext(),
+                1,
+                GridLayoutManager.HORIZONTAL,
+                false
+            )
+
+            seasonRecycler.adapter = seasonAdapter
+            seasonRecycler.layoutManager = GridLayoutManager(
+                requireContext(),
+                1,
+                GridLayoutManager.HORIZONTAL,
+                false
+            )
 
 //            showMoreTextView.setOnClickListener {
 //                findNavController().navigate(

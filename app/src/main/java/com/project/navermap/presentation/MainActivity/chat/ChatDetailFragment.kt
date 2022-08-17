@@ -9,6 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChatDetailFragment : BaseFragment<FragmentChatDetailBinding>() {
+
     override fun getViewBinding(): FragmentChatDetailBinding =
         FragmentChatDetailBinding.inflate(layoutInflater)
 

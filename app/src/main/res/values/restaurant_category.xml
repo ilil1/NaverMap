@@ -1,6 +1,6 @@
 <resources>
     
-<!--    <string name="all">전체</string>-->
+    <string name="all_food">전체</string>
     <string name="korean_food">한식</string>
     <string name="dumpling_food">분식</string>
     <string name="cafe_dessert">카페 디저트</string>
@@ -10,7 +10,7 @@
     <string name="fast_food">패스트푸드</string>
     <string name="chicken_pizza">치킨•피자</string>
 
-<!--    <string name="all_type">식당</string>-->
+    <string name="all_food_type">식당</string>
     <string name="korean_food_type">한식</string>
     <string name="dumpling_food_type">분식</string>
     <string name="cafe_dessert_type">카페;디저트</string>

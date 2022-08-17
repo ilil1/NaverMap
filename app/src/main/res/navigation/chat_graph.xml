@@ -15,6 +15,7 @@
             android:id="@+id/action_chatFragment_to_chatDetailFragment"
             app:destination="@id/chatDetailFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/chatDetailFragment"
         android:name="com.project.navermap.presentation.MainActivity.chat.ChatDetailFragment"

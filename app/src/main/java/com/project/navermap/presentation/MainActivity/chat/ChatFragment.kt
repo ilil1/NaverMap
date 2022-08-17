@@ -1,18 +1,14 @@
 package com.project.navermap.presentation.MainActivity.chat
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.project.navermap.R
 import com.project.navermap.data.entity.ChatEntity
 import com.project.navermap.databinding.FragmentChatBinding
 import com.project.navermap.domain.model.ChatModel
-import com.project.navermap.presentation.MainActivity.home.HomeViewModel
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.ChatModelListener
@@ -37,9 +33,9 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
                     val bundle = Bundle()
                     bundle.putParcelable("data", data)
 
-                    view?.let { it1 ->
-                        Navigation.findNavController(it1)
-                            .navigate(R.id.action_chatFragment_to_chatDetailFragment,bundle)
+                    view?.let {
+                        findNavController()
+                            .navigate(R.id.action_chatFragment_to_chatDetailFragment, bundle)
                     }
                 }
             }

@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:allowBackup="true"
         android:name=".MapApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -16,10 +16,13 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.project.navermap.presentation.myLocation.MyLocationActivity"
+            android:name=".presentation.MainActivity.chat.ChatActivity"
             android:exported="true" />
         <activity
-            android:name="com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity"
+            android:name=".presentation.myLocation.MyLocationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.myLocation.mapLocationSetting.MapLocationSettingActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.MainActivity.MainActivity"
@@ -31,13 +34,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity"
+            android:name=".presentation.MainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="" />
-
+            android:value="5le4pbwk0f" />
     </application>
 
 </manifest>
