@@ -7,7 +7,7 @@ enum class RestaurantCategory(
     @StringRes val categoryNameId: Int,
     @StringRes val categoryTypeId: Int
 ) {
-    ALL(R.string.all, R.string.all_type),
+    ALL(R.string.all_food, R.string.all_food_type),
     KOREAN_FOOD(R.string.korean_food, R.string.korean_food_type),
     DUMPLING_FOOD(R.string.dumpling_food, R.string.dumpling_food_type),
     CAFE_DESSERT(R.string.cafe_dessert, R.string.cafe_dessert_type),
