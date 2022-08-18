@@ -14,10 +14,10 @@ import com.project.navermap.widget.adapter.viewholder.ModelViewHolder
 import javax.inject.Inject
 
 
-open class ModelRecyclerAdapter<M : Model, VM : ViewModel> @Inject constructor(
+open class ModelRecyclerAdapter<M : Model, VM : ViewModel> (
     private var modelList: List<Model>,
     private val viewModel: VM,
-    private val resourcesProvider: ResourcesProvider = ResourcesProviderImpl(MapApplication.appContext!!),
+    private val resourcesProvider: ResourcesProvider,
     private val adapterListener: AdapterListener
 ) : ListAdapter<Model, ModelViewHolder<M>>(Model.DIFF_CALLBACK) {
 

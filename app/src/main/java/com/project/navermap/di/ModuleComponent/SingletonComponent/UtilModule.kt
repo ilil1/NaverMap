@@ -17,7 +17,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 object UtilModule {
 
     @Provides
-    fun providedefaultResourcesProvider(@ApplicationContext context: Context
+    fun provideResourcesProvider(@ApplicationContext context: Context
     ): ResourcesProviderImpl {
         return ResourcesProviderImpl(context)
     }

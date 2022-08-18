@@ -10,9 +10,12 @@ import com.project.navermap.data.entity.ChatEntity
 import com.project.navermap.databinding.FragmentChatBinding
 import com.project.navermap.domain.model.ChatModel
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.ChatModelListener
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 class ChatFragment : BaseFragment<FragmentChatBinding>() {
@@ -22,10 +25,15 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
     override fun getViewBinding(): FragmentChatBinding =
         FragmentChatBinding.inflate(layoutInflater)
 
+    @Inject
+    lateinit var _resourcesProvider: Provider<ResourcesProvider>
+    private val resourcesProvider get() = _resourcesProvider.get()
+
     private val chatadapter by lazy {
         ModelRecyclerAdapter<ChatModel, ChatViewModel>(
             listOf(),
             viewModel,
+            resourcesProvider,
             adapterListener = object : ChatModelListener {
                 override fun onClickItem(model: ChatModel) {
 
