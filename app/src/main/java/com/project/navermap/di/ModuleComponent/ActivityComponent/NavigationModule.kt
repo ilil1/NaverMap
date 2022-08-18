@@ -14,6 +14,7 @@ import dagger.hilt.android.scopes.ActivityScoped
 @Module
 @InstallIn(ActivityComponent::class)
 object NavigationModule {
+
     @Provides
     fun provideActivity(activity: Activity) = activity as AppCompatActivity
 

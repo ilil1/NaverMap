@@ -21,7 +21,7 @@ abstract class RepositoryBindModule {
 
     @Binds
     abstract fun bindResourcesProvider(
-        defaultResourcesProvider: ResourcesProviderImpl
+        resourcesProviderImpl: ResourcesProviderImpl
     ): ResourcesProvider
 
     @Binds

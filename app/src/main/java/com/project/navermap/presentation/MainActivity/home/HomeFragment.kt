@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,11 +30,14 @@ import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.map.mapFragment.MapViewModel
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.SliderAdater
 import com.project.navermap.widget.adapter.listener.SuggestListener
 import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -47,11 +51,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun getViewBinding(): FragmentHomeBinding =
         FragmentHomeBinding.inflate(layoutInflater)
 
+    @Inject
+    lateinit var _resourcesProvider: Provider<ResourcesProvider>
+    private val resourcesProvider get() = _resourcesProvider.get()
+
     private val nearbyMarketAdapter by lazy {
         ModelRecyclerAdapter<TownMarketModel, HomeViewModel>(
             listOf(),
             viewModel,
-            adapterListener = object : TownMarketListener {
+            resourcesProvider,
+             object : TownMarketListener {
                 override fun onClickItem(model: TownMarketModel) {
                 }
             }
@@ -62,6 +71,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         ModelRecyclerAdapter<SuggestItemModel, HomeViewModel>(
             listOf(),
             viewModel,
+            resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
                 }
@@ -73,6 +83,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         ModelRecyclerAdapter<SuggestItemModel, HomeViewModel>(
             listOf(),
             viewModel,
+            resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
                 }
@@ -84,6 +95,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         ModelRecyclerAdapter<SuggestItemModel, HomeViewModel>(
             listOf(),
             viewModel,
+            resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
                 }

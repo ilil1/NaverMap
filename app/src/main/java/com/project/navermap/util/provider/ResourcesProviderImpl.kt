@@ -6,9 +6,10 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ResourcesProviderImpl @Inject constructor(
+class ResourcesProviderImpl(
     private val context: Context
 ) : ResourcesProvider {
 

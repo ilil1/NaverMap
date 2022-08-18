@@ -12,10 +12,12 @@ import com.project.navermap.databinding.FragmentListBinding
 import com.project.navermap.databinding.FragmentStoreBinding
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.MainActivity.map.mapFragment.MapViewModel
+import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 class RestaurantListFragment : Fragment() {
@@ -34,10 +36,15 @@ class RestaurantListFragment : Fragment() {
         RestaurantListViewModel.provideFactory(ViewModelFactory, restaurantCategory, locationEntity)
     }
 
+    @Inject
+    lateinit var _resourcesProvider: Provider<ResourcesProvider>
+    private val resourcesProvider get() = _resourcesProvider.get()
+
     private val adapter by lazy {
         ModelRecyclerAdapter<RestaurantModel, RestaurantListViewModel>(
             listOf(),
             viewModel,
+            resourcesProvider,
             adapterListener = object : RestaurantListListener {
                 override fun onClickItem(model: RestaurantModel) {
                 }
