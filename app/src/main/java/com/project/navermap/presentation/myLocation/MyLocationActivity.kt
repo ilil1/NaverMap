@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.*
+import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
