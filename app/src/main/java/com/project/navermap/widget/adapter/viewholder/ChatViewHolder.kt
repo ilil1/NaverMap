@@ -15,10 +15,7 @@ class ChatViewHolder(
     resourcesProvider: ResourcesProvider
 ) : ModelViewHolder<ChatModel>(binding, viewModel, resourcesProvider) {
 
-
-    override fun reset() {
-
-    }
+    override fun reset() {}
 
     override fun bindData(listModel: ChatModel) {
         super.bindData(listModel)

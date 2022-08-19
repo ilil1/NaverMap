@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var navControllerProvider: Provider<NavController>
+    //fragment가 생성이되면 그때 그 id값을 반환하면서 get으로 가져오게된다.
     private val navController get() = navControllerProvider.get()
 
     private val changeLocationLauncher =

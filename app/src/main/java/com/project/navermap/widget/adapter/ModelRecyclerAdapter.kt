@@ -23,7 +23,7 @@ open class ModelRecyclerAdapter<M : Model, VM : ViewModel> (
 
     override fun getItemViewType(position: Int): Int = modelList[position].type.ordinal
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModelViewHolder<M>{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModelViewHolder<M> {
         return  ViewHolderMapper.map(parent, CellType.values()[viewType], viewModel, resourcesProvider)
     }
 
@@ -31,7 +31,6 @@ open class ModelRecyclerAdapter<M : Model, VM : ViewModel> (
     override fun onBindViewHolder(holder: ModelViewHolder<M>, position: Int) {
         holder.bindData(modelList[position] as M)
         holder.bindViews(modelList[position] as M, adapterListener)
-
     }
 
     override fun submitList(list: List<Model>?) {

@@ -10,6 +10,7 @@ import com.project.navermap.presentation.MainActivity.store.restaurant.Restauran
 import javax.inject.Inject
 
 class MarkerFactory @Inject constructor() {
+
     fun createMarker(
         position: LatLng,
         category: RestaurantCategory,
