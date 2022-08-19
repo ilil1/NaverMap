@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             results.data?.getParcelableExtra<MapSearchInfoEntity>(MyLocationActivity.MY_LOCATION_KEY)
                 ?.let { mapSearchInfoEntity ->
                     viewModel.getReverseGeoInformation(mapSearchInfoEntity.locationLatLng)
-                    viewModel.setDestinationLocation(mapSearchInfoEntity.locationLatLng)
+//                    viewModel.setDestinationLocation(mapSearchInfoEntity.locationLatLng)
                 }
         }
 
@@ -106,7 +106,6 @@ class MainActivity : AppCompatActivity() {
                 is MainState.Success -> {
                     locationLoading.isGone = true
                     locationTitleTextView.text = it.mapSearchInfoEntity.fullAddress
-                    viewModel.setDestinationLocation(it.mapSearchInfoEntity.locationLatLng)
                 }
 
                 is MainState.Error -> {
@@ -142,7 +141,7 @@ class MainActivity : AppCompatActivity() {
         @RequiresApi(Build.VERSION_CODES.P)
         override fun onLocationChanged(location: Location) {
 
-            viewModel.setCurrentLocation(location)
+//            viewModel.setCurrentLocation(location)
             viewModel.getReverseGeoInformation(
                 LocationEntity(
                     latitude = location.latitude,

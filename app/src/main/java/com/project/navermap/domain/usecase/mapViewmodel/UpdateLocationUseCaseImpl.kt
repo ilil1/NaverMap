@@ -11,31 +11,31 @@ import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class UpdateLocationUseCaseImpl {
-    private lateinit var destLocation: LocationEntity
-    private var destMarker: Marker = Marker(
-        MarkerIcons.BLACK
-    ).apply {
-        zIndex = 111
-        iconTintColor = Color.parseColor("#FA295B")
-        width = 100
-        height = 125
-    }
-        get() = field.apply {
-            position = LatLng(
-                destLocation.latitude,
-                destLocation.longitude
-            )
-        }
+//    private lateinit var destLocation: LocationEntity
+//    private var destMarker: Marker = Marker(
+//        MarkerIcons.BLACK
+//    ).apply {
+//        zIndex = 111
+//        iconTintColor = Color.parseColor("#FA295B")
+//        width = 100
+//        height = 125
+//    }
+//        get() = field.apply {
+//            position = LatLng(
+//                destLocation.latitude,
+//                destLocation.longitude
+//            )
+//        }
 
-    fun updateLocation(location: LocationEntity, naverMap: NaverMap?) {
-        // 위치 업데이트 될 때마다 목적지 마커 초기화
-        destLocation = location
-        naverMap?.cameraPosition = CameraPosition(
-            LatLng(
-                destLocation.latitude,
-                destLocation.longitude
-            ), 15.0
-        )
-        destMarker.map = naverMap
-    }
+//    fun updateLocation(location: LocationEntity, naverMap: NaverMap?) {
+//        // 위치 업데이트 될 때마다 목적지 마커 초기화
+//        destLocation = location
+//        naverMap?.cameraPosition = CameraPosition(
+//            LatLng(
+//                destLocation.latitude,
+//                destLocation.longitude
+//            ), 15.0
+//        )
+//        destMarker.map = naverMap
+//    }
 }

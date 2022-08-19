@@ -1,14 +1,14 @@
 package com.project.navermap.presentation.MainActivity.map.mapFragment
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.domain.model.FoodModel
-import com.project.navermap.domain.usecase.mapViewmodel.*
+import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
+import com.project.navermap.domain.usecase.mapViewmodel.UpdateLocationUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
@@ -25,18 +25,21 @@ constructor(
     private val updateLocationUseCaseImpl: UpdateLocationUseCaseImpl
 ) : ViewModel() {
 
-    lateinit var destLocation: LocationEntity
+//    lateinit var destLocation: LocationEntity
     var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
-    val data: LiveData<MapState> = _data
+    val data: LiveData<MapState> get() = _data
 
     private val _items = MutableLiveData<List<FoodModel>>(emptyList())
     val items: LiveData<List<FoodModel>> get() = _items
 
-    fun setDestinationLocation(loc: LocationEntity) {
-        destLocation = loc
-    }
+    private val _destLocation = MutableLiveData<LocationEntity>()
+    val destLocation: LiveData<LocationEntity> get() = _destLocation
+
+//    fun setDestinationLocation(loc: LocationEntity) {
+//        destLocation = loc
+//    }
 
     //상점을 외부DB로 부터 가져온다
     fun loadRestaurantList(
@@ -45,10 +48,17 @@ constructor(
     ) = viewModelScope.launch {
         when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, location)) {
             is RestaurantResult.Success -> {
-                _data.postValue(MapState.Success(result.data))
+                _data.value = MapState.Success(result.data)
             }
         }
     }
+
+    fun updateDestLocation() {
+
+//        _destLocation.value = updateLocationUseCaseImpl.updateLocation()
+    }
+
+
 
     @SuppressLint("NullSafeMutableLiveData")
     fun loadRestaurantItems(

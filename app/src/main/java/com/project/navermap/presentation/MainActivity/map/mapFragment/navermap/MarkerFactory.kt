@@ -4,6 +4,7 @@ import android.graphics.Color
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.R
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import javax.inject.Inject
@@ -19,6 +20,15 @@ class MarkerFactory @Inject constructor() {
         this.tag = tag
         this.zIndex = zIndex
         setMarkerIconAndColor(this, category)
+    }
+
+    fun createDestMarker(destLocation: LatLng) = Marker(
+        destLocation, MarkerIcons.BLACK
+    ).apply {
+        zIndex = 111
+        iconTintColor = Color.parseColor("#FA295B")
+        width = 100
+        height = 125
     }
 
     private fun setMarkerIconAndColor(marker: Marker, category: RestaurantCategory) = with(marker) {
