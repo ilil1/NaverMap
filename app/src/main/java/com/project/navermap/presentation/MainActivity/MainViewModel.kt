@@ -22,23 +22,25 @@ import javax.inject.Inject
 class MainViewModel
 @Inject
 constructor(
-//    private val mapApiRepositoryImpl: MapApiRepository
     private val getReverseGeoUseCase: GetReverseGeoUseCase
 ) : ViewModel() {
 
     private val _locationData = MutableLiveData<MainState>(MainState.Uninitialized)
     val locationData: LiveData<MainState> = _locationData
 
-    val destLocation get() = if (locationData.value is MainState.Success) {
-        LatLng(
-            (locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng.latitude,
-            (locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng.longitude
-        )
-    } else {
-        null
-    }
+    val destLocation
+        get() = if (locationData.value is MainState.Success) {
+            LatLng(
+                (locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng.latitude,
+                (locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng.longitude
+            )
+        } else {
+            null
+        }
 
     // TODO: 현재 위치 정보
+    var curLocation: LatLng? = null
+        private set
 
     private lateinit var locationManager: LocationManager
 
@@ -68,6 +70,13 @@ constructor(
     fun getReverseGeoInformation(
         locationLatLngEntity: LocationEntity
     ) = viewModelScope.launch {
+
+        if (curLocation == null) {
+            curLocation = LatLng(
+                locationLatLngEntity.latitude,
+                locationLatLngEntity.longitude
+            )
+        }
 
         val addressInfo = getReverseGeoUseCase(locationLatLngEntity)
 

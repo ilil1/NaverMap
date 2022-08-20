@@ -133,12 +133,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 is MainState.Success -> {
                     val latlng = it.mapSearchInfoEntity.locationLatLng
                     viewModel.loadRestaurantList(RestaurantCategory.ALL, latlng)
-                    moveCameraTo(
-                        LatLng(
-                            latlng.latitude,
-                            latlng.longitude
-                        ), "위치를 불러오는 중입니다."
-                    )
+                    moveCameraTo(LatLng(latlng.latitude, latlng.longitude)) {
+                        showToast("위치를 불러오는 중입니다.")
+                    }
+
                     showDestMarker()
                 }
 
@@ -167,20 +165,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun setupClickListeners() = with(binding) {
         btnCurLocation.setOnClickListener {
             // TODO: 현재 위치 마커 구현
-            activityViewModel.destLocation?.let {
-                moveCameraTo(
-                    location = it,
-                    errorMessage = INITIALIZING_CURRENT_LOCATION
-                )
+            activityViewModel.curLocation?.let {
+                moveCameraTo(it) {
+                    showToast(INITIALIZING_CURRENT_LOCATION)
+                }
             }
         }
 
         btnDestLocation.setOnClickListener {
             activityViewModel.destLocation?.let {
-                moveCameraTo(
-                    location = it,
-                    errorMessage = INITIALIZING_DESTINATION_LOCATION
-                )
+                moveCameraTo(it) {
+                    showToast(INITIALIZING_DESTINATION_LOCATION)
+                }
 
                 showDestMarker()
             }
@@ -228,11 +224,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun moveCameraTo(location: LatLng, errorMessage: String) {
+    /**
+     * 카메라를 이동하는 함수
+     * @param location 이동할 위치
+     * @param onError 실패시 수행할 동작
+     */
+    private fun moveCameraTo(location: LatLng, onError: () -> Unit) {
         try {
             naverMap.cameraPosition = CameraPosition(location, 15.0)
         } catch (ex: Exception) {
-            showToast(errorMessage)
+            onError()
         }
     }
 
