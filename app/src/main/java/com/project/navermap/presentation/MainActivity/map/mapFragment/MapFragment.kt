@@ -192,6 +192,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         btnFilter.setOnClickListener {
             filterDialog.dialog = filterDialog.builder.show()
             viewModel.loadRestaurantList(
+                // TODO: 카테고리 필터 적용
                 RestaurantCategory.ALL,
                 (activityViewModel.locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng
             )
@@ -206,6 +207,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             startSearchActivityForResult.launch(
                 Intent(requireContext(), SearchAddressActivity::class.java)
             )
+        }
+
+        fbtnCloseViewPager.setOnClickListener {
+            viewPager2.visibility = View.GONE
+            fbtnCloseViewPager.visibility = View.GONE
         }
     }
 
