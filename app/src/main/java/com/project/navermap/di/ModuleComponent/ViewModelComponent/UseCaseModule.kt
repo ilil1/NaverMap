@@ -1,8 +1,10 @@
 package com.project.navermap.di.ModuleComponent.ViewModelComponent
 
+import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.data.repository.shop.ShopApiRepository
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
+import com.project.navermap.domain.usecase.GetReverseGeoUseCase
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import com.project.navermap.domain.usecase.mapViewmodel.LegacyShop.GetShopListUseCaseImpl
 import com.project.navermap.domain.usecase.mapViewmodel.UpdateLocationUseCaseImpl
@@ -27,4 +29,8 @@ object UseCaseModule {
     @Provides
     fun provideGetItemsByRestaurantIdUseCase(repository: RestaurantRepository) =
         GetItemsByRestaurantIdUseCase(repository)
+
+    @Provides
+    fun provideGetReverseGeoUseCase(repository: MapApiRepository) =
+        GetReverseGeoUseCase(repository)
 }

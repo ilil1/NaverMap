@@ -1,11 +1,8 @@
 package com.project.navermap.presentation.MainActivity.map.mapFragment
 
-import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.location.LocationListener
-import android.location.LocationManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
@@ -30,6 +27,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
@@ -38,6 +36,7 @@ import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.extensions.deleteOnMap
 import com.project.navermap.extensions.showOnMap
+import com.project.navermap.extensions.showToast
 import com.project.navermap.presentation.MainActivity.MainActivity
 import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
@@ -74,6 +73,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var infoWindow: InfoWindow? = null
 
+    private var destMarker: Marker? = null
+
     private val viewPagerAdapter by lazy {
         ModelRecyclerAdapter<FoodModel, MapViewModel>(
             emptyList(), viewModel, resourcesProvider,
@@ -86,7 +87,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private lateinit var filterDialog: FilterDialog
-    private lateinit var locationSource: FusedLocationSource
+    private val locationSource: FusedLocationSource by lazy {
+        FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+    }
 
     private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
@@ -95,13 +98,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
         private const val DISTANCE = 300
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
+
+        private const val FAILED_TO_GET_RESTAURANT_LIST = "리스트를 불러오는데 실패했습니다."
+        private const val INITIALIZING_CURRENT_LOCATION = "CurLocation 초기화 중"
+        private const val INITIALIZING_DESTINATION_LOCATION = "DestLocation 초기화 중"
     }
 
-    private val locationListener: LocationListener by lazy {
-        LocationListener { location ->
-            activityViewModel.curLocation = location
-        }
-    }
+//    private val locationListener: LocationListener by lazy {
+//        LocationListener { location ->
+//            activityViewModel.curLocation = location
+//        }
+//    }
 
     private fun observeData() {
         viewModel.data.observe(viewLifecycleOwner) {
@@ -111,7 +118,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
                 is MapState.Loading -> {}
                 is MapState.Success -> updateMarkers(it.restaurantInfoList)
-                is MapState.Error -> {}
+                is MapState.Error -> showToast(FAILED_TO_GET_RESTAURANT_LIST)
             }
         }
 
@@ -126,6 +133,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 is MainState.Success -> {
                     val latlng = it.mapSearchInfoEntity.locationLatLng
                     viewModel.loadRestaurantList(RestaurantCategory.ALL, latlng)
+                    moveCameraTo(
+                        LatLng(
+                            latlng.latitude,
+                            latlng.longitude
+                        ), "위치를 불러오는 중입니다."
+                    )
+                    showDestMarker()
                 }
 
                 is MainState.Error -> {}
@@ -144,7 +158,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         setupClickListeners()
 
-        initMap()
+//        initMap()
         binding.mapView.getMapAsync(this@MapFragment)
         binding.viewPager2.adapter = viewPagerAdapter
         return binding.root
@@ -152,39 +166,34 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun setupClickListeners() = with(binding) {
         btnCurLocation.setOnClickListener {
-            try {
-                naverMap.cameraPosition = CameraPosition(
-                    LatLng(
-                        activityViewModel.getCurrentLocation().latitude,
-                        activityViewModel.getCurrentLocation().longitude
-                    ), 15.0
+            // TODO: 현재 위치 마커 구현
+            activityViewModel.destLocation?.let {
+                moveCameraTo(
+                    location = it,
+                    errorMessage = INITIALIZING_CURRENT_LOCATION
                 )
-
-            } catch (ex: Exception) {
-                Toast.makeText(context, "CurLocation 초기화 중", Toast.LENGTH_SHORT).show()
             }
         }
 
         btnDestLocation.setOnClickListener {
-            try {
-                naverMap.cameraPosition = CameraPosition(
-                    LatLng(
-                        activityViewModel.getDestinationLocation().latitude,
-                        activityViewModel.getDestinationLocation().longitude
-                    ), 15.0
+            activityViewModel.destLocation?.let {
+                moveCameraTo(
+                    location = it,
+                    errorMessage = INITIALIZING_DESTINATION_LOCATION
                 )
 
-                // TODO: update location
-//                viewModel.updateLocation(activityViewModel.getDestinationLocation())
-
-            } catch (ex: Exception) {
-                Toast.makeText(context, "DestLocation 초기화 중", Toast.LENGTH_SHORT).show()
+                showDestMarker()
             }
         }
 
         btnSearchAround.setOnClickListener {
-            // TODO: update location
-//            viewModel.updateMarker()
+            val state = viewModel.data.value
+
+            if (state is MapState.Success) {
+                updateMarkers(state.restaurantInfoList)
+            } else {
+                showToast(FAILED_TO_GET_RESTAURANT_LIST)
+            }
         }
 
         btnFilter.setOnClickListener {
@@ -204,6 +213,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             startSearchActivityForResult.launch(
                 Intent(requireContext(), SearchAddressActivity::class.java)
             )
+        }
+    }
+
+    private fun showDestMarker() {
+        destMarker?.map = null
+        destMarker = markerFactory.createDestMarker(
+            destLocation = LatLng(
+                activityViewModel.destLocation!!.latitude,
+                activityViewModel.destLocation!!.longitude
+            )
+        ).apply {
+            map = naverMap
+        }
+    }
+
+    private fun moveCameraTo(location: LatLng, errorMessage: String) {
+        try {
+            naverMap.cameraPosition = CameraPosition(location, 15.0)
+        } catch (ex: Exception) {
+            showToast(errorMessage)
         }
     }
 
@@ -284,34 +313,34 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
 
                     activity?.runOnUiThread {
-                        Toast.makeText(requireContext(), asw.toString(), Toast.LENGTH_LONG).show()
+                        showToast(asw.toString(), Toast.LENGTH_LONG)
                     }
 
                 }.start()
             }
         }
 
-    @SuppressLint("MissingPermission")
-    private fun initMap() = with(binding) {
-        locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
-
-        val locationManager =
-            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            1000,
-            1f,
-            locationListener
-        )
-
-        locationManager.requestLocationUpdates(
-            LocationManager.NETWORK_PROVIDER,
-            1000,
-            1f,
-            locationListener
-        )
-    }
+//    @SuppressLint("MissingPermission")
+//    private fun initMap() = with(binding) {
+//        locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
+//
+//        val locationManager =
+//            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.GPS_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener
+//        )
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.NETWORK_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener
+//        )
+//    }
 
     override fun onMapReady(map: NaverMap) {
         naverMap = map.apply {
@@ -389,7 +418,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 )
 
                 activity?.runOnUiThread {
-                    Toast.makeText(requireContext(), asw.toString(), Toast.LENGTH_LONG).show()
+                    showToast(asw.toString(), Toast.LENGTH_LONG)
                 }
 
             }.start()
