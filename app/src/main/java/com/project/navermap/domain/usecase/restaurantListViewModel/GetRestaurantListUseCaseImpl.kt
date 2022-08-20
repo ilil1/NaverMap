@@ -20,6 +20,7 @@ class GetRestaurantListUseCaseImpl(
     ) = withContext(ioDispatcher) {
 
         val restaurantList = restaurantRepositoryImpl.getList(restaurantCategory, locationEntity)
+        _restaurantList.clear()
 
         val sortedList = when (RestautantFilterOrder.DEFAULT) {
             RestautantFilterOrder.DEFAULT -> {
