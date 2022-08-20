@@ -9,8 +9,8 @@ import androidx.core.content.ContextCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ResourcesProviderImpl(
-    private val context: Context
+class ResourcesProviderImpl @Inject constructor(
+    @ApplicationContext private val context: Context
 ) : ResourcesProvider {
 
     override fun getString(resId: Int): String = context.getString(resId)

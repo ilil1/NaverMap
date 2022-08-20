@@ -2,29 +2,24 @@ package com.project.navermap.di.ModuleComponent.ViewModelComponent
 
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
-import com.project.navermap.data.repository.shop.ShopApiRepository
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import com.project.navermap.domain.usecase.GetReverseGeoUseCase
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
-import com.project.navermap.domain.usecase.mapViewmodel.LegacyShop.GetShopListUseCaseImpl
-import com.project.navermap.domain.usecase.mapViewmodel.UpdateLocationUseCaseImpl
+import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object UseCaseModule {
     @Provides
-    fun provideShopListUseCase(
-        shopApiRepositoryImpl: ShopApiRepository,
+    fun provideGetShopListUseCase(
+        repository: RestaurantRepository,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ) = GetShopListUseCaseImpl(shopApiRepositoryImpl, ioDispatcher)
-
-    @Provides
-    fun provideUpdateLocationUseCase() = UpdateLocationUseCaseImpl()
+    ) = GetRestaurantListUseCaseImpl(repository, ioDispatcher)
 
     @Provides
     fun provideGetItemsByRestaurantIdUseCase(repository: RestaurantRepository) =
