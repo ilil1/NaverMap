@@ -20,7 +20,7 @@ class MarkerFactory @Inject constructor() {
         this.position = position
         this.tag = tag
         this.zIndex = zIndex
-        setMarkerIconAndColor(this, category)
+        setMarkerIconAndColor(category)
     }
 
     fun createDestMarker(destLocation: LatLng) = Marker(
@@ -32,29 +32,29 @@ class MarkerFactory @Inject constructor() {
         height = 125
     }
 
-    private fun setMarkerIconAndColor(marker: Marker, category: RestaurantCategory) = with(marker) {
-        when (category.ordinal) {
-            0 -> {
+    private fun Marker.setMarkerIconAndColor(category: RestaurantCategory) {
+        when (category) {
+            RestaurantCategory.ALL -> {
                 icon = OverlayImage.fromResource(R.drawable.marker_m)
                 iconTintColor = Color.parseColor("#46F5FF")
             }
-            1 -> {
+            RestaurantCategory.KOREAN_FOOD -> {
                 icon = OverlayImage.fromResource(R.drawable.marker_r)
                 iconTintColor = Color.parseColor("#FFCB41")
             }
-            2 -> {
+            RestaurantCategory.DUMPLING_FOOD -> {
                 icon = OverlayImage.fromResource(R.drawable.marker_s)
                 iconTintColor = Color.parseColor("#886AFF")
             }
-            3 -> {
+            RestaurantCategory.CAFE_DESSERT -> {
                 icon = OverlayImage.fromResource(R.drawable.marker_e)
                 iconTintColor = Color.parseColor("#04B404")
             }
-            4 -> {
+            RestaurantCategory.JAPANESE_FOOD -> {
                 icon = OverlayImage.fromResource(R.drawable.marker_f)
                 iconTintColor = Color.parseColor("#8A0886")
             }
-            5 -> {
+            else -> {
                 icon = OverlayImage.fromResource(R.drawable.marker_f)
                 iconTintColor = Color.parseColor("#0B2F3A")
             }
