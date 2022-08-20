@@ -68,7 +68,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
 
-    private var infoWindow: InfoWindow? = null
+    //    private var infoWindow: InfoWindow? = null
+    private val infoWindow by lazy {
+        InfoWindow().apply {
+            adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+                override fun getText(infoWindow: InfoWindow): CharSequence {
+                    // info window에 가게 이름이 뜨도록
+                    return (infoWindow.marker?.tag as RestaurantModel).restaurantTitle
+                }
+            }
+        }
+    }
 
     private var destMarker: Marker? = null
 
@@ -113,7 +123,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 is MapState.Uninitialized -> {
 //                    viewModel.loadShopList()
                 }
-                is MapState.Loading -> {}
+                is MapState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */ }
                 is MapState.Success -> updateMarkers(it.restaurantInfoList)
                 is MapState.Error -> showToast(FAILED_TO_GET_RESTAURANT_LIST)
             }
@@ -125,21 +135,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
-                is MainState.Uninitialized -> {}
-                is MainState.Loading -> {}
-                is MainState.Success -> {
-                    val latlng = it.mapSearchInfoEntity.locationLatLng
-                    viewModel.loadRestaurantList(RestaurantCategory.ALL, latlng)
-                    moveCameraTo(LatLng(latlng.latitude, latlng.longitude)) {
-                        showToast("위치를 불러오는 중입니다.")
-                    }
-
-                    showDestMarker()
-                }
-
-                is MainState.Error -> {}
+                is MainState.Uninitialized -> Unit
+                is MainState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */ }
+                is MainState.Success -> onMainStateSuccess(it)
+                is MainState.Error -> { /* TODO: 2022.08.20 에러 처리 */ }
             }
         }
+    }
+
+    private fun onMainStateSuccess(success: MainState.Success) {
+        val latlng = success.mapSearchInfoEntity.locationLatLng
+        viewModel.loadRestaurantList(RestaurantCategory.ALL, latlng)
+        moveCameraTo(LatLng(latlng.latitude, latlng.longitude)) {
+            showToast("위치를 불러오는 중입니다.")
+        }
+
+        showDestMarker()
     }
 
     override fun onCreateView(
@@ -212,9 +223,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         fbtnCloseViewPager.setOnClickListener {
             viewPager2.visibility = View.GONE
             fbtnCloseViewPager.visibility = View.GONE
+            infoWindow.close()
         }
     }
 
+    /**
+     * 목적지 마커를 띄우는 함수
+     */
     private fun showDestMarker() {
         destMarker?.map = null
         destMarker = markerFactory.createDestMarker(
@@ -240,6 +255,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * 주변 가게들에 대해 마커를 띄우는 함수
+     * @param restaurantInfoList 마커를 띄울 가게 리스트
+     */
     private fun updateMarkers(restaurantInfoList: List<RestaurantModel>) {
         markers.deleteOnMap()
         markers = restaurantInfoList.mapIndexed { index, restaurant ->
@@ -250,17 +269,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 zIndex = index
             ).apply {
                 setOnClickListener {
-                    this@MapFragment.infoWindow?.close()
-
-                    this@MapFragment.infoWindow = InfoWindow()
-                    this@MapFragment.infoWindow?.adapter =
-                        object : InfoWindow.DefaultTextAdapter(requireContext()) {
-                            override fun getText(infoWindow: InfoWindow): CharSequence {
-                                // info window에 가게 이름이 뜨도록
-                                return (infoWindow.marker?.tag as RestaurantModel).restaurantTitle
-                            }
-                        }
-                    this@MapFragment.infoWindow?.open(this)
+                    // 이전에 열려있는 info window를 닫음
+                    this@MapFragment.infoWindow.close()
+                    this@MapFragment.infoWindow.open(this)
 
                     viewModel.loadRestaurantItems((this.tag as RestaurantModel).restaurantInfoId)
                     // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
@@ -283,6 +294,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 Log.d("SearchActivityForResult", str)
 
+                // TODO: coroutine과 retrofit으로 바꾸기
                 Thread {
                     val obj: URL
                     val address: String = URLEncoder.encode(str, "UTF-8")
