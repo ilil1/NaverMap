@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
-import com.project.navermap.domain.usecase.mapViewmodel.UpdateLocationUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
@@ -22,10 +21,7 @@ class MapViewModel
 constructor(
     private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
     private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase,
-    private val updateLocationUseCaseImpl: UpdateLocationUseCaseImpl
 ) : ViewModel() {
-
-//    lateinit var destLocation: LocationEntity
     var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
@@ -33,13 +29,6 @@ constructor(
 
     private val _items = MutableLiveData<List<FoodModel>>(emptyList())
     val items: LiveData<List<FoodModel>> get() = _items
-
-    private val _destLocation = MutableLiveData<LocationEntity>()
-    val destLocation: LiveData<LocationEntity> get() = _destLocation
-
-//    fun setDestinationLocation(loc: LocationEntity) {
-//        destLocation = loc
-//    }
 
     //상점을 외부DB로 부터 가져온다
     fun loadRestaurantList(
@@ -52,13 +41,6 @@ constructor(
             }
         }
     }
-
-    fun updateDestLocation() {
-
-//        _destLocation.value = updateLocationUseCaseImpl.updateLocation()
-    }
-
-
 
     @SuppressLint("NullSafeMutableLiveData")
     fun loadRestaurantItems(
