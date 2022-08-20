@@ -2,7 +2,6 @@ package com.project.navermap.presentation.MainActivity.map.mapFragment
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
@@ -14,7 +13,6 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +25,6 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
@@ -239,11 +236,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun updateMarkers(restaurantInfoList: List<RestaurantModel>) {
         markers.deleteOnMap()
-        markers = restaurantInfoList.mapIndexed { index, it ->
+        markers = restaurantInfoList.mapIndexed { index, restaurant ->
             markerFactory.createMarker(
-                position = LatLng(it.latitude, it.longitude),
-                category = it.restaurantCategory,
-                tag = it.restaurantTitle,
+                position = LatLng(restaurant.latitude, restaurant.longitude),
+                category = restaurant.restaurantCategory,
+                tag = restaurant,
                 zIndex = index
             ).apply {
                 setOnClickListener {
@@ -253,12 +250,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     this@MapFragment.infoWindow?.adapter =
                         object : InfoWindow.DefaultTextAdapter(requireContext()) {
                             override fun getText(infoWindow: InfoWindow): CharSequence {
-                                return infoWindow.marker?.tag as CharSequence
+                                // info window에 가게 이름이 뜨도록
+                                return (infoWindow.marker?.tag as RestaurantModel).restaurantTitle
                             }
                         }
                     this@MapFragment.infoWindow?.open(this)
 
-                    viewModel.loadRestaurantItems(restaurantInfoList[zIndex].restaurantInfoId)
+                    viewModel.loadRestaurantItems((this.tag as RestaurantModel).restaurantInfoId)
                     // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
                     binding.viewPager2.visibility = View.VISIBLE
                     binding.fbtnCloseViewPager.visibility = View.VISIBLE
@@ -270,9 +268,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
     private val startSearchActivityForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
 
                 val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
@@ -282,7 +278,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Log.d("SearchActivityForResult", str)
 
                 Thread {
-
                     val obj: URL
                     val address: String = URLEncoder.encode(str, "UTF-8")
 
