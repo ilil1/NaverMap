@@ -20,4 +20,9 @@
     <string name="fast_food_type">패스트푸드</string>
     <string name="chicken_pizza_type">치킨;피자</string>
 
+    <string name="itemList">상품정보</string>
+    <string name="storeInfo">스토어 정보</string>
+    <string name="storeReview">스토어 리뷰</string>
+
+
 </resources>

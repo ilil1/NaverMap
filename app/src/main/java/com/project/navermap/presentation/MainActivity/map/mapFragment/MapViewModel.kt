@@ -27,25 +27,18 @@ constructor(
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> get() = _data
 
-    /* TODO: 2022-08-21 일 11:31, 물품 목록도 state로 관리 */
     private val _items = MutableLiveData<List<FoodModel>>(emptyList())
     val items: LiveData<List<FoodModel>> get() = _items
 
     //상점을 외부DB로 부터 가져온다
-    /* TODO: 2022-08-21 일 11:30, 필터 리스트로 받아오기 */
     fun loadRestaurantList(
         restaurantCategory: RestaurantCategory,
         location: LocationEntity
     ) = viewModelScope.launch {
-        when (val result = getRestaurantListUseCaseImpl.fetchData(
-            restaurantCategory,
-            location
-        )) {
+        when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, location)) {
             is RestaurantResult.Success -> {
                 _data.value = MapState.Success(result.data)
             }
-
-            RestaurantResult.Failure -> TODO("error state 처리")
         }
     }
 

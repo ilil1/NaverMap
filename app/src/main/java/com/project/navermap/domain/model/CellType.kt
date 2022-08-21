@@ -16,5 +16,6 @@ enum class CellType {
     STORE_CELL,
     HOME_REVIEW_ITEM_CELL,
     RESTAURANT_CELL,
-    FOOD_CELL
+    FOOD_CELL,
+    STORE_DETAIL_FOOD_CELL
 }
