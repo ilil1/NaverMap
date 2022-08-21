@@ -36,6 +36,8 @@
         <activity
             android:name=".presentation.MainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
+        <activity android:name=".presentation.MainActivity.store.storeDetail.StoreDetailActivty"
+            android:exported="true"/>
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

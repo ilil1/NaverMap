@@ -80,6 +80,11 @@ object ViewHolderMapper {
             MAP_ITEM_CELL -> TODO()
             STORE_CELL -> TODO()
             HOME_REVIEW_ITEM_CELL -> TODO()
+            STORE_DETAIL_FOOD_CELL -> SaleItemViewHolder(
+                ViewholderSaleItemBinding.inflate(inflater,parent,false),
+                viewModel,
+                resourcesProvider
+            )
         }
         return viewHolder as ModelViewHolder<M>
     }

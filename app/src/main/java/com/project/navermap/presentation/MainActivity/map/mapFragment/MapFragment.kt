@@ -31,14 +31,14 @@ import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.extensions.deleteOnMap
-import com.project.navermap.extensions.showOnMap
 import com.project.navermap.extensions.showToast
 import com.project.navermap.presentation.MainActivity.MainActivity
 import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity
+import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerClickListener
 import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerFactory
+import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.NaverMapHandler
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
@@ -49,6 +49,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import javax.inject.Inject
+import javax.inject.Provider
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -59,14 +60,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentMapBinding
 
-    private lateinit var naverMap: NaverMap
-    private var markers = emptyList<Marker>()
-
-    @Inject
-    lateinit var markerFactory: MarkerFactory
-
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
+    lateinit var naverMap: NaverMap
 
     private val infoWindow by lazy {
         InfoWindow().apply {
@@ -79,7 +73,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private var destMarker: Marker? = null
+
+    @Inject
+    lateinit var markerFactory: MarkerFactory
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
+
+    @Inject
+    lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
+    private val naverMapHandler get() = naverMapHandlerProvider.get()
+
+    private val markerClickListener: MarkerClickListener = {
+        // 이전에 열려있는 info window를 닫음
+        this@MapFragment.infoWindow.close()
+        this@MapFragment.infoWindow.open(this)
+
+        viewModel.loadRestaurantItems((this.tag as RestaurantModel).restaurantInfoId)
+        // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
+        binding.viewPager2.visibility = View.VISIBLE
+        binding.fbtnCloseViewPager.visibility = View.VISIBLE
+        true
+    }
+
+    private val destMarker: Marker by lazy {
+        markerFactory.createDestMarker()
+    }
 
     private val viewPagerAdapter by lazy {
         ModelRecyclerAdapter<FoodModel, MapViewModel>(
@@ -122,8 +141,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 is MapState.Uninitialized -> {
 //                    viewModel.loadShopList()
                 }
-                is MapState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */ }
-                is MapState.Success -> updateMarkers(it.restaurantInfoList)
+                is MapState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */
+                }
+                is MapState.Success -> naverMapHandler.updateRestaurantMarkers(
+                    it.restaurantInfoList,
+                    markerClickListener
+                )
                 is MapState.Error -> showToast(FAILED_TO_GET_RESTAURANT_LIST)
             }
         }
@@ -135,9 +158,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
                 is MainState.Uninitialized -> Unit
-                is MainState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */ }
+                is MainState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */
+                }
                 is MainState.Success -> onMainStateSuccess(it)
-                is MainState.Error -> { /* TODO: 2022.08.20 에러 처리 */ }
+                is MainState.Error -> { /* TODO: 2022.08.20 에러 처리 */
+                }
             }
         }
     }
@@ -145,11 +170,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun onMainStateSuccess(success: MainState.Success) {
         val latlng = success.mapSearchInfoEntity.locationLatLng
         viewModel.loadRestaurantList(RestaurantCategory.ALL, latlng)
-        moveCameraTo(LatLng(latlng.latitude, latlng.longitude)) {
+        naverMapHandler.moveCameraTo(LatLng(latlng.latitude, latlng.longitude)) {
             showToast("위치를 불러오는 중입니다.")
         }
 
-        showDestMarker()
+        activityViewModel.destLocation?.let {
+            naverMapHandler.updateDestMarker(
+                destMarker,
+                LatLng(
+                    it.latitude,
+                    it.longitude
+                )
+            )
+        }
     }
 
     override fun onCreateView(
@@ -173,7 +206,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         btnCurLocation.setOnClickListener {
             // TODO: 현재 위치 마커 구현
             activityViewModel.curLocation?.let {
-                moveCameraTo(it) {
+                naverMapHandler.moveCameraTo(it) {
                     showToast(INITIALIZING_CURRENT_LOCATION)
                 }
             }
@@ -181,19 +214,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         btnDestLocation.setOnClickListener {
             activityViewModel.destLocation?.let {
-                moveCameraTo(it) {
+                naverMapHandler.moveCameraTo(it) {
                     showToast(INITIALIZING_DESTINATION_LOCATION)
                 }
 
-                showDestMarker()
+                naverMapHandler.updateDestMarker(
+                    destMarker,
+                    LatLng(
+                        it.latitude,
+                        it.longitude
+                    )
+                )
             }
         }
 
         btnSearchAround.setOnClickListener {
             val state = viewModel.data.value
+            Log.d("TAG", "setupClickListeners: $state")
+
 
             if (state is MapState.Success) {
-                updateMarkers(state.restaurantInfoList)
+                naverMapHandler.updateRestaurantMarkers(
+                    state.restaurantInfoList,
+                    markerClickListener
+                )
             } else {
                 showToast(FAILED_TO_GET_RESTAURANT_LIST)
             }
@@ -209,7 +253,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         btnCloseMarkers.setOnClickListener {
-            markers.deleteOnMap()
+            naverMapHandler.deleteMarkers()
         }
 
         etSearch.setOnClickListener {
@@ -224,62 +268,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             fbtnCloseViewPager.visibility = View.GONE
             infoWindow.close()
         }
-    }
-
-    /**
-     * 목적지 마커를 띄우는 함수
-     */
-    private fun showDestMarker() {
-        destMarker?.map = null
-        destMarker = markerFactory.createDestMarker(
-            destLocation = LatLng(
-                activityViewModel.destLocation!!.latitude,
-                activityViewModel.destLocation!!.longitude
-            )
-        ).apply {
-            map = naverMap
-        }
-    }
-
-    /**
-     * 카메라를 이동하는 함수
-     * @param location 이동할 위치
-     * @param onError 실패시 수행할 동작
-     */
-    private fun moveCameraTo(location: LatLng, onError: () -> Unit) {
-        try {
-            naverMap.cameraPosition = CameraPosition(location, 15.0)
-        } catch (ex: Exception) {
-            onError()
-        }
-    }
-
-    /**
-     * 주변 가게들에 대해 마커를 띄우는 함수
-     * @param restaurantInfoList 마커를 띄울 가게 리스트
-     */
-    private fun updateMarkers(restaurantInfoList: List<RestaurantModel>) {
-        markers.deleteOnMap()
-        markers = restaurantInfoList.mapIndexed { index, restaurant ->
-            markerFactory.createMarker(
-                position = LatLng(restaurant.latitude, restaurant.longitude),
-                category = restaurant.restaurantCategory,
-                tag = restaurant,
-                zIndex = index
-            ).apply {
-                setOnClickListener {
-                    // 이전에 열려있는 info window를 닫음
-                    this@MapFragment.infoWindow.close()
-                    this@MapFragment.infoWindow.open(this)
-
-                    viewModel.loadRestaurantItems((this.tag as RestaurantModel).restaurantInfoId)
-                    // 여기서 오픈한 말풍선은 fbtnViewPager2를 클릭하면 제거
-                    binding.viewPager2.visibility = View.VISIBLE
-                    binding.fbtnCloseViewPager.visibility = View.VISIBLE
-                    true
-                }
-            }
-        }.also { it.showOnMap(naverMap) }
     }
 
 
@@ -356,7 +344,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //    }
 
     override fun onMapReady(map: NaverMap) {
-
         naverMap = map.apply {
             locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
             locationTrackingMode = LocationTrackingMode.NoFollow
@@ -365,14 +352,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             uiSettings.isCompassEnabled = true
         }
 
+//        naverMapHandler = NaverMapHandler(
+//            markerFactory, map
+//        )
+
         observeData()
     }
 
     private fun init() = with(binding.webViewAddress) {
-
 //        webViewAddress = // 메인 웹뷰
 //        webViewLayout = // 웹뷰가 속한 레이아웃
 //        공통 설정
+
         settings.apply {
             javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
             javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용

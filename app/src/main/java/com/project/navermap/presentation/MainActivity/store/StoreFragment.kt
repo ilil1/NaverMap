@@ -5,18 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
-import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.databinding.FragmentStoreBinding
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
+import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailActivty
 import com.project.navermap.widget.RestaurantListFragmentPagerAdapter
+import com.project.navermap.widget.adapter.listener.StoreListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,7 +62,7 @@ class StoreFragment : Fragment() {
             viewPagerAdapter = RestaurantListFragmentPagerAdapter(
                 this@StoreFragment,
                 restaurantListFragmentList,
-                locationLatLng
+                locationLatLng,
             )
 
             viewPager.adapter = viewPagerAdapter
@@ -80,4 +80,9 @@ class StoreFragment : Fragment() {
             }
         }
     }
+
+    companion object{
+        const val StoreFragment_KEY = "StoreFragment"
+    }
+
 }

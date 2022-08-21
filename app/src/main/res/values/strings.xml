@@ -20,6 +20,8 @@
     <string name="review">리뷰</string>
     <string name="market_open">OPEN</string>
     <string name="market_closed">CLOSED</string>
+    <string name="menu">상품정보</string>
+    <string name="shopinform">가게정보</string>
 
     <string name="home_item_stock">%1$d개 주문 가능</string>
     <string name="distance_unit_kilometer">km</string>
