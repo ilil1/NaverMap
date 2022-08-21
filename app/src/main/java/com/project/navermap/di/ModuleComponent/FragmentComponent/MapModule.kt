@@ -23,6 +23,9 @@ object MapModule {
     fun provideNaverMap(mapFragment: MapFragment) = mapFragment.naverMap
 
     @Provides
+    fun provideMarkerFactory() = MarkerFactory()
+
+    @Provides
     @FragmentScoped
     fun provideNaverMapHandler(
         markerFactory: MarkerFactory,

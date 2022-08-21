@@ -7,9 +7,8 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.R
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
-import javax.inject.Inject
 
-class MarkerFactory @Inject constructor() {
+class MarkerFactory {
 
     fun createMarker(
         position: LatLng,
