@@ -22,6 +22,7 @@ constructor(
     private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
     private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase,
 ) : ViewModel() {
+
     var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)

@@ -37,8 +37,7 @@ class RestaurantListFragment : Fragment() {
     }
 
     @Inject
-    lateinit var _resourcesProvider: Provider<ResourcesProvider>
-    private val resourcesProvider get() = _resourcesProvider.get()
+    lateinit var resourcesProvider: ResourcesProvider
 
     private val adapter by lazy {
         ModelRecyclerAdapter<RestaurantModel, RestaurantListViewModel>(

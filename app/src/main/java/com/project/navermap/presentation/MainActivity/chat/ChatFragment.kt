@@ -26,8 +26,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
         FragmentChatBinding.inflate(layoutInflater)
 
     @Inject
-    lateinit var _resourcesProvider: Provider<ResourcesProvider>
-    private val resourcesProvider get() = _resourcesProvider.get()
+    lateinit var resourcesProvider: ResourcesProvider
 
     private val chatadapter by lazy {
         ModelRecyclerAdapter<ChatModel, ChatViewModel>(

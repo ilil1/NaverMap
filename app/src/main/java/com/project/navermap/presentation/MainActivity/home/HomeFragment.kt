@@ -52,8 +52,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         FragmentHomeBinding.inflate(layoutInflater)
 
     @Inject
-    lateinit var _resourcesProvider: Provider<ResourcesProvider>
-    private val resourcesProvider get() = _resourcesProvider.get()
+    lateinit var resourcesProvider: ResourcesProvider
 
     private val nearbyMarketAdapter by lazy {
         ModelRecyclerAdapter<TownMarketModel, HomeViewModel>(
@@ -197,6 +196,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         viewPager2.adapter = SliderAdater(slideritems, viewPager2)
+
         viewPager2.layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT

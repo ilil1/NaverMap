@@ -68,7 +68,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
 
-    //    private var infoWindow: InfoWindow? = null
     private val infoWindow by lazy {
         InfoWindow().apply {
             adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
@@ -357,6 +356,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //    }
 
     override fun onMapReady(map: NaverMap) {
+
         naverMap = map.apply {
             locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
             locationTrackingMode = LocationTrackingMode.NoFollow
@@ -369,10 +369,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun init() = with(binding.webViewAddress) {
+
 //        webViewAddress = // 메인 웹뷰
 //        webViewLayout = // 웹뷰가 속한 레이아웃
 //        공통 설정
-
         settings.apply {
             javaScriptEnabled = true// javaScript 허용으로 메인 페이지 띄움
             javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
