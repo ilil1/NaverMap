@@ -35,7 +35,10 @@ constructor(
         restaurantCategory: RestaurantCategory,
         location: LocationEntity
     ) = viewModelScope.launch {
-        when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, location)) {
+        when (val result = getRestaurantListUseCaseImpl.fetchData(
+            restaurantCategory,
+            location
+        )) {
             is RestaurantResult.Success -> {
                 _data.value = MapState.Success(result.data)
             }
