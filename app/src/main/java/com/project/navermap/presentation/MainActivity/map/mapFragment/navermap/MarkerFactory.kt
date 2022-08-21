@@ -23,8 +23,8 @@ class MarkerFactory @Inject constructor() {
         setMarkerIconAndColor(category)
     }
 
-    fun createDestMarker(destLocation: LatLng) = Marker(
-        destLocation, MarkerIcons.BLACK
+    fun createDestMarker() = Marker(
+        MarkerIcons.BLACK
     ).apply {
         zIndex = 111
         iconTintColor = Color.parseColor("#FA295B")
