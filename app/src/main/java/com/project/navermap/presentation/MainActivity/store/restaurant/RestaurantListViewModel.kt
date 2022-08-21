@@ -2,16 +2,19 @@ package com.project.navermap.presentation.MainActivity.store.restaurant
 
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.domain.model.RestaurantModel
+import com.project.navermap.domain.usecase.mapViewmodel.ShopResult
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
+import com.project.navermap.presentation.MainActivity.map.mapFragment.MapState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-/* TODO: 2022-08-21 일 12:23, category와 location entity constructor에서 제거 */
 class RestaurantListViewModel @AssistedInject constructor(
     private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
     @Assisted private val restaurantCategory: RestaurantCategory,
@@ -41,15 +44,11 @@ class RestaurantListViewModel @AssistedInject constructor(
     val restaurantListLiveData: LiveData<List<RestaurantModel>> get() = _restaurantListLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
-        when (val result = getRestaurantListUseCaseImpl.fetchData(
-            restaurantCategory,
-            locationEntity
-        )) {
+        when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, locationEntity)) {
             is RestaurantResult.Success -> {
+//                val it = getRestaurantListUseCaseImpl.getRestaurantList()
                 _restaurantListLiveData.value = result.data
             }
-
-            RestaurantResult.Failure -> TODO("error state 처리")
         }
     }
 
