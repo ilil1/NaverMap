@@ -218,20 +218,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     showToast(INITIALIZING_DESTINATION_LOCATION)
                 }
 
-                activityViewModel.destLocation?.let {
-                    naverMapHandler.updateDestMarker(
-                        destMarker,
-                        LatLng(
-                            it.latitude,
-                            it.longitude
-                        )
+                naverMapHandler.updateDestMarker(
+                    destMarker,
+                    LatLng(
+                        it.latitude,
+                        it.longitude
                     )
-                }
+                )
             }
         }
 
         btnSearchAround.setOnClickListener {
             val state = viewModel.data.value
+            Log.d("TAG", "setupClickListeners: $state")
+
 
             if (state is MapState.Success) {
                 naverMapHandler.updateRestaurantMarkers(
