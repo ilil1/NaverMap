@@ -73,7 +73,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
     @Inject
     lateinit var markerFactory: MarkerFactory
 

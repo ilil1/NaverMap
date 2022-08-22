@@ -1,25 +1,17 @@
 package com.project.navermap.presentation.MainActivity.home
 
 import android.graphics.Typeface
-import android.os.Bundle
 import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.project.navermap.R
 import com.project.navermap.databinding.FragmentHomeBinding
@@ -28,16 +20,14 @@ import com.project.navermap.domain.model.SuggestItemModel
 import com.project.navermap.domain.model.TownMarketModel
 import com.project.navermap.presentation.MainActivity.MainState
 import com.project.navermap.presentation.MainActivity.MainViewModel
-import com.project.navermap.presentation.MainActivity.map.mapFragment.MapViewModel
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
-import com.project.navermap.widget.adapter.SliderAdater
+import com.project.navermap.widget.adapter.SliderAdapter
 import com.project.navermap.widget.adapter.listener.SuggestListener
 import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import javax.inject.Provider
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -187,29 +177,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         super.initViews()
 
-        viewPager2 = binding.pager
-
-        val slideritems: MutableList<SliderItemModel> = mutableListOf()
-
-        for (i: Int in 1..4) {
-            slideritems.add(SliderItemModel(R.drawable.testimage3))
+        val slideritems = mutableListOf<SliderItemModel>().apply {
+            for (i: Int in 1..4) {
+                add(SliderItemModel(R.drawable.testimage3))
+            }
         }
 
-        viewPager2.adapter = SliderAdater(slideritems, viewPager2)
+        val sliderRunnable = Runnable {
+            viewPager2.currentItem = viewPager2.currentItem + 1
+        }
 
+        viewPager2 = binding.pager
+        viewPager2.adapter = SliderAdapter(slideritems, viewPager2)
         viewPager2.layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
 
-        viewPager2.clipToPadding = false
-        viewPager2.offscreenPageLimit = 4
-        viewPager2.clipChildren = false //한개만 보이게
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-
-        val sliderRunnable = Runnable {
-            viewPager2.currentItem = viewPager2.currentItem + 1
-        }
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
