@@ -139,7 +139,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 is MapState.Uninitialized -> {
 //                    viewModel.loadShopList()
                 }
-                is MapState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */
+                is MapState.Loading -> {
                 }
                 is MapState.Success -> naverMapHandler.updateRestaurantMarkers(
                     it.restaurantInfoList,
@@ -156,10 +156,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
                 is MainState.Uninitialized -> Unit
-                is MainState.Loading -> { /* TODO: 2022.08.20 로딩 처리 */
+                is MainState.Loading -> {
                 }
                 is MainState.Success -> onMainStateSuccess(it)
-                is MainState.Error -> { /* TODO: 2022.08.20 에러 처리 */
+                is MainState.Error -> {
                 }
             }
         }
@@ -187,8 +187,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMapBinding.inflate(layoutInflater)
 
+        binding = FragmentMapBinding.inflate(layoutInflater)
         filterDialog = FilterDialog(requireActivity())
         filterDialog.initDialog(viewModel)
 
@@ -215,7 +215,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 naverMapHandler.moveCameraTo(it) {
                     showToast(INITIALIZING_DESTINATION_LOCATION)
                 }
-
                 naverMapHandler.updateDestMarker(
                     destMarker,
                     LatLng(
@@ -229,7 +228,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         btnSearchAround.setOnClickListener {
             val state = viewModel.data.value
             Log.d("TAG", "setupClickListeners: $state")
-
 
             if (state is MapState.Success) {
                 naverMapHandler.updateRestaurantMarkers(
@@ -252,13 +250,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         btnCloseMarkers.setOnClickListener {
             naverMapHandler.deleteMarkers()
-        }
-
-        etSearch.setOnClickListener {
-            init()
-            startSearchActivityForResult.launch(
-                Intent(requireContext(), SearchAddressActivity::class.java)
-            )
         }
 
         fbtnCloseViewPager.setOnClickListener {
@@ -349,11 +340,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             uiSettings.isScaleBarEnabled = true
             uiSettings.isCompassEnabled = true
         }
-
-//        naverMapHandler = NaverMapHandler(
-//            markerFactory, map
-//        )
-
         observeData()
     }
 

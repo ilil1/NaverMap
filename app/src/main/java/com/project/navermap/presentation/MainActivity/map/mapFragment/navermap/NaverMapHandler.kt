@@ -1,5 +1,7 @@
 package com.project.navermap.presentation.MainActivity.map.mapFragment.navermap
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.NaverMap
@@ -17,13 +19,15 @@ class NaverMapHandler(
     /**
      * Handler의 지도에 띄울 마커들
      */
-    private var markers = emptyList<Marker>()
 
+    private var markers = emptyList<Marker>()
+    //private var markers = mutableListOf<Marker>()
     /**
      * 목적지 마커를 띄우는 함수
      */
     fun updateDestMarker(destMarker: Marker, location: LatLng) {
         destMarker.position = location
+        destMarker.map = naverMap
     }
 
     /**
@@ -44,6 +48,7 @@ class NaverMapHandler(
      */
     fun deleteMarkers() {
         for (marker in markers) {
+            Log.d("markers", markers.toString())
             marker.map = null
         }
     }

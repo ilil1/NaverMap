@@ -37,13 +37,6 @@
             android:layout_height="wrap_content"
             android:text="주소지" />
 
-        <EditText
-            android:id="@+id/etSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="도로, 건물명 지번으로 검색" />
         <!--키보드 올라오는 현상 방지 android:focusable-->
 
     </LinearLayout>
