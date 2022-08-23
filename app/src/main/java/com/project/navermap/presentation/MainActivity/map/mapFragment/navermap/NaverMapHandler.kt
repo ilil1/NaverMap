@@ -48,7 +48,6 @@ class NaverMapHandler(
      */
     fun deleteMarkers() {
         for (marker in markers) {
-            //Log.d("markers", markers.toString())
             marker.map = null
         }
     }
@@ -57,6 +56,7 @@ class NaverMapHandler(
      * Handler의 지도에 마커들을 표시
      */
     fun showMarkers() {
+        Log.d("TAG", "showMarkers: $markers")
         for (marker in markers) {
             marker.map = naverMap
         }
@@ -71,7 +71,9 @@ class NaverMapHandler(
         clickListener: MarkerClickListener
     ) {
         deleteMarkers()
+
         markers = restaurantInfoList.mapIndexed { index, restaurant ->
+            Log.d("TAG", "updateRestaurantMarkers: $index")
             markerFactory.createMarker(
                 position = LatLng(restaurant.latitude, restaurant.longitude),
                 category = restaurant.restaurantCategory,
@@ -80,6 +82,8 @@ class NaverMapHandler(
             ).apply {
                 setOnClickListener { overlay -> clickListener(this, overlay) }
             }
-        }.also { showMarkers() }
+        }
+
+        showMarkers()
     }
 }

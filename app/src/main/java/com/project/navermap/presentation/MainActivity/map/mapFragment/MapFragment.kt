@@ -249,6 +249,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         btnCloseMarkers.setOnClickListener {
+            viewPager2.visibility = View.GONE
+            fbtnCloseViewPager.visibility = View.GONE
             naverMapHandler.deleteMarkers()
         }
 
