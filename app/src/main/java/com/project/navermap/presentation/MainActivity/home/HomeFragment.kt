@@ -178,6 +178,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
+    private val runnable = Runnable {
+        viewPager2.currentItem = 0
+    }
+
     private val sliderRunnable by lazy {
         Runnable {
             viewPager2.currentItem = viewPager2.currentItem + 1
@@ -199,6 +203,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         viewPager2 = binding.pager
         viewPager2.adapter = SliderAdapter(items, viewPager2)
+        viewPager2.post(runnable)
         viewPager2.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

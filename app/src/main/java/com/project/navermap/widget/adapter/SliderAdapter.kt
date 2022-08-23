@@ -17,6 +17,7 @@ class SliderAdapter(
 
     private val runnable = Runnable {
         sliderItems.addAll(sliderItems)
+        //viewPager2.currentItem = 0
     }
 
     inner class SliderViewHolder(val binding: SlideItemContainerBinding) :
@@ -42,6 +43,7 @@ class SliderAdapter(
         Log.d("position", position.toString())
         //position이 3일때 다시 post 한다.
         if (position == sliderItems.size - 1) {
+            //viewPager2.currentItem = 0
             viewPager2.post(runnable)
         }
     }

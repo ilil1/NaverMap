@@ -48,7 +48,7 @@ class NaverMapHandler(
      */
     fun deleteMarkers() {
         for (marker in markers) {
-            Log.d("markers", markers.toString())
+            //Log.d("markers", markers.toString())
             marker.map = null
         }
     }
