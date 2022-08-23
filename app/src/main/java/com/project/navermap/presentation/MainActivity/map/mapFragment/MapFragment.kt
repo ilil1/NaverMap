@@ -57,10 +57,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val viewModel: MapViewModel by viewModels()
     private val activityViewModel by activityViewModels<MainViewModel>()
-
     private lateinit var binding: FragmentMapBinding
 
     lateinit var naverMap: NaverMap
+
+    @Inject
+    lateinit var markerFactory: MarkerFactory
+
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
+
+    @Inject
+    lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
+    private val naverMapHandler get() = naverMapHandlerProvider.get()
 
     private val infoWindow by lazy {
         InfoWindow().apply {
@@ -72,16 +81,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-
-    @Inject
-    lateinit var markerFactory: MarkerFactory
-
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
-
-    @Inject
-    lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
-    private val naverMapHandler get() = naverMapHandlerProvider.get()
 
     private val markerClickListener: MarkerClickListener = {
         // 이전에 열려있는 info window를 닫음

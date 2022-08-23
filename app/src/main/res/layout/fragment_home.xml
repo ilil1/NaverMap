@@ -50,16 +50,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--            <TextView-->
-            <!--                android:id="@+id/showMoreSeason"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:text="더보기"-->
-            <!--                android:textSize="14sp"-->
-            <!--                app:layout_constraintBottom_toBottomOf="@id/season"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="@id/season" />-->
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/showMoreSeason"
                 android:layout_width="60dp"
@@ -78,9 +68,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/season" />
-
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/season"
+                app:spanCount="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -119,8 +109,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/popular" />
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/popular"
+                app:spanCount="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -157,7 +148,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/nearbyMarketTextView" />
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/nearbyMarketTextView"
+                app:spanCount="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,7 +188,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:nestedScrollingEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/annival" />
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/annival"
+                app:spanCount="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

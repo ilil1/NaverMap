@@ -1,10 +1,14 @@
 package com.project.navermap.presentation.MainActivity.home
 
+import android.content.ContentValues.TAG
 import android.graphics.Typeface
+import android.os.Bundle
 import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -166,6 +170,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
             }
         }
+
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             if (it is MainState.Success) {
                 viewModel.fetchData()
@@ -173,28 +178,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    override fun initViews() {
+    private val sliderRunnable by lazy {
+        Runnable {
+            viewPager2.currentItem = viewPager2.currentItem + 1
+        }
+    }
 
-        super.initViews()
-
-        val slideritems = mutableListOf<SliderItemModel>().apply {
+    private val items by lazy  {
+        mutableListOf<SliderItemModel>().apply {
             for (i: Int in 1..4) {
                 add(SliderItemModel(R.drawable.testimage3))
             }
         }
+    }
 
-        val sliderRunnable = Runnable {
-            viewPager2.currentItem = viewPager2.currentItem + 1
-        }
+    override fun initViews() {
+        super.initViews()
+
+        Log.d(TAG, "initViews: ")
 
         viewPager2 = binding.pager
-        viewPager2.adapter = SliderAdapter(slideritems, viewPager2)
-        viewPager2.layoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-
-        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        viewPager2.adapter = SliderAdapter(items, viewPager2)
+        viewPager2.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -205,58 +210,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         })
 
         with(binding) {
-
             searchView.isSubmitButtonEnabled = true
-
-            val spannable = SpannableStringBuilder(popular.text)
-            spannable.setSpan(
-                StyleSpan(Typeface.BOLD),
-                10,
-                13,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-
-            popular.text = spannable
-
-            // 근처 마켓 RecyclerView 설정
             nearbyMarketRecyclerView.adapter = nearbyMarketAdapter
-            nearbyMarketRecyclerView.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-
-            // 인기있는 취미
-            popularRecycler.adapter = suggestAdapter
-            popularRecycler.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-
-            annivalRecyclerView.adapter = annivalAdapter
-            annivalRecyclerView.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-
             seasonRecycler.adapter = seasonAdapter
-            seasonRecycler.layoutManager = GridLayoutManager(
-                requireContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false
-            )
-
-//            showMoreTextView.setOnClickListener {
-//                findNavController().navigate(
-//                    HomeFragmentDirections.actionHomeMainFragmentToMap()
-//                )
-//            }
+            popularRecycler.adapter = suggestAdapter
+            annivalRecyclerView.adapter = annivalAdapter
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewPager2.adapter = null
     }
 }

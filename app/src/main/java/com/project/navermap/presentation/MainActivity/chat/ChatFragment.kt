@@ -56,15 +56,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
 
     override fun initViews() {
         super.initViews()
-
         binding.chatRecy.adapter = chatadapter
-        binding.chatRecy.layoutManager =  GridLayoutManager(
-            requireContext(),
-            1,
-            GridLayoutManager.VERTICAL,
-            false
-        )
-
         binding.back.setOnClickListener {
             activity?.finish()
         }

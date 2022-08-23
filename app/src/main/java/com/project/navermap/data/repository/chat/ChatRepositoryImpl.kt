@@ -6,7 +6,7 @@ import com.project.navermap.domain.model.ChatModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
-class DefaultChatRepository @Inject constructor(
+class ChatRepositoryImpl @Inject constructor(
 ) : ChatRepository {
 
     override fun findChatList(): List<ChatModel> {

@@ -1,6 +1,7 @@
 package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
 import com.project.navermap.data.extensions.load
 import com.project.navermap.databinding.ViewholderChatlistBinding
 import com.project.navermap.domain.model.ChatModel
@@ -20,11 +21,10 @@ class ChatViewHolder(
     override fun bindData(listModel: ChatModel) {
         super.bindData(listModel)
         with(binding) {
-            storeName.text = listModel.StoreName
             storeImage.load(listModel.ImageUrl, 0f)
+            storeName.text = listModel.StoreName
             date.text = listModel.Data
             recentlyText.text = listModel.RecentlyText
-
         }
     }
 

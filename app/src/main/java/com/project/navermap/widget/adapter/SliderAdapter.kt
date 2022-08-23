@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.project.navermap.databinding.SlideItemContainerBinding
 import com.project.navermap.domain.model.SliderItemModel
+import kotlin.Byte.Companion.MAX_VALUE
 
 class SliderAdapter(
     private val sliderItems: MutableList<SliderItemModel>,
@@ -16,17 +17,17 @@ class SliderAdapter(
 
     private val runnable = Runnable {
         sliderItems.addAll(sliderItems)
-        notifyDataSetChanged()
     }
 
     inner class SliderViewHolder(val binding: SlideItemContainerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(Item: SliderItemModel) {
+            binding.itemNameText.text = position.toString()
             binding.pagerimage.setImageResource(Item.image)
         }
     }
 
-    override fun getItemCount(): Int = sliderItems.size
+    override fun getItemCount(): Int = Int.MAX_VALUE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
         val binding =
@@ -37,10 +38,10 @@ class SliderAdapter(
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
         holder.bind(sliderItems[position])
-
-        Log.d("sliderItems.size", sliderItems.size.toString())
+        Log.d("sliderItems", sliderItems.size.toString())
+        Log.d("position", position.toString())
+        //position이 3일때 다시 post 한다.
         if (position == sliderItems.size - 1) {
-            Log.d("runnablecall", sliderItems.size.toString())
             viewPager2.post(runnable)
         }
     }
