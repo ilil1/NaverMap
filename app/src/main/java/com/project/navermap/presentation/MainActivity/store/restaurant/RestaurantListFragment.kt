@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.FragmentListBinding
+import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.databinding.FragmentStoreBinding
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.MainActivity.map.mapFragment.MapViewModel
 import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailActivty
+import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
@@ -21,9 +23,10 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @AndroidEntryPoint
-class RestaurantListFragment : Fragment() {
+class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
 
-    private lateinit var binding: FragmentListBinding
+    override fun getViewBinding(): FragmentListBinding =
+        FragmentListBinding.inflate(layoutInflater)
 
     private val restaurantCategory
     by lazy { arguments?.getSerializable(RESTAURANT_CATEGORY_KEY) as RestaurantCategory }
@@ -33,6 +36,9 @@ class RestaurantListFragment : Fragment() {
 
     @Inject lateinit var ViewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
 
+    /**
+     * hilt를 활용한 런타임 주입인데 Hilt의 의존성 관리상 저장되는 위치가 달라서 생기는 문제가 있음.
+     */
     val viewModel by viewModels<RestaurantListViewModel> {
         RestaurantListViewModel.provideFactory(ViewModelFactory, restaurantCategory, locationEntity)
     }
@@ -54,18 +60,12 @@ class RestaurantListFragment : Fragment() {
             })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentListBinding.inflate(layoutInflater)
-        observeData()
+    override fun initState() {
+        super.initState()
         viewModel.fetchData()
-        return binding.root
     }
 
-
-    fun observeData() {
+    override fun observeData() {
         viewModel.restaurantListLiveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.recyclerVIew.adapter = adapter
@@ -73,7 +73,6 @@ class RestaurantListFragment : Fragment() {
     }
 
     companion object {
-        const val RESTAURANT_KEY = "Restaurant"
         const val RESTAURANT_CATEGORY_KEY = "restaurantCategory"
         const val LOCATION_KEY = "location"
 

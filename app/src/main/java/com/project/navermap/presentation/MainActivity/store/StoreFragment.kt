@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.databinding.FragmentListBinding
 import com.project.navermap.databinding.FragmentStoreBinding
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.MainActivity.MainState
@@ -15,28 +16,21 @@ import com.project.navermap.presentation.MainActivity.MainViewModel
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
 import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailActivty
+import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.widget.RestaurantListFragmentPagerAdapter
 import com.project.navermap.widget.adapter.listener.StoreListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StoreFragment : Fragment() {
+class StoreFragment : BaseFragment<FragmentStoreBinding>() {
 
     private val activityViewModel by activityViewModels<MainViewModel>()
     private lateinit var viewPagerAdapter: RestaurantListFragmentPagerAdapter
-    private lateinit var binding: FragmentStoreBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun getViewBinding(): FragmentStoreBinding =
+        FragmentStoreBinding.inflate(layoutInflater)
 
-        binding = FragmentStoreBinding.inflate(layoutInflater)
-        observeData()
-        return binding.root
-    }
-
-    fun observeData() {
+    override fun observeData() {
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
                 is MainState.Uninitialized -> {}
