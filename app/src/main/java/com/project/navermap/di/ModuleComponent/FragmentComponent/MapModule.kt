@@ -2,9 +2,9 @@ package com.project.navermap.di.ModuleComponent.FragmentComponent
 
 import androidx.fragment.app.Fragment
 import com.naver.maps.map.NaverMap
-import com.project.navermap.presentation.MainActivity.map.mapFragment.MapFragment
-import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerFactory
-import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.NaverMapHandler
+import com.project.navermap.presentation.mainActivity.map.mapFragment.MapFragment
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerFactory
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

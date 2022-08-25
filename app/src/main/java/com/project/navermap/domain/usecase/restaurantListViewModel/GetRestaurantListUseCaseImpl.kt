@@ -3,9 +3,8 @@ package com.project.navermap.domain.usecase.restaurantListViewModel
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
-import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestautantFilterOrder
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestautantFilterOrder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 

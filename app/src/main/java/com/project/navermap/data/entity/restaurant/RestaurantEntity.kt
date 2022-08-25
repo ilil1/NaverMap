@@ -3,7 +3,7 @@ package com.project.navermap.data.entity.restaurant
 import android.os.Parcelable
 import androidx.room.PrimaryKey
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

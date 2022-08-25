@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.project.navermap.presentation.MainActivity.chat.ChatFragment"
+        android:name="com.project.navermap.presentation.mainActivity.chat.ChatFragment"
         android:label="ChatFragment"
         tools:layout="@layout/fragment_chat"
         >
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/chatDetailFragment"
-        android:name="com.project.navermap.presentation.MainActivity.chat.ChatDetailFragment"
+        android:name="com.project.navermap.presentation.mainActivity.chat.ChatDetailFragment"
         tools:layout="@layout/fragment_chat_detail"
         android:label="ChatDetailFragment" >
         <action

@@ -1,20 +1,20 @@
-package com.project.navermap.presentation.myLocation.mapLocationSetting
+package com.project.navermap.presentation.mainActivity
 
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.MapSearchInfoEntity
 
-sealed class MapLocationSettingState {
+sealed class MainState {
 
-    object Uninitialized : MapLocationSettingState()
-    object Loading : MapLocationSettingState()
+    object Uninitialized : MainState()
+    object Loading : MainState()
 
     data class Success(
         val mapSearchInfoEntity: MapSearchInfoEntity,
         val isLocationSame: Boolean,
 //        val foodMenuListInBasket: List<RestaurantFoodEntity>? = null
-    ) : MapLocationSettingState()
+    ) : MainState()
 
     data class Error(
         @StringRes val errorMessage: Int
-    ) : MapLocationSettingState()
+    ) : MainState()
 }

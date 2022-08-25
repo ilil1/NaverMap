@@ -1,7 +1,7 @@
 package com.project.navermap.domain.model
 
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 
 data class RestaurantModel(
     override val id: Long,

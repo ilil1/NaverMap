@@ -7,10 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
-    tools:context=".presentation.MainActivity.store.storeDetail.StoreDetailActivty">
-
-
-
+    tools:context=".presentation.mainActivity.store.storeDetail.StoreDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

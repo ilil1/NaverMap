@@ -16,7 +16,7 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".presentation.MainActivity.chat.ChatActivity"
+            android:name=".presentation.mainActivity.chat.ChatActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.myLocation.MyLocationActivity"
@@ -25,7 +25,7 @@
             android:name=".presentation.myLocation.mapLocationSetting.MapLocationSettingActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.MainActivity.MainActivity"
+            android:name=".presentation.mainActivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,9 +34,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.MainActivity.map.SearchAddress.SearchAddressActivity"
+            android:name=".presentation.mainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
-        <activity android:name=".presentation.MainActivity.store.storeDetail.StoreDetailActivty"
+        <activity android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivity"
             android:exported="true"/>
 
         <meta-data

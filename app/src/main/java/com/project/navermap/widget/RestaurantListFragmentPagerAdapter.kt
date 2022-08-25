@@ -3,9 +3,7 @@ package com.project.navermap.widget
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
-import com.project.navermap.widget.adapter.listener.AdapterListener
-import com.project.navermap.widget.adapter.listener.StoreListener
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
 
 class RestaurantListFragmentPagerAdapter(
     fragment: Fragment,
