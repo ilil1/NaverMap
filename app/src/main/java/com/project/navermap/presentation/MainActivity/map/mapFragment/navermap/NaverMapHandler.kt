@@ -1,7 +1,5 @@
 package com.project.navermap.presentation.MainActivity.map.mapFragment.navermap
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.NaverMap
@@ -19,7 +17,6 @@ class NaverMapHandler(
     /**
      * Handler의 지도에 띄울 마커들
      */
-
     private var markers = emptyList<Marker>()
 
     /**
@@ -56,7 +53,6 @@ class NaverMapHandler(
      * Handler의 지도에 마커들을 표시
      */
     fun showMarkers() {
-        Log.d("TAG", "showMarkers: $markers")
         for (marker in markers) {
             marker.map = naverMap
         }
@@ -73,7 +69,6 @@ class NaverMapHandler(
         deleteMarkers()
 
         markers = restaurantInfoList.mapIndexed { index, restaurant ->
-            Log.d("TAG", "updateRestaurantMarkers: $index")
             markerFactory.createMarker(
                 position = LatLng(restaurant.latitude, restaurant.longitude),
                 category = restaurant.restaurantCategory,
