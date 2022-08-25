@@ -21,7 +21,7 @@ class NaverMapHandler(
      */
 
     private var markers = emptyList<Marker>()
-    //private var markers = mutableListOf<Marker>()
+
     /**
      * 목적지 마커를 띄우는 함수
      */

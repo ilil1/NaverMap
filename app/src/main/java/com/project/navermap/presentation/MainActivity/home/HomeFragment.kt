@@ -202,8 +202,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         Log.d(TAG, "initViews: ")
 
         viewPager2 = binding.pager
-        viewPager2.adapter = SliderAdapter(items, viewPager2)
         viewPager2.post(runnable)
+        viewPager2.adapter = SliderAdapter(items, viewPager2)
         viewPager2.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

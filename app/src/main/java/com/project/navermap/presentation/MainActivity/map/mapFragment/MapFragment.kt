@@ -28,6 +28,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
+import com.project.navermap.databinding.FragmentHomeBinding
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
@@ -40,6 +41,7 @@ import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.M
 import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerFactory
 import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.NaverMapHandler
 import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener
@@ -53,11 +55,13 @@ import javax.inject.Provider
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     private val viewModel: MapViewModel by viewModels()
     private val activityViewModel by activityViewModels<MainViewModel>()
-    private lateinit var binding: FragmentMapBinding
+
+    override fun getViewBinding(): FragmentMapBinding =
+        FragmentMapBinding.inflate(layoutInflater)
 
     lateinit var naverMap: NaverMap
 
@@ -133,7 +137,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //        }
 //    }
 
-    private fun observeData() {
+    private fun mapObserveData() {
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
                 is MapState.Uninitialized -> {
@@ -183,21 +187,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        binding = FragmentMapBinding.inflate(layoutInflater)
+    override fun initState() {
+        super.initState()
+        //initMap()
+        setupClickListeners()
         filterDialog = FilterDialog(requireActivity())
         filterDialog.initDialog(viewModel)
-
-        setupClickListeners()
-
-//        initMap()
         binding.mapView.getMapAsync(this@MapFragment)
         binding.viewPager2.adapter = viewPagerAdapter
-        return binding.root
     }
 
     private fun setupClickListeners() = with(binding) {
@@ -228,7 +225,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         btnSearchAround.setOnClickListener {
             val state = viewModel.data.value
             Log.d("TAG", "setupClickListeners: $state")
-
             if (state is MapState.Success) {
                 naverMapHandler.updateRestaurantMarkers(
                     state.restaurantInfoList,
@@ -261,7 +257,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    override fun onMapReady(map: NaverMap) {
+        naverMap = map.apply {
+            locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
+            locationTrackingMode = LocationTrackingMode.NoFollow
+            uiSettings.isLocationButtonEnabled = true
+            uiSettings.isScaleBarEnabled = true
+            uiSettings.isCompassEnabled = true
+        }
+        mapObserveData()
+    }
 
+    //웹뷰 관련 코드들 제거 해야함
     private val startSearchActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -333,17 +340,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //            locationListener
 //        )
 //    }
-
-    override fun onMapReady(map: NaverMap) {
-        naverMap = map.apply {
-            locationSource = this@MapFragment.locationSource //현재 위치값을 넘긴다
-            locationTrackingMode = LocationTrackingMode.NoFollow
-            uiSettings.isLocationButtonEnabled = true
-            uiSettings.isScaleBarEnabled = true
-            uiSettings.isCompassEnabled = true
-        }
-        observeData()
-    }
 
     private fun init() = with(binding.webViewAddress) {
 //        webViewAddress = // 메인 웹뷰
