@@ -35,11 +35,11 @@ class StoreDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private val _items = MutableLiveData<StoreDetailResult>(StoreDetailResult.Uninitialized)
-    val items: LiveData<StoreDetailResult> get() = _items
+    private val _storeDetailResultLiveData = MutableLiveData<StoreDetailResult>(StoreDetailResult.Uninitialized)
+    val storeDetailResultLiveData: LiveData<StoreDetailResult> get() = _storeDetailResultLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
-        _items.value = StoreDetailResult.Success(
+        _storeDetailResultLiveData.value = StoreDetailResult.Success(
             restaurantEntity = restaurantEntity
         )
     }

@@ -181,7 +181,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.initViews()
 
         viewPager2 = binding.pager
-        viewPager2.post(runnable)
+        viewPager2.post(runnable) //0번 position으로 초기화
         viewPager2.adapter = SliderAdapter(items, viewPager2)
         viewPager2.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 

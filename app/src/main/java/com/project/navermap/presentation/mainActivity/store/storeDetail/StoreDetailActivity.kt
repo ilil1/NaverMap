@@ -39,7 +39,7 @@ class StoreDetailActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.items.observe(this) {
+        viewModel.storeDetailResultLiveData.observe(this) {
             when(it){
                 is StoreDetailResult.Uninitialized -> {}
                 is StoreDetailResult.Loading -> {}
@@ -56,6 +56,10 @@ class StoreDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel.fetchData()
         observeData()
+
+        binding.back.setOnClickListener {
+            finish()
+        }
     }
 
     private fun bundleData(restaurantEntity: RestaurantEntity) {
