@@ -1,45 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/topLinearLayout"
-        android:layout_width="match_parent"
+    <HorizontalScrollView
+        android:id="@+id/filterScrollView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnFilter"
-            android:layout_width="65dp"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/orderChipGroup"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="필터" />
+            android:paddingHorizontal="12dp"
+            app:chipSpacingHorizontal="4dp"
+            app:chipSpacingVertical="6dp"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true"
+            tools:visibility="visible">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCloseMarkers"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
-            android:text="닫기" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/btnFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="가게 필터"
+                app:chipIcon="@drawable/list"
+                app:chipIconEnabled="true"
+                app:chipBackgroundColor="#D8F4F2"
+                app:chipIconTint="#000000"
+                tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_curLocation"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
-            android:text="현위치" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/btn_curLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="현위치"
+                app:chipIcon="@drawable/my_location"
+                app:chipIconEnabled="true"
+                app:chipBackgroundColor="#D8F4F2"
+                app:chipIconTint="#000000"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_destLocation"
-            android:layout_width="65dp"
-            android:layout_height="wrap_content"
-            android:text="주소지" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/btn_destLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주소지"
+                app:chipIcon="@drawable/address_location"
+                app:chipIconEnabled="true"
+                app:chipBackgroundColor="#D8F4F2"
+                app:chipIconTint="#000000"/>
 
-        <!--키보드 올라오는 현상 방지 android:focusable-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/btnCloseMarkers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="닫기"
+                app:chipBackgroundColor="#D8F4F2" />
 
-    </LinearLayout>
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
 
     <WebView
         android:id="@+id/webView_address"
@@ -48,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/filterScrollView" />
 
     <com.naver.maps.map.MapView
         android:id="@+id/map_view"
@@ -56,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/filterScrollView" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_search_around"

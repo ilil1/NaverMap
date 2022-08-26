@@ -16,6 +16,9 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".chippractice"
+            android:exported="true" />
+        <activity
             android:name=".presentation.mainActivity.chat.ChatActivity"
             android:exported="true" />
         <activity
@@ -36,8 +39,9 @@
         <activity
             android:name=".presentation.mainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
-        <activity android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
