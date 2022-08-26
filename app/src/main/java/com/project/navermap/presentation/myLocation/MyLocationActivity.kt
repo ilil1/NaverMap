@@ -28,6 +28,24 @@ class MyLocationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyLocationBinding
     lateinit var recentAddrAdapter: RecentAddrAdapter
 
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val bundle = result.data?.extras
+                val result = bundle?.get("result")
+
+                intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
+                setResult(Activity.RESULT_OK, intent)
+
+                viewModel.saveRecentSearchItems(result as MapSearchInfoEntity)
+
+                Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
+                finish() //반환시에 MyLocationActivity finish()
+            }
+        }
+
     companion object {
 
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
@@ -74,24 +92,6 @@ class MyLocationActivity : AppCompatActivity() {
 
         observeData()
     }
-
-    private val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-
-                val bundle = result.data?.extras
-                val result = bundle?.get("result")
-
-                //intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
-                //setResult(Activity.RESULT_OK, intent)
-
-                viewModel.saveRecentSearchItems(result as MapSearchInfoEntity)
-
-                Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
-                //finish()//반환시에 MyLocationActivity finish()
-            }
-        }
 
     private fun observeData() = with(binding) {
 

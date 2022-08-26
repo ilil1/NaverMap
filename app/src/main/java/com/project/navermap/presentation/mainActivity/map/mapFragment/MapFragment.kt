@@ -134,11 +134,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private fun mapObserveData() {
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
-                is MapState.Uninitialized -> {
-//                    viewModel.loadShopList()
-                }
-                is MapState.Loading -> {
-                }
+                is MapState.Uninitialized -> {}
+                is MapState.Loading -> {}
                 is MapState.Success -> naverMapHandler.updateRestaurantMarkers(
                     it.restaurantInfoList,
                     markerClickListener
