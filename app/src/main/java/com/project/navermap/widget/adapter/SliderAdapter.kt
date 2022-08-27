@@ -23,7 +23,7 @@ class SliderAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(Item: SliderItemModel) {
             //binding.itemNameText.text = (position % 3 + 1).toString()
-            binding.itemNameText.text = position.toString()
+            //binding.itemNameText.text = position.toString()
             binding.pagerimage.setImageResource(Item.image)
         }
     }
