@@ -14,20 +14,18 @@ class RecentAddrAdapter(val itemClick: (AddressHistoryEntity) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val b = RecyclerRecentAddrItemBinding.inflate(
             LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+            parent, false)
         return ViewHolder(b, itemClick)
     }
 
     override fun getItemCount(): Int = datas.size
 
-    fun clear() {
-        datas.clear()
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position])
+    }
+
+    fun clear() {
+        datas.clear()
     }
 
     inner class ViewHolder(
@@ -35,7 +33,7 @@ class RecentAddrAdapter(val itemClick: (AddressHistoryEntity) -> Unit) :
         itemClick: (AddressHistoryEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AddressHistoryEntity) {
-            binding.tvAddr.text = item.name
+            binding.tvAddr.text = item.fullAddress
             binding.root.setOnClickListener { itemClick(item) }
         }
     }
