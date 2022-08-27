@@ -41,7 +41,9 @@
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_home_item.xml" value="0.176" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_map_viewpager.xml" value="0.264" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_nearby_market.xml" value="0.11875" />
-        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_restaurant.xml" value="0.4" />
+        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_restaurant.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_sale_item.xml" value="0.2" />
+        <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_town_market.xml" value="0.264" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.25" />
       </map>
     </option>

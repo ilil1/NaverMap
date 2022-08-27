@@ -42,7 +42,8 @@ constructor(
     fun saveRecentSearchItems(entity: MapSearchInfoEntity) = viewModelScope.launch {
         val data = AddressHistoryEntity(
             id = null,
-            name = entity.fullAddress,
+            fullAddress = entity.fullAddress,
+            name = entity.name,
             lat = entity.locationLatLng.latitude,
             lng = entity.locationLatLng.longitude
         )

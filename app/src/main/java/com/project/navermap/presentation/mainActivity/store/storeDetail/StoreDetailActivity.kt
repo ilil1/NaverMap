@@ -109,6 +109,8 @@ class StoreDetailActivity : AppCompatActivity() {
             deliveryTipRange = restaurantEntity.deliveryTipRange,
             latitude = restaurantEntity.latitude,
             longitude = restaurantEntity.longitude,
+            isMarketOpen = restaurantEntity.isMarketOpen,
+            distance= restaurantEntity.distance,
         )
 
         TownMarketMainTitleTextView.text = townMarketEntity.restaurantTitle

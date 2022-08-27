@@ -39,10 +39,9 @@ class MyLocationActivity : AppCompatActivity() {
                 intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
                 setResult(Activity.RESULT_OK, intent)
 
-                viewModel.saveRecentSearchItems(result as MapSearchInfoEntity)
-
+                viewModel.saveRecentSearchItems(result as MapSearchInfoEntity) //Room에 저장
                 Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
-                finish() //반환시에 MyLocationActivity finish()
+                finish()
             }
         }
 
@@ -76,20 +75,21 @@ class MyLocationActivity : AppCompatActivity() {
         }
 
         binding.etSearch.setOnClickListener {}
-
         binding.ivBack.setOnClickListener {
             finish()
         }
 
-        recentAddrAdapter = RecentAddrAdapter { item ->
-            intent.putExtra(MY_LOCATION_KEY, MapSearchInfoEntity(item.name, item.name, LocationEntity(item.lat, item.lng)))
+        recentAddrAdapter = RecentAddrAdapter { addressData ->
+            intent.putExtra(MY_LOCATION_KEY,
+                MapSearchInfoEntity(
+                    fullAddress = addressData.fullAddress,
+                    name = addressData.name,
+                    locationLatLng = LocationEntity(addressData.lat, addressData.lng)
+                )
+            )
             setResult(RESULT_OK, intent)
             finish()
         }
-
-        binding.rvRecentAddr.layoutManager = LinearLayoutManager(
-            this@MyLocationActivity, LinearLayoutManager.VERTICAL, false)
-
         observeData()
     }
 

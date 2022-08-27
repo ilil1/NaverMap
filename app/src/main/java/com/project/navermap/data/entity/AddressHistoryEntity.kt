@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class AddressHistoryEntity(
     @PrimaryKey(autoGenerate = true) //키가 1,2,3,4 ... 순서대로 자동으로 할당
     val id: Long?,
+    val fullAddress: String,
     val name: String,
     val lat: Double,
     val lng: Double
