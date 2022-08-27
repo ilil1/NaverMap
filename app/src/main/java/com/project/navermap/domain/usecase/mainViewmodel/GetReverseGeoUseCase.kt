@@ -1,4 +1,4 @@
-package com.project.navermap.domain.usecase
+package com.project.navermap.domain.usecase.mainViewmodel
 
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.repository.map.MapApiRepository

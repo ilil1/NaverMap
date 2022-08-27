@@ -17,10 +17,9 @@ class GetRestaurantListUseCaseImpl(
         locationEntity: LocationEntity,
         filterOrder: RestautantFilterOrder = RestautantFilterOrder.DEFAULT
     ): RestaurantResult = withContext(ioDispatcher) {
-        /* TODO: 2022-08-21 일 12:20, 리스트 가져오는데 실패하면 Failure로 return */
         val sortedList = sortList(
             restaurantRepositoryImpl.getList(restaurantCategory, locationEntity),
-            filterOrder
+            filterOrder//DEFAULT
         ).map { it.toRestaurantModel() }
 
         RestaurantResult.Success(data = sortedList)

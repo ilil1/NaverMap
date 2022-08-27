@@ -8,7 +8,7 @@ import com.naver.maps.geometry.LatLng
 import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.domain.usecase.GetReverseGeoUseCase
+import com.project.navermap.domain.usecase.mainViewmodel.GetReverseGeoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
