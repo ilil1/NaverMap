@@ -7,12 +7,14 @@ import com.project.navermap.databinding.FragmentListBinding
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
 import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
@@ -25,6 +27,11 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
 
     val locationEntity
     by lazy<LocationEntity> { arguments?.getParcelable(LOCATION_KEY)!! }
+
+//    @Inject
+//    lateinit var viewModelFactoryProvider: Provider<RestaurantListViewModel.RestaurantAssistedFactory>
+//    //get()이 불리기 전까지는 초기화되는것을 늦출 수 있다.
+//    private val viewModelFactory get() = viewModelFactoryProvider.get()
 
     @Inject lateinit var viewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
 

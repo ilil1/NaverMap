@@ -15,6 +15,7 @@ import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
 import com.project.navermap.presentation.mainActivity.MainActivity
+import com.project.navermap.presentation.mainActivity.map.SearchAddress.SearchAddressActivity
 import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,9 +46,20 @@ class MyLocationActivity : AppCompatActivity() {
             }
         }
 
+    private val startSearchActivityForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { results ->
+            if(results.resultCode == RESULT_OK) {
+                if(results.data != null) {
+                    val result = results.data!!.getStringExtra(SEARCH_LOCATION_KEY)
+                }
+            }
+        }
+
     companion object {
 
         const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
+        const val SEARCH_LOCATION_KEY = "SEARCH_LOCATION_KEY"
 
         fun newIntent(context: Context, mapSearchInfoEntity: MapSearchInfoEntity) =
             Intent(context, MyLocationActivity::class.java).apply {
@@ -74,7 +86,14 @@ class MyLocationActivity : AppCompatActivity() {
             recentAddrAdapter.notifyDataSetChanged()
         }
 
-        binding.etSearch.setOnClickListener {}
+        binding.etSearch.setOnClickListener {
+            startSearchActivityForResult.launch(
+                Intent(
+                    applicationContext,
+                    SearchAddressActivity::class.java
+                )
+            )
+        }
         binding.ivBack.setOnClickListener {
             finish()
         }

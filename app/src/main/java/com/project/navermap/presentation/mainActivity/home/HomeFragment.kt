@@ -38,8 +38,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
      * Adpater를 따로 관리하는 구조 필요
      */
 
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
+    @Inject lateinit var resourcesProvider: ResourcesProvider
 
     private val nearbyMarketAdapter by lazy {
         ModelRecyclerAdapter<TownMarketModel, HomeViewModel>(
@@ -182,7 +181,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         viewPager2 = binding.pager
         viewPager2.post(runnable) //0번 position으로 초기화
-        viewPager2.adapter = SliderAdapter(items, viewPager2)
         viewPager2.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -200,6 +198,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             popularRecycler.adapter = suggestAdapter
             annivalRecyclerView.adapter = annivalAdapter
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewPager2.adapter = SliderAdapter(items, viewPager2)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewPager2.adapter = null
     }
 
     override fun onDestroyView() {

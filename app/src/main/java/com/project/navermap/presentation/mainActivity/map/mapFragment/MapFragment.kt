@@ -24,6 +24,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
+import com.project.navermap.data.url.Url
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
@@ -54,19 +55,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     private val viewModel: MapViewModel by viewModels()
     private val activityViewModel by activityViewModels<MainViewModel>()
 
-    override fun getViewBinding(): FragmentMapBinding =
-        FragmentMapBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentMapBinding = FragmentMapBinding.inflate(layoutInflater)
 
     lateinit var naverMap: NaverMap
 
-    @Inject
-    lateinit var markerFactory: MarkerFactory
-
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
-
-    @Inject
-    lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
+    @Inject lateinit var resourcesProvider: ResourcesProvider
+    @Inject lateinit var markerFactory: MarkerFactory
+    @Inject lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
     private val naverMapHandler get() = naverMapHandlerProvider.get()
 
     private val infoWindow by lazy {
@@ -112,14 +107,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
-    private val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
     private val GEOCODE_USER_INFO = "2b4e5d3d2f35dd584b398978c3aca53a"
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val DISTANCE = 300
-        const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
-
         private const val FAILED_TO_GET_RESTAURANT_LIST = "리스트를 불러오는데 실패했습니다."
         private const val INITIALIZING_CURRENT_LOCATION = "CurLocation 초기화 중"
         private const val INITIALIZING_DESTINATION_LOCATION = "DestLocation 초기화 중"
@@ -170,10 +161,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         activityViewModel.destLocation?.let {
             naverMapHandler.updateDestMarker(
                 destMarker,
-                LatLng(
-                    it.latitude,
-                    it.longitude
-                )
+                LatLng(it.latitude, it.longitude)
             )
         }
     }
@@ -259,6 +247,28 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         mapObserveData()
     }
 
+//    @SuppressLint("MissingPermission")
+//    private fun initMap() = with(binding) {
+//        locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
+//
+//        val locationManager =
+//            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.GPS_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener
+//        )
+//
+//        locationManager.requestLocationUpdates(
+//            LocationManager.NETWORK_PROVIDER,
+//            1000,
+//            1f,
+//            locationListener
+//        )
+//    }
+
     //웹뷰 관련 코드들 제거 해야함
     private val startSearchActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -275,7 +285,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                     val obj: URL
                     val address: String = URLEncoder.encode(str, "UTF-8")
 
-                    obj = URL(GEOCODE_URL + address)
+                    obj = URL(Url.GEOCODE_URL + address)
 
                     val con: HttpURLConnection = obj.openConnection() as HttpURLConnection
 
@@ -309,28 +319,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 }.start()
             }
         }
-
-//    @SuppressLint("MissingPermission")
-//    private fun initMap() = with(binding) {
-//        locationSource = FusedLocationSource(this@MapFragment, LOCATION_PERMISSION_REQUEST_CODE)
-//
-//        val locationManager =
-//            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//
-//        locationManager.requestLocationUpdates(
-//            LocationManager.GPS_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener
-//        )
-//
-//        locationManager.requestLocationUpdates(
-//            LocationManager.NETWORK_PROVIDER,
-//            1000,
-//            1f,
-//            locationListener
-//        )
-//    }
 
     private fun init() = with(binding.webViewAddress) {
 //        webViewAddress = // 메인 웹뷰
@@ -368,7 +356,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 val obj: URL
                 val address: String = URLEncoder.encode(str, "UTF-8")
 
-                obj = URL(GEOCODE_URL + address)
+                obj = URL(Url.GEOCODE_URL + address)
 
                 val con: HttpURLConnection = obj.openConnection() as HttpURLConnection
 
