@@ -20,7 +20,10 @@ data class RestaurantEntity(
     val restaurantTelNumber: String?,
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
+    val isMarketOpen: Boolean,
+    val distance: Float
 ):  Parcelable {
+
     fun toRestaurantModel() = RestaurantModel(
         id = id,
         restaurantInfoId = restaurantInfoId,
@@ -33,6 +36,8 @@ data class RestaurantEntity(
         deliveryTipRange = deliveryTipRange,
         restaurantTelNumber = restaurantTelNumber,
         latitude = latitude,
-        longitude = longitude
+        longitude = longitude,
+        isMarketOpen = isMarketOpen,
+        distance = distance
     )
 }

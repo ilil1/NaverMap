@@ -10,6 +10,7 @@ import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
+import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,13 +26,13 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
     val locationEntity
     by lazy<LocationEntity> { arguments?.getParcelable(LOCATION_KEY)!! }
 
-    @Inject lateinit var ViewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
+    @Inject lateinit var viewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
 
     /**
      * hilt를 활용한 런타임 주입인데 Hilt의 의존성 관리상 저장되는 위치가 달라서 생기는 문제가 있음.
      */
     val viewModel by viewModels<RestaurantListViewModel> {
-        RestaurantListViewModel.provideFactory(ViewModelFactory, restaurantCategory, locationEntity)
+        RestaurantListViewModel.provideFactory(viewModelFactory, restaurantCategory, locationEntity)
     }
 
     @Inject
