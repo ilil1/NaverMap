@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -57,8 +59,8 @@ class MyLocationActivity : AppCompatActivity() {
     private val startSearchActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result ->
-            if(result.resultCode == RESULT_OK) {
-                if(result.data != null) {
+            if (result.resultCode == RESULT_OK) {
+                if (result.data != null) {
 
                     val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
                     val str = bundle?.get(SEARCH_LOCATION_KEY).toString()
@@ -68,6 +70,7 @@ class MyLocationActivity : AppCompatActivity() {
 
                     // TODO: coroutine과 retrofit으로 바꾸기
                     Thread {
+
                         val obj: URL
                         val address: String = URLEncoder.encode(str, "UTF-8")
 
@@ -94,18 +97,14 @@ class MyLocationActivity : AppCompatActivity() {
                             xy[0].documents[0].roadAddress.buildingName,
                             LocationEntity(
                                 xy[0].documents[0].y.toDouble(),
-                                xy[0].documents[0].x.toDouble()
-                            )
+                                xy[0].documents[0].x.toDouble())
                         )
 
-                        runOnUiThread {
-                            Toast.makeText(
-                                this@MyLocationActivity,
-                                asw.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        intent?.putExtra(MY_LOCATION_KEY, asw)
+                        setResult(Activity.RESULT_OK, intent)
+                        viewModel.saveRecentSearchItems(asw!!)
 
+                        finish()
                     }.start()
                 }
             }
@@ -131,7 +130,7 @@ class MyLocationActivity : AppCompatActivity() {
         binding.btnSetLocation.setOnClickListener {
             startForResult.launch(
                 MapLocationSettingActivity.newIntent
-                (this, intent.getParcelableExtra(MainActivity.MY_LOCATION_KEY)!!)
+                    (this, intent.getParcelableExtra(MainActivity.MY_LOCATION_KEY)!!)
             )
         }
 
@@ -143,10 +142,7 @@ class MyLocationActivity : AppCompatActivity() {
 
         binding.etSearch.setOnClickListener {
             startSearchActivityForResult.launch(
-                Intent(
-                    applicationContext,
-                    SearchAddressActivity::class.java
-                )
+                Intent(applicationContext, SearchAddressActivity::class.java)
             )
         }
         binding.ivBack.setOnClickListener {
@@ -154,7 +150,8 @@ class MyLocationActivity : AppCompatActivity() {
         }
 
         recentAddrAdapter = RecentAddrAdapter { addressData ->
-            intent.putExtra(MY_LOCATION_KEY,
+            intent.putExtra(
+                MY_LOCATION_KEY,
                 MapSearchInfoEntity(
                     fullAddress = addressData.fullAddress,
                     name = addressData.name,

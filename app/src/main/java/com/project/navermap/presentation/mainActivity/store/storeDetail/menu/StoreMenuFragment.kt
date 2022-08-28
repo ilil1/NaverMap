@@ -21,15 +21,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StoreMenuFragment : Fragment() {
 
-    private lateinit var binding : FragmentStoreMarketMenuBinding
+    private lateinit var binding: FragmentStoreMarketMenuBinding
 
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
+    @Inject lateinit var resourcesProvider: ResourcesProvider
     private val viewModel by viewModels<StoreMenuViewModel>()
-   // val intent =  Intent()
-  //  private val saleList = intent.getParcelableExtra<RestaurantEntity>("Store")
+    // val intent =  Intent()
+    //  private val saleList = intent.getParcelableExtra<RestaurantEntity>("Store")
 
-        private val adapter by lazy {
+    private val adapter by lazy {
         ModelRecyclerAdapter<FoodModel, StoreMenuViewModel>(
             listOf(), viewModel, resourcesProvider,
             object : StoreDetailItemListener {
@@ -40,12 +39,11 @@ class StoreMenuFragment : Fragment() {
         )
     }
 
-    private fun fetchData(restaurantEntity: RestaurantEntity){
-        viewModel.items.observe(viewLifecycleOwner){
-            when(it){
-                is StoreMenuState.Uninitialized ->{
+    private fun fetchData(restaurantEntity: RestaurantEntity) {
+        viewModel.items.observe(viewLifecycleOwner) {
+            when (it) {
+                is StoreMenuState.Uninitialized -> {
                     observeData()
-
                 }
             }
         }
@@ -69,7 +67,8 @@ class StoreMenuFragment : Fragment() {
         //observeData(storeData)
         viewModel.loadRestaurantItems(storeData?.restaurantInfoId!!)
         binding.restaurantRecyclerView.adapter = adapter
-        binding.restaurantRecyclerView.layoutManager = LinearLayoutManager(this@StoreMenuFragment.context)
+        binding.restaurantRecyclerView.layoutManager =
+            LinearLayoutManager(this@StoreMenuFragment.context)
 
         return binding.root
     }
@@ -77,7 +76,7 @@ class StoreMenuFragment : Fragment() {
     companion object {
         const val SALE_LIST_KEY = "saleList"
 
-        fun newInstance(menu : RestaurantEntity) : StoreMenuFragment {
+        fun newInstance(menu: RestaurantEntity): StoreMenuFragment {
             val bundle = Bundle().apply {
                 putParcelable(SALE_LIST_KEY, menu)
             }

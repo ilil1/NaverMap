@@ -104,8 +104,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     nearbyMarketAdapter.submitList(it.modelList)
                 }
                 is HomeMainState.Error -> {
-                    Toast.makeText(
-                        context,
+                    Toast.makeText(context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()

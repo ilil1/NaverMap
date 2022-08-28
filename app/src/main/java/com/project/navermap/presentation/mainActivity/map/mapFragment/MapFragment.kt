@@ -22,6 +22,7 @@ import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.project.navermap.*
+import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.data.url.Key
@@ -109,7 +110,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val FAILED_TO_GET_RESTAURANT_LIST = "리스트를 불러오는데 실패했습니다."
         private const val INITIALIZING_CURRENT_LOCATION = "CurLocation 초기화 중"
         private const val INITIALIZING_DESTINATION_LOCATION = "DestLocation 초기화 중"
     }
@@ -129,7 +129,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                     it.restaurantInfoList,
                     markerClickListener
                 )
-                is MapState.Error -> showToast(FAILED_TO_GET_RESTAURANT_LIST)
+                is MapState.Error -> Toast.makeText(context,
+                    R.string.failed_get_restaurant_list,
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -140,11 +142,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
                 is MainState.Uninitialized -> Unit
-                is MainState.Loading -> {
-                }
+                is MainState.Loading -> {}
                 is MainState.Success -> onMainStateSuccess(it)
-                is MainState.Error -> {
-                }
+                is MainState.Error -> {}
             }
         }
     }
@@ -205,7 +205,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                     markerClickListener
                 )
             } else {
-                showToast(FAILED_TO_GET_RESTAURANT_LIST)
+                Toast.makeText(context,
+                    R.string.failed_get_restaurant_list,
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
