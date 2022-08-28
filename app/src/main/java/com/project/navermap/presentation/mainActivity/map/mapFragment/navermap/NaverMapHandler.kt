@@ -5,6 +5,7 @@ import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
+import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.domain.model.RestaurantModel
 
 typealias MarkerClickListener = Marker.(Overlay) -> Boolean
@@ -64,8 +65,8 @@ class NaverMapHandler(
      */
     fun updateRestaurantMarkers(
         restaurantInfoList: List<RestaurantModel>,
-        clickListener: MarkerClickListener
-    ) {
+        clickListener: MarkerClickListener) {
+
         deleteMarkers()
 
         markers = restaurantInfoList.mapIndexed { index, restaurant ->
@@ -73,7 +74,7 @@ class NaverMapHandler(
                 position = LatLng(restaurant.latitude, restaurant.longitude),
                 category = restaurant.restaurantCategory,
                 tag = restaurant,
-                zIndex = index,
+                zIndex = index
             ).apply {
                 setOnClickListener { overlay -> clickListener(this, overlay) }
             }

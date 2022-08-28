@@ -10,7 +10,7 @@ sealed class MapState {
     object Loading : MapState()
 
     data class Success(
-        val restaurantInfoList: List<RestaurantModel>,
+        val restaurantInfoList: MutableList<RestaurantModel>,
         val destLocation: LocationEntity? = null
     ) : MapState()
 

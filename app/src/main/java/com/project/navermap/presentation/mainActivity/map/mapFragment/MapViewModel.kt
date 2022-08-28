@@ -1,28 +1,35 @@
 package com.project.navermap.presentation.mainActivity.map.mapFragment
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.domain.model.FoodModel
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MapViewModel
-@Inject
-constructor(
+class MapViewModel @Inject constructor(
     private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
-    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase,
+    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase
 ) : ViewModel() {
 
+    lateinit var destLocation: LocationEntity
     var filterCategoryChecked = mutableListOf<Boolean>()
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
@@ -31,14 +38,39 @@ constructor(
     private val _items = MutableLiveData<List<FoodModel>>(emptyList())
     val items: LiveData<List<FoodModel>> get() = _items
 
-    //상점을 외부DB로 부터 가져온다
+    private var restaurantList: MutableList<RestaurantModel> = mutableListOf()
+
+    fun getCategoryNum(category: String): Int =
+        when (category) {
+            "ALL" -> 0
+            "KOREAN_FOOD" -> 1
+            "DUMPLING_FOOD" -> 2
+            "CAFE_DESSERT" -> 3
+            "JAPANESE_FOOD" -> 4
+            else -> 5
+        }
+
     fun loadRestaurantList(
         restaurantCategory: RestaurantCategory,
-        location: LocationEntity
+        location: LocationEntity = destLocation
     ) = viewModelScope.launch {
-        when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, location)) {
-            is RestaurantResult.Success -> {
-                _data.value = MapState.Success(result.data)
+        restaurantList.clear()
+        val restaurantCategories = RestaurantCategory.values()
+        restaurantCategories.map {
+            when (val result = getRestaurantListUseCaseImpl.fetchData(it, location)) {
+                is RestaurantResult.Success -> {
+                    val mutableResult = result.data.toMutableList()
+                    //restaurantList.addAll(mutableResult)
+                    var i = 0
+                    repeat(mutableResult.size) {
+                        if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())] == true) {
+                            restaurantList.add(mutableResult[i])
+                            Log.d("filterCategoryChecked", filterCategoryChecked.toString())
+                        }
+                        i++
+                    }
+                    _data.value = MapState.Success(restaurantList)
+                }
             }
         }
     }
@@ -48,21 +80,5 @@ constructor(
         restaurantId: Long
     ) = viewModelScope.launch {
         _items.value = getItemsByRestaurantIdUseCase(restaurantId)
-    }
-
-    //거리 계산은 서버에서
-    fun calDist(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Long {
-
-        val EARTH_R = 6371000.0
-        val rad = Math.PI / 180
-        val radLat1 = rad * lat1
-        val radLat2 = rad * lat2
-        val radDist = rad * (lon1 - lon2)
-
-        var distance = Math.sin(radLat1) * Math.sin(radLat2)
-        distance = distance + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radDist)
-        val ret = EARTH_R * Math.acos(distance)
-
-        return Math.round(ret)
     }
 }

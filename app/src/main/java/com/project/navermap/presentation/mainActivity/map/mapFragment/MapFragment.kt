@@ -76,6 +76,10 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
     }
 
+    private val destMarker: Marker by lazy {
+        markerFactory.createDestMarker()
+    }
+
     private val markerClickListener: MarkerClickListener = {
 
         this@MapFragment.infoWindow.close()
@@ -86,10 +90,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         binding.viewPager2.visibility = View.VISIBLE
         binding.fbtnCloseViewPager.visibility = View.VISIBLE
         true
-    }
-
-    private val destMarker: Marker by lazy {
-        markerFactory.createDestMarker()
     }
 
     private val viewPagerAdapter by lazy {
@@ -104,14 +104,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     }
 
     private lateinit var filterDialog: FilterDialog
+
     private val locationSource: FusedLocationSource by lazy {
         FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val INITIALIZING_CURRENT_LOCATION = "CurLocation 초기화 중"
-        private const val INITIALIZING_DESTINATION_LOCATION = "DestLocation 초기화 중"
     }
 
 //    private val locationListener: LocationListener by lazy {
@@ -127,9 +126,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 is MapState.Loading -> {}
                 is MapState.Success -> naverMapHandler.updateRestaurantMarkers(
                     it.restaurantInfoList,
-                    markerClickListener
-                )
-                is MapState.Error -> Toast.makeText(context,
+                    markerClickListener)
+                is MapState.Error -> Toast.makeText(
+                    context,
                     R.string.failed_get_restaurant_list,
                     Toast.LENGTH_SHORT).show()
             }
@@ -143,13 +142,18 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             when (it) {
                 is MainState.Uninitialized -> Unit
                 is MainState.Loading -> {}
-                is MainState.Success -> onMainStateSuccess(it)
+                is MainState.Success -> {
+                    onMainStateSuccess(it)
+                    viewModel.destLocation = it.mapSearchInfoEntity.locationLatLng
+                    filterDialog.initDialog(viewModel, it.mapSearchInfoEntity.locationLatLng)
+                }
                 is MainState.Error -> {}
             }
         }
     }
 
     private fun onMainStateSuccess(success: MainState.Success) {
+
         val location = success.mapSearchInfoEntity.locationLatLng
         viewModel.loadRestaurantList(RestaurantCategory.ALL, location)
         naverMapHandler.moveCameraTo(LatLng(location.latitude, location.longitude)) {
@@ -166,10 +170,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     override fun initState() {
         super.initState()
-        //initMap()
         setupClickListeners()
+        //hilt로 바꿔야함
         filterDialog = FilterDialog(requireActivity())
-        filterDialog.initDialog(viewModel)
         binding.mapView.getMapAsync(this@MapFragment)
         binding.viewPager2.adapter = viewPagerAdapter
     }
@@ -179,7 +182,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             // TODO: 현재 위치 마커 구현
             activityViewModel.curLocation?.let {
                 naverMapHandler.moveCameraTo(it) {
-                    showToast(INITIALIZING_CURRENT_LOCATION)
+                    showToast("CurLocation 초기화 중")
                 }
             }
         }
@@ -187,7 +190,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         btnDestLocation.setOnClickListener {
             activityViewModel.destLocation?.let {
                 naverMapHandler.moveCameraTo(it) {
-                    showToast(INITIALIZING_DESTINATION_LOCATION)
+                    showToast("DestLocation 초기화 중")
                 }
                 naverMapHandler.updateDestMarker(
                     destMarker,
@@ -202,8 +205,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             if (state is MapState.Success) {
                 naverMapHandler.updateRestaurantMarkers(
                     state.restaurantInfoList,
-                    markerClickListener
-                )
+                    markerClickListener)
             } else {
                 Toast.makeText(context,
                     R.string.failed_get_restaurant_list,
@@ -213,11 +215,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
         btnFilter.setOnClickListener {
             filterDialog.dialog = filterDialog.builder.show()
-            viewModel.loadRestaurantList(
-                // TODO: 카테고리 필터 적용
-                RestaurantCategory.ALL,
-                (activityViewModel.locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng
-            )
+//            viewModel.loadRestaurantList(
+//                // TODO: 카테고리 필터 적용
+//                RestaurantCategory.ALL,
+//                (activityViewModel.locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng
+//            )
         }
 
         btnCloseMarkers.setOnClickListener {

@@ -37,18 +37,18 @@ class MyLocationActivity : AppCompatActivity() {
     private val viewModel: MyLocationViewModel by viewModels()
 
     private lateinit var binding: ActivityMyLocationBinding
-    lateinit var recentAddrAdapter: RecentAddrAdapter
+    private lateinit var recentAddrAdapter: RecentAddrAdapter
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
 
                 val bundle = result.data?.extras
                 val result = bundle?.get("result")
 
                 intent?.putExtra(MY_LOCATION_KEY, result as MapSearchInfoEntity)
-                setResult(Activity.RESULT_OK, intent)
+                setResult(RESULT_OK, intent)
 
                 viewModel.saveRecentSearchItems(result as MapSearchInfoEntity) //Room에 저장
                 Toast.makeText(this, result.toString(), Toast.LENGTH_LONG).show()
@@ -101,10 +101,10 @@ class MyLocationActivity : AppCompatActivity() {
                         )
 
                         intent?.putExtra(MY_LOCATION_KEY, asw)
-                        setResult(Activity.RESULT_OK, intent)
+                        setResult(RESULT_OK, intent)
                         viewModel.saveRecentSearchItems(asw!!)
-
                         finish()
+
                     }.start()
                 }
             }

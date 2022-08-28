@@ -6,7 +6,13 @@ import android.graphics.Rect
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.Toast
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.util.MarkerIcons
+import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.DialogFilterBinding
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 
 
 class FilterDialog(private val context : Activity) {
@@ -27,7 +33,7 @@ class FilterDialog(private val context : Activity) {
         }
     }
 
-    fun initDialog(viewModel :MapViewModel) {
+    fun initDialog(viewModel : MapViewModel, location : LocationEntity) {
 
         //dialog = Dialog(this)
         //dialog.setCancelable(false)
@@ -48,8 +54,7 @@ class FilterDialog(private val context : Activity) {
             filterCategoryOptions.addAll(
                 arrayOf(
                     foodBeverage, service, fashionAccessories,
-                    supermarket, fashionClothes, etc
-                )
+                    supermarket, fashionClothes, etc)
             )
         }
 
@@ -120,8 +125,7 @@ class FilterDialog(private val context : Activity) {
             for (i in 0 until filterCategoryOptions.size)
                 viewModel.filterCategoryChecked[i] = filterCategoryOptions[i].isChecked
 
-            // TODO: update marker
-//            viewModel.updateMarker()
+            viewModel.loadRestaurantList(RestaurantCategory.ALL, location)
 
             dialog.dismiss()
             (dialogBinding.root.parent as ViewGroup).removeView(dialogBinding.root)

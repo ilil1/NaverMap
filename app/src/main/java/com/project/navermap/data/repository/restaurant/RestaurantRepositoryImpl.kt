@@ -1,5 +1,6 @@
 package com.project.navermap.data.repository.restaurant
 
+import android.util.Log
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.data.network.FoodApiService
@@ -22,6 +23,8 @@ class RestaurantRepositoryImpl @Inject constructor(
         restaurantCategory: RestaurantCategory,
         locationLatLngEntity: LocationEntity
     ): List<RestaurantEntity> = withContext(ioDispatcher) {
+
+        Log.d("getList", resourcesProvider.getString(restaurantCategory.categoryTypeId))
 
         val response = mapApiService.getSearchLocationAround(
             categories = resourcesProvider.getString(restaurantCategory.categoryTypeId),
