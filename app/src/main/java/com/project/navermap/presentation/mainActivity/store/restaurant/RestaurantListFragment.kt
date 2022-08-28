@@ -19,8 +19,7 @@ import javax.inject.Provider
 @AndroidEntryPoint
 class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
 
-    override fun getViewBinding(): FragmentListBinding =
-        FragmentListBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentListBinding = FragmentListBinding.inflate(layoutInflater)
 
     private val restaurantCategory
     by lazy { arguments?.getSerializable(RESTAURANT_CATEGORY_KEY) as RestaurantCategory }

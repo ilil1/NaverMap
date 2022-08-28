@@ -5,21 +5,29 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
+import com.project.navermap.data.url.Key
+import com.project.navermap.data.url.Url
 import com.project.navermap.databinding.ActivityMyLocationBinding
+import com.project.navermap.extensions.showToast
 import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.mainActivity.map.SearchAddress.SearchAddressActivity
 import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
 @AndroidEntryPoint
 class MyLocationActivity : AppCompatActivity() {
@@ -48,10 +56,57 @@ class MyLocationActivity : AppCompatActivity() {
 
     private val startSearchActivityForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { results ->
-            if(results.resultCode == RESULT_OK) {
-                if(results.data != null) {
-                    val result = results.data!!.getStringExtra(SEARCH_LOCATION_KEY)
+        { result ->
+            if(result.resultCode == RESULT_OK) {
+                if(result.data != null) {
+
+                    val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
+                    val str = bundle?.get(SEARCH_LOCATION_KEY).toString()
+                    var asw: MapSearchInfoEntity?
+
+                    Log.d("SearchActivityForResult", str)
+
+                    // TODO: coroutine과 retrofit으로 바꾸기
+                    Thread {
+                        val obj: URL
+                        val address: String = URLEncoder.encode(str, "UTF-8")
+
+                        obj = URL(Url.GEOCODE_URL + address)
+
+                        val con: HttpURLConnection = obj.openConnection() as HttpURLConnection
+
+                        con.setRequestMethod("GET")
+                        con.setRequestProperty("Authorization", "KakaoAK " + Key.GEOCODE_USER_INFO)
+                        con.setRequestProperty("content-type", "application/json")
+                        con.setDoOutput(true)
+                        con.setUseCaches(false)
+                        con.setDefaultUseCaches(false)
+
+                        val data = con.inputStream.bufferedReader().readText()
+
+                        Log.d("application/json", data)
+
+                        val dataList = "[$data]"
+                        val xy = Gson().fromJson(dataList, Array<Address>::class.java).toList()
+
+                        asw = MapSearchInfoEntity(
+                            xy[0].documents[0].addressName,
+                            xy[0].documents[0].roadAddress.buildingName,
+                            LocationEntity(
+                                xy[0].documents[0].y.toDouble(),
+                                xy[0].documents[0].x.toDouble()
+                            )
+                        )
+
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@MyLocationActivity,
+                                asw.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    }.start()
                 }
             }
         }

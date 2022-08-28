@@ -36,47 +36,31 @@ class SearchAddressActivity : AppCompatActivity() {
                 javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
                 setSupportMultipleWindows(true)
         }
-
-        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "Android")
-
-        binding.webViewAddress.setWebViewClient(object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-//page loading을 끝냈을 때 호출되는 콜백 메서드
-//안드로이드에서 자바스크립트 메서드 호출
-                binding.webViewAddress.loadUrl("javascript:sample2_execDaumPostcode();")
-            }
-        })
+        //addJavascriptInterface(AndroidBridge(), "TestApp")
+        binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
 //최초로 웹뷰 로딩
-        binding.webViewAddress.loadUrl("https://javaaddress-1b3d9.web.app/")
-        //binding.webViewAddress.webChromeClient = webChromeClient
+        //https://searchaddress-f9857.web.app/
+        //https://searchaddress-f9857.firebaseapp.com/
+        binding.webViewAddress.loadUrl("https://searchaddress-f9857.web.app")
+        binding.webViewAddress.webChromeClient = this@SearchAddressActivity.webChromeClient
 
     }
 
     private inner class AndroidBridge {
         // 웹에서 JavaScript로 android 함수를 호출할 수 있도록 도와줌
-        @JavascriptInterface
-        fun processDATA(data: String?) {
-            //자바 스크립트로 부터 다음 카카오 주소 검색 API 결과를 전달 받는다.
+            @JavascriptInterface
+            fun setAddress(arg1: String?, arg2: String?, arg3: String?) {
+            // search.php에서 callback 호출되는 함수
+            Log.d("arg1.toString()", arg1.toString())
+            Log.d("arg2.toString()", arg2.toString())
+            Log.d("arg3.toString()", arg3.toString())
             val extra = Bundle()
             val intent = Intent()
-            extra.putString("data", data)
+            extra.putString(SEARCH_LOCATION_KEY, String.format("%s %s", arg2, arg3))
             intent.putExtras(extra)
             setResult(RESULT_OK, intent)
             finish()
         }
-    //        fun setAddress(arg1: String?, arg2: String?, arg3: String?) {
-//            // search.php에서 callback 호출되는 함수
-//            Log.d("arg1.toString()", arg1.toString())
-//            Log.d("arg2.toString()", arg2.toString())
-//            Log.d("arg3.toString()", arg3.toString())
-//
-//            val extra = Bundle()
-//            val intent = Intent()
-//            extra.putString(SEARCH_LOCATION_KEY, String.format("%s %s", arg2, arg3))
-//            intent.putExtras(extra)
-//            setResult(RESULT_OK, intent)
-//            finish()
-//        }
     }
 
     private val webChromeClient = object: WebChromeClient() {
