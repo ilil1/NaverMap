@@ -25,8 +25,6 @@ class StoreMenuFragment : Fragment() {
 
     @Inject lateinit var resourcesProvider: ResourcesProvider
     private val viewModel by viewModels<StoreMenuViewModel>()
-    // val intent =  Intent()
-    //  private val saleList = intent.getParcelableExtra<RestaurantEntity>("Store")
 
     private val adapter by lazy {
         ModelRecyclerAdapter<FoodModel, StoreMenuViewModel>(
@@ -64,8 +62,7 @@ class StoreMenuFragment : Fragment() {
         binding = FragmentStoreMarketMenuBinding.inflate(layoutInflater)
         val storeData = arguments?.getParcelable<RestaurantEntity>(SALE_LIST_KEY)!!
         fetchData(storeData)
-        //observeData(storeData)
-        viewModel.loadRestaurantItems(storeData?.restaurantInfoId!!)
+        viewModel.loadRestaurantItems(storeData.restaurantInfoId)
         binding.restaurantRecyclerView.adapter = adapter
         binding.restaurantRecyclerView.layoutManager =
             LinearLayoutManager(this@StoreMenuFragment.context)

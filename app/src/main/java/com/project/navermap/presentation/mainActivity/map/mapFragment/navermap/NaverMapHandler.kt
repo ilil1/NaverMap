@@ -36,9 +36,7 @@ class NaverMapHandler(
     fun moveCameraTo(location: LatLng, onError: () -> Unit) {
         try {
             naverMap.cameraPosition = CameraPosition(location, 15.0)
-        } catch (ex: Exception) {
-            onError()
-        }
+        } catch (ex: Exception) { onError() }
     }
 
     /**

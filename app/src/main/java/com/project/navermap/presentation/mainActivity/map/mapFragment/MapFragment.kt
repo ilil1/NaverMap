@@ -127,8 +127,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 is MapState.Success -> naverMapHandler.updateRestaurantMarkers(
                     it.restaurantInfoList,
                     markerClickListener)
-                is MapState.Error -> Toast.makeText(
-                    context,
+                is MapState.Error -> Toast.makeText(context,
                     R.string.failed_get_restaurant_list,
                     Toast.LENGTH_SHORT).show()
             }
@@ -181,17 +180,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         btnCurLocation.setOnClickListener {
             // TODO: 현재 위치 마커 구현
             activityViewModel.curLocation?.let {
-                naverMapHandler.moveCameraTo(it) {
-                    showToast("CurLocation 초기화 중")
-                }
+                naverMapHandler.moveCameraTo(it) { showToast("CurLocation 초기화 중") }
             }
         }
 
         btnDestLocation.setOnClickListener {
             activityViewModel.destLocation?.let {
-                naverMapHandler.moveCameraTo(it) {
-                    showToast("DestLocation 초기화 중")
-                }
+                naverMapHandler.moveCameraTo(it) { showToast("DestLocation 초기화 중") }
                 naverMapHandler.updateDestMarker(
                     destMarker,
                     LatLng(it.latitude, it.longitude)
@@ -214,12 +209,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         }
 
         btnFilter.setOnClickListener {
-            filterDialog.dialog = filterDialog.builder.show()
-//            viewModel.loadRestaurantList(
-//                // TODO: 카테고리 필터 적용
-//                RestaurantCategory.ALL,
-//                (activityViewModel.locationData.value as MainState.Success).mapSearchInfoEntity.locationLatLng
-//            )
+            try {
+                filterDialog.dialog = filterDialog.builder.show()
+            } catch (ex: Exception) {
+                Toast.makeText(context, "초기화 중", Toast.LENGTH_SHORT).show()
+            }
         }
 
         btnCloseMarkers.setOnClickListener {

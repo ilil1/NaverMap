@@ -40,7 +40,7 @@ class MapViewModel @Inject constructor(
 
     private var restaurantList: MutableList<RestaurantModel> = mutableListOf()
 
-    fun getCategoryNum(category: String): Int =
+    private fun getCategoryNum(category: String): Int =
         when (category) {
             "ALL" -> 0
             "KOREAN_FOOD" -> 1
@@ -50,6 +50,9 @@ class MapViewModel @Inject constructor(
             else -> 5
         }
 
+    /**
+    백엔드 API를 좀더 유동적으로 사용할수있게 쿼리를 알아봐야함 현재는 필터 구현을 위한 임시방편
+     */
     fun loadRestaurantList(
         restaurantCategory: RestaurantCategory,
         location: LocationEntity = destLocation
@@ -60,12 +63,10 @@ class MapViewModel @Inject constructor(
             when (val result = getRestaurantListUseCaseImpl.fetchData(it, location)) {
                 is RestaurantResult.Success -> {
                     val mutableResult = result.data.toMutableList()
-                    //restaurantList.addAll(mutableResult)
                     var i = 0
                     repeat(mutableResult.size) {
-                        if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())] == true) {
+                        if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
                             restaurantList.add(mutableResult[i])
-                            Log.d("filterCategoryChecked", filterCategoryChecked.toString())
                         }
                         i++
                     }
