@@ -39,6 +39,7 @@ class StoreDetailViewModel @AssistedInject constructor(
     val storeDetailResultLiveData: LiveData<StoreDetailResult> get() = _storeDetailResultLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
+        _storeDetailResultLiveData.value = StoreDetailResult.Loading
         _storeDetailResultLiveData.value = StoreDetailResult.Success(
             restaurantEntity = restaurantEntity
         )

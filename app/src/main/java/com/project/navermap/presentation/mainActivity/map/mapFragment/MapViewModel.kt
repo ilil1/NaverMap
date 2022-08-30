@@ -40,16 +40,6 @@ class MapViewModel @Inject constructor(
 
     private var restaurantList: MutableList<RestaurantModel> = mutableListOf()
 
-    private fun getCategoryNum(category: String): Int =
-        when (category) {
-            "ALL" -> 0
-            "KOREAN_FOOD" -> 1
-            "DUMPLING_FOOD" -> 2
-            "CAFE_DESSERT" -> 3
-            "JAPANESE_FOOD" -> 4
-            else -> 5
-        }
-
     /**
     백엔드 API를 좀더 유동적으로 사용할수있게 쿼리를 알아봐야함 현재는 필터 구현을 위한 임시방편
      */
@@ -82,4 +72,14 @@ class MapViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _items.value = getItemsByRestaurantIdUseCase(restaurantId)
     }
+
+    private fun getCategoryNum(category: String): Int =
+        when (category) {
+            "ALL" -> 0
+            "KOREAN_FOOD" -> 1
+            "DUMPLING_FOOD" -> 2
+            "CAFE_DESSERT" -> 3
+            "JAPANESE_FOOD" -> 4
+            else -> 5
+        }
 }

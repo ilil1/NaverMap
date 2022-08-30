@@ -7,29 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.databinding.FragmentStoreMarketReviewBinding
+import com.project.navermap.databinding.FragmentStoreMarketinformBinding
+import com.project.navermap.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StoreReviewFragment : Fragment() {
+class StoreReviewFragment : BaseFragment<FragmentStoreMarketReviewBinding>() {
 
-    private lateinit var binding : FragmentStoreMarketReviewBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentStoreMarketReviewBinding.inflate(layoutInflater)
-
-        return binding.root
-    }
+    override fun getViewBinding() = FragmentStoreMarketReviewBinding.inflate(layoutInflater)
 
     companion object {
-
         fun newInstance(menu : RestaurantEntity) : StoreReviewFragment {
-            return StoreReviewFragment().apply {
-
-            }
+            return StoreReviewFragment()
         }
     }
 

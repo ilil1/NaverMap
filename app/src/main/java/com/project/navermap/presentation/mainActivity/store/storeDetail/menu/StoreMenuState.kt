@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.project.navermap.domain.model.Model
 
 sealed class StoreMenuState {
-
+//나중에 사용할 클래스
     object Uninitialized : StoreMenuState()
 
     object Loading : StoreMenuState()

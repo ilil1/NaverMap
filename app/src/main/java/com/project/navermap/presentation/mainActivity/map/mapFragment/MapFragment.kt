@@ -54,14 +54,19 @@ import javax.inject.Provider
 @AndroidEntryPoint
 class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
-    override fun getViewBinding(): FragmentMapBinding = FragmentMapBinding.inflate(layoutInflater)
+    override fun getViewBinding() = FragmentMapBinding.inflate(layoutInflater)
 
     private val viewModel: MapViewModel by viewModels()
     private val activityViewModel by activityViewModels<MainViewModel>()
 
-    @Inject lateinit var resourcesProvider: ResourcesProvider
-    @Inject lateinit var markerFactory: MarkerFactory
-    @Inject lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
+
+    @Inject
+    lateinit var markerFactory: MarkerFactory
+
+    @Inject
+    lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
     private val naverMapHandler get() = naverMapHandlerProvider.get()
 
     lateinit var naverMap: NaverMap
@@ -97,7 +102,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             emptyList(), viewModel, resourcesProvider,
             object : MapItemListAdapterListener {
                 override fun onClickItem(foodModel: FoodModel) {
-                    // TODO: start activity
+                    Toast.makeText(
+                        context,
+                        R.string.failed_get_restaurant_list,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         )
@@ -126,10 +135,13 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 is MapState.Loading -> {}
                 is MapState.Success -> naverMapHandler.updateRestaurantMarkers(
                     it.restaurantInfoList,
-                    markerClickListener)
-                is MapState.Error -> Toast.makeText(context,
+                    markerClickListener
+                )
+                is MapState.Error -> Toast.makeText(
+                    context,
                     R.string.failed_get_restaurant_list,
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -200,11 +212,14 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             if (state is MapState.Success) {
                 naverMapHandler.updateRestaurantMarkers(
                     state.restaurantInfoList,
-                    markerClickListener)
+                    markerClickListener
+                )
             } else {
-                Toast.makeText(context,
+                Toast.makeText(
+                    context,
                     R.string.failed_get_restaurant_list,
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

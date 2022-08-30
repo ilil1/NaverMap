@@ -144,8 +144,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.getReverseGeoInformation(
                 LocationEntity(
                     latitude = location.latitude,
-                    longitude = location.longitude
-                )
+                    longitude = location.longitude)
             )
             removeLocationListener()
         }

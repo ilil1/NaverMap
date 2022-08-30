@@ -23,11 +23,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StoreDetailActivity : AppCompatActivity() {
 
-    private lateinit var viewPagerAdapter: StoreDetailFragmentPagerAdapter
     private lateinit var binding: ActivityStoreDetailBinding
+    private lateinit var viewPagerAdapter: StoreDetailFragmentPagerAdapter
 
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
+    @Inject lateinit var resourcesProvider: ResourcesProvider
     @Inject lateinit var viewModelFactory: StoreDetailViewModel.StoreDetailAssistedFactory
 
     /**
@@ -38,11 +37,13 @@ class StoreDetailActivity : AppCompatActivity() {
             ,restaurantEntity = intent.getParcelableExtra(StoreFragment.StoreFragment_KEY)!!)
     }
 
-    private fun observeData() {
-        viewModel.storeDetailResultLiveData.observe(this) {
-            when(it){
+    private fun observeData() = with(binding) {
+        viewModel.storeDetailResultLiveData.observe(this@StoreDetailActivity) {
+            when(it) {
                 is StoreDetailResult.Uninitialized -> {}
-                is StoreDetailResult.Loading -> {}
+                is StoreDetailResult.Loading -> {
+                    progressBar.isVisible = true
+                }
                 is StoreDetailResult.Success -> {
                     handleSuccess(it)
                 }
@@ -55,6 +56,7 @@ class StoreDetailActivity : AppCompatActivity() {
         binding = ActivityStoreDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.fetchData()
+
         observeData()
 
         binding.back.setOnClickListener {
@@ -67,57 +69,37 @@ class StoreDetailActivity : AppCompatActivity() {
     }
 
     private fun initViewPager(state: RestaurantEntity) {
+
         viewPagerAdapter = StoreDetailFragmentPagerAdapter(
             this@StoreDetailActivity,
             listOf(
                 StoreMenuFragment.newInstance(state),
-                StoreInformFragment.newInstance(state),
+                StoreInformFragment.newInstance(),
                 StoreReviewFragment.newInstance(state)
             )
         )
         val storeMarketDetailCategory = StoreDetailCategory.values()
 
         binding.menuAndReviewViewPager.adapter = viewPagerAdapter
+
         TabLayoutMediator(
             binding.menuAndReviewTabLayout,
             binding.menuAndReviewViewPager
         ) { tab, position ->
             tab.setText(storeMarketDetailCategory[position].categoryNameId)
         }.attach()
-
-    }
-
-    private fun handleLoading() = with(binding) {
-        progressBar.isVisible = true
     }
 
     private fun handleSuccess(state: StoreDetailResult.Success) = with(binding) {
         progressBar.isGone = true
 
-        val restaurantEntity = state.restaurantEntity
+       val restaurantEntity = state.restaurantEntity
 
-        val townMarketEntity = RestaurantEntity(
-            id = restaurantEntity.id,
-            restaurantInfoId = restaurantEntity.restaurantInfoId,
-            restaurantCategory = restaurantEntity.restaurantCategory,
-            restaurantTitle = restaurantEntity.restaurantTitle,
-            restaurantImageUrl = restaurantEntity.restaurantImageUrl,
-            restaurantTelNumber = restaurantEntity.restaurantTelNumber,
-            grade = restaurantEntity.grade,
-            reviewCount = restaurantEntity.reviewCount,
-            deliveryTimeRange = restaurantEntity.deliveryTimeRange,
-            deliveryTipRange = restaurantEntity.deliveryTipRange,
-            latitude = restaurantEntity.latitude,
-            longitude = restaurantEntity.longitude,
-            isMarketOpen = restaurantEntity.isMarketOpen,
-            distance= restaurantEntity.distance,
-        )
-
-        TownMarketMainTitleTextView.text = townMarketEntity.restaurantTitle
+        TownMarketMainTitleTextView.text = restaurantEntity.restaurantTitle
         TownMarketImage.load(restaurantEntity.restaurantImageUrl)
 
         if (::viewPagerAdapter.isInitialized.not()) {
-            initViewPager(townMarketEntity)
+            initViewPager(restaurantEntity)
         }
     }
 

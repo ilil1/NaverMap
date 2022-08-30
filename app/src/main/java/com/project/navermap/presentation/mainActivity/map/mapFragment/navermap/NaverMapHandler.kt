@@ -74,8 +74,10 @@ class NaverMapHandler(
                 tag = restaurant,
                 zIndex = index
             ).apply {
+                //Marker의 setOnClickListener
                 setOnClickListener { overlay -> clickListener(this, overlay) }
             }
+
         }
         showMarkers()
     }

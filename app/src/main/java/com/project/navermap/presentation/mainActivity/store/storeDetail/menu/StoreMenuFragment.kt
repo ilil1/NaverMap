@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.project.navermap.R
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
+import com.project.navermap.databinding.FragmentChatBinding
 import com.project.navermap.databinding.FragmentStoreMarketMenuBinding
 import com.project.navermap.domain.model.FoodModel
+import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.map.mapFragment.MapState
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.StoreDetailItemListener
@@ -19,11 +24,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StoreMenuFragment : Fragment() {
+class StoreMenuFragment : BaseFragment<FragmentStoreMarketMenuBinding>() {
 
-    private lateinit var binding: FragmentStoreMarketMenuBinding
+    override fun getViewBinding() = FragmentStoreMarketMenuBinding.inflate(layoutInflater)
 
-    @Inject lateinit var resourcesProvider: ResourcesProvider
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
     private val viewModel by viewModels<StoreMenuViewModel>()
 
     private val adapter by lazy {
@@ -31,43 +37,27 @@ class StoreMenuFragment : Fragment() {
             listOf(), viewModel, resourcesProvider,
             object : StoreDetailItemListener {
                 override fun onClickItem(foodModel: FoodModel) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(
+                        context,
+                        R.string.cannot_load_data,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         )
     }
 
-    private fun fetchData(restaurantEntity: RestaurantEntity) {
-        viewModel.items.observe(viewLifecycleOwner) {
-            when (it) {
-                is StoreMenuState.Uninitialized -> {
-                    observeData()
-                }
-            }
+    override fun observeData() = with(viewModel) {
+        storeItem.observe(viewLifecycleOwner) {
+            adapter.submitList(it)//Data callback
         }
     }
 
-
-    fun observeData() = viewModel.storeItem.observe(viewLifecycleOwner) {
-        lifecycleScope.launch {
-            adapter.submitList(it)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentStoreMarketMenuBinding.inflate(layoutInflater)
+    override fun initState() {
         val storeData = arguments?.getParcelable<RestaurantEntity>(SALE_LIST_KEY)!!
-        fetchData(storeData)
-        viewModel.loadRestaurantItems(storeData.restaurantInfoId)
+        viewModel.loadRestaurantItems(storeData.restaurantInfoId)//Data Request
         binding.restaurantRecyclerView.adapter = adapter
-        binding.restaurantRecyclerView.layoutManager =
-            LinearLayoutManager(this@StoreMenuFragment.context)
-
-        return binding.root
+        super.initState()
     }
 
     companion object {

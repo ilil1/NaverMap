@@ -16,6 +16,7 @@ class ChatViewModel @Inject constructor(
     private val chatRepository: ChatRepository
 ) : ViewModel() {
 
+    //List<ChatModel>을 가져오면
     private val _chatListData = MutableLiveData<List<ChatModel>>()
     val chatListData : LiveData<List<ChatModel>> = _chatListData
 

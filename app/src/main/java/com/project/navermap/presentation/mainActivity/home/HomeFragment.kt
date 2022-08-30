@@ -25,7 +25,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
-    override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
+    override fun getViewBinding() = FragmentHomeBinding.inflate(layoutInflater)
 
     private lateinit var viewPager2: ViewPager2
     private val sliderHandler = Handler()
@@ -33,7 +33,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val viewModel: HomeViewModel by viewModels()
     private val activityViewModel by activityViewModels<MainViewModel>()
 
-    @Inject lateinit var resourcesProvider: ResourcesProvider
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
 
     /**
      * Adpater를 따로 관리하는 클래스 구조 필요
@@ -41,9 +42,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val nearbyMarketAdapter by lazy {
         ModelRecyclerAdapter<TownMarketModel, HomeViewModel>(
             listOf(), viewModel, resourcesProvider,
-             object : TownMarketListener {
+            object : TownMarketListener {
                 override fun onClickItem(model: TownMarketModel) {
-                    Toast.makeText(context,
+                    Toast.makeText(
+                        context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -57,7 +59,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    Toast.makeText(context,
+                    Toast.makeText(
+                        context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -71,7 +74,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    Toast.makeText(context,
+                    Toast.makeText(
+                        context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -85,7 +89,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    Toast.makeText(context,
+                    Toast.makeText(
+                        context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -104,7 +109,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     nearbyMarketAdapter.submitList(it.modelList)
                 }
                 is HomeMainState.Error -> {
-                    Toast.makeText(context,
+                    Toast.makeText(
+                        context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -121,7 +127,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     suggestAdapter.submitList(it.modelList)
                 }
                 is HomeMainState.Error -> {
-                    Toast.makeText(context,
+                    Toast.makeText(
+                        context,
                         R.string.cannot_load_data,
                         Toast.LENGTH_SHORT
                     ).show()
@@ -130,7 +137,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         seasonData.observe(viewLifecycleOwner) {
             when (it) {
-
                 is HomeMainState.Uninitialized -> {}
                 is HomeMainState.Loading -> {}
                 is HomeMainState.ListLoaded -> {}
@@ -180,13 +186,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val sliderRunnable by lazy {
         Runnable {
-            viewPager2.currentItem =  viewPager2.currentItem + 1
+            viewPager2.currentItem = viewPager2.currentItem + 1
         }
     }
 
-    private val items by lazy  {
+    private val items by lazy {
         mutableListOf<SliderItemModel>().apply {
-           for (i: Int in 1..4) {
+            for (i: Int in 1..4) {
                 add(SliderItemModel(R.drawable.testimage3))
             }
         }

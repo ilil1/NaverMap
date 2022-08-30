@@ -16,21 +16,11 @@ class StoreMenuViewModel @Inject constructor(
     private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase,
 ) : ViewModel() {
 
-    private val _items = MutableLiveData<StoreMenuState>(StoreMenuState.Uninitialized)
-    val items: LiveData<StoreMenuState> get() = _items
-
     private val _storeItem = MutableLiveData<List<FoodModel>>(emptyList())
     val storeItem: LiveData<List<FoodModel>> get() = _storeItem
 
-    fun fetchData() {
-        if (items.value is StoreMenuState.Uninitialized) {
-            //_items.value = StoreMenuState.Loading
-        }
-    }
-
-    fun loadRestaurantItems(
-        restaurantId: Long
-    ) = viewModelScope.launch {
+    //추후에 Model을 분리해서 따로 관리
+    fun loadRestaurantItems(restaurantId: Long) = viewModelScope.launch {
         _storeItem.value = getItemsByRestaurantIdUseCase(restaurantId).map {
             it.copy(type = CellType.STORE_DETAIL_FOOD_CELL)
         }
