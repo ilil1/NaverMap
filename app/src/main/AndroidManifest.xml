@@ -16,9 +16,6 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".chippractice"
-            android:exported="true" />
-        <activity
             android:name=".presentation.mainActivity.chat.ChatActivity"
             android:exported="true" />
         <activity

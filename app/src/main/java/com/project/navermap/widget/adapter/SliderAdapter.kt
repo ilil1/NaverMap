@@ -43,7 +43,7 @@ class SliderAdapter(
         //holder.bind(sliderItems[(position % 3)])
         Log.d("sliderItems", sliderItems.size.toString())
         Log.d("position", position.toString())
-        if (position == sliderItems.size - 1) {
+        if (position == sliderItems.size - 2) {
             viewPager2.post(runnable)
         }
     }

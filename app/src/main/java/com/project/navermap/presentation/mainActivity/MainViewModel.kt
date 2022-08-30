@@ -14,11 +14,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
-class MainViewModel
-@Inject
-constructor(
+class MainViewModel @Inject constructor(
     private val getReverseGeoUseCase: GetReverseGeoUseCase
 ) : ViewModel() {
 
@@ -64,15 +61,12 @@ constructor(
         return locationManager
     }
 
-    fun getReverseGeoInformation(
-        locationLatLngEntity: LocationEntity
-    ) = viewModelScope.launch {
+    fun getReverseGeoInformation(locationLatLngEntity: LocationEntity) = viewModelScope.launch {
 
         if (curLocation == null) {
             curLocation = LatLng(
                 locationLatLngEntity.latitude,
-                locationLatLngEntity.longitude
-            )
+                locationLatLngEntity.longitude)
         }
 
         val addressInfo = getReverseGeoUseCase(locationLatLngEntity)

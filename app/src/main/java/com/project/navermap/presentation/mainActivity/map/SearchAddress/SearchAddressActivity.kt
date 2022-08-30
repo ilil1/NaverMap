@@ -8,23 +8,32 @@ import android.os.Message
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.*
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import com.project.navermap.databinding.ActivitySearchAddressBinding
+import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.mainActivity.MainActivity.Companion.MY_LOCATION_KEY
+import com.project.navermap.presentation.mainActivity.MainState
+import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
 import com.project.navermap.presentation.myLocation.MyLocationActivity
 import com.project.navermap.presentation.myLocation.MyLocationActivity.Companion.SEARCH_LOCATION_KEY
+import com.project.navermap.presentation.myLocation.MyLocationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SearchAddressActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchAddressBinding
+    private val viewModel: SearchAddressViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
         init()
+        observeData()
     }
 
     private fun init() {
@@ -36,11 +45,8 @@ class SearchAddressActivity : AppCompatActivity() {
                 javaScriptCanOpenWindowsAutomatically = true//javaScript window.open 허용
                 setSupportMultipleWindows(true)
         }
-        //addJavascriptInterface(AndroidBridge(), "TestApp")
         binding.webViewAddress.addJavascriptInterface(AndroidBridge(), "TestApp")
 //최초로 웹뷰 로딩
-        //https://searchaddress-f9857.web.app/
-        //https://searchaddress-f9857.firebaseapp.com/
         binding.webViewAddress.loadUrl("https://searchaddress-f9857.web.app")
         binding.webViewAddress.webChromeClient = this@SearchAddressActivity.webChromeClient
 
@@ -54,12 +60,30 @@ class SearchAddressActivity : AppCompatActivity() {
             Log.d("arg1.toString()", arg1.toString())
             Log.d("arg2.toString()", arg2.toString())
             Log.d("arg3.toString()", arg3.toString())
-            val extra = Bundle()
-            val intent = Intent()
-            extra.putString(SEARCH_LOCATION_KEY, String.format("%s %s", arg2, arg3))
-            intent.putExtras(extra)
-            setResult(RESULT_OK, intent)
-            finish()
+
+            val address = String.format("%s %s", arg2, arg3)
+            viewModel.getAddressInformation(address)
+        }
+    }
+
+    private fun observeData() = with(binding) {
+
+        viewModel.locationData.observe(this@SearchAddressActivity) {
+            when (it) {
+                is SearchState.Uninitialized -> {
+                }
+                is SearchState.Loading -> {}
+                is SearchState.Success -> {
+                    val bundle = Bundle().apply {
+                        putParcelable(SEARCH_LOCATION_KEY, it.mapSearchInfoEntity)
+                    }
+                    intent.putExtras(bundle)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+                is SearchState.Error -> {
+                }
+            }
         }
     }
 

@@ -23,6 +23,7 @@ import com.project.navermap.databinding.ActivityMyLocationBinding
 import com.project.navermap.extensions.showToast
 import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.mainActivity.map.SearchAddress.SearchAddressActivity
+import com.project.navermap.presentation.mainActivity.store.StoreFragment
 import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,53 +61,12 @@ class MyLocationActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         { result ->
             if (result.resultCode == RESULT_OK) {
-                if (result.data != null) {
-
-                    val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
-                    val str = bundle?.get(SEARCH_LOCATION_KEY).toString()
-                    var asw: MapSearchInfoEntity?
-
-                    Log.d("SearchActivityForResult", str)
-
-                    // TODO: coroutine과 retrofit으로 바꾸기
-                    Thread {
-
-                        val obj: URL
-                        val address: String = URLEncoder.encode(str, "UTF-8")
-
-                        obj = URL(Url.GEOCODE_URL + address)
-
-                        val con: HttpURLConnection = obj.openConnection() as HttpURLConnection
-
-                        con.setRequestMethod("GET")
-                        con.setRequestProperty("Authorization", "KakaoAK " + Key.GEOCODE_USER_INFO)
-                        con.setRequestProperty("content-type", "application/json")
-                        con.setDoOutput(true)
-                        con.setUseCaches(false)
-                        con.setDefaultUseCaches(false)
-
-                        val data = con.inputStream.bufferedReader().readText()
-
-                        Log.d("application/json", data)
-
-                        val dataList = "[$data]"
-                        val xy = Gson().fromJson(dataList, Array<Address>::class.java).toList()
-
-                        asw = MapSearchInfoEntity(
-                            xy[0].documents[0].addressName,
-                            xy[0].documents[0].roadAddress.buildingName,
-                            LocationEntity(
-                                xy[0].documents[0].y.toDouble(),
-                                xy[0].documents[0].x.toDouble())
-                        )
-
-                        intent?.putExtra(MY_LOCATION_KEY, asw)
-                        setResult(RESULT_OK, intent)
-                        viewModel.saveRecentSearchItems(asw!!)
-                        finish()
-
-                    }.start()
-                }
+                val bundle = result.data?.extras //인텐트로 보낸 extras를 받아옵니다.
+                var result = bundle?.get(SEARCH_LOCATION_KEY)
+                viewModel.saveRecentSearchItems(result as MapSearchInfoEntity) //Room에 저장
+                intent?.putExtra(MY_LOCATION_KEY, result)
+                setResult(RESULT_OK, intent)
+                finish()
             }
         }
 
@@ -153,8 +113,8 @@ class MyLocationActivity : AppCompatActivity() {
             intent.putExtra(
                 MY_LOCATION_KEY,
                 MapSearchInfoEntity(
-                    fullAddress = addressData.fullAddress,
-                    name = addressData.name,
+                    fullAddress = addressData.fullAddress ?: "주소 정보 없음",
+                    name = addressData.name ?: "주소 정보 없음",
                     locationLatLng = LocationEntity(addressData.lat, addressData.lng)
                 )
             )
