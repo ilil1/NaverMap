@@ -4,16 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class StoreDetailFragmentPagerAdapter : FragmentStateAdapter {
-
-    private val fragmentList: List<Fragment>
-
-    constructor(
-        activity: FragmentActivity,
-        fragmentList: List<Fragment>
-    ): super(activity) {
-        this.fragmentList = fragmentList
-    }
+class StoreDetailFragmentPagerAdapter(
+    activity: FragmentActivity,
+    val fragmentList: List<Fragment>
+) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = fragmentList.size
 

@@ -26,20 +26,24 @@ class StoreDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoreDetailBinding
     private lateinit var viewPagerAdapter: StoreDetailFragmentPagerAdapter
 
-    @Inject lateinit var resourcesProvider: ResourcesProvider
-    @Inject lateinit var viewModelFactory: StoreDetailViewModel.StoreDetailAssistedFactory
+    @Inject
+    lateinit var resourcesProvider: ResourcesProvider
+    @Inject
+    lateinit var viewModelFactory: StoreDetailViewModel.StoreDetailAssistedFactory
 
     /**
      * hilt를 활용한 런타임 주입인데 Hilt의 의존성 관리상 저장되는 위치가 달라서 생기는 문제가 있음.
      */
     val viewModel by viewModels<StoreDetailViewModel> {
-        StoreDetailViewModel.provideFactory(viewModelFactory
-            ,restaurantEntity = intent.getParcelableExtra(StoreFragment.StoreFragment_KEY)!!)
+        StoreDetailViewModel.provideFactory(
+            viewModelFactory,
+            restaurantEntity = intent.getParcelableExtra(StoreFragment.StoreFragment_KEY)!!
+        )
     }
 
     private fun observeData() = with(binding) {
         viewModel.storeDetailResultLiveData.observe(this@StoreDetailActivity) {
-            when(it) {
+            when (it) {
                 is StoreDetailResult.Uninitialized -> {}
                 is StoreDetailResult.Loading -> {
                     progressBar.isVisible = true
@@ -64,10 +68,6 @@ class StoreDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun bundleData(restaurantEntity: RestaurantEntity) {
-        initViewPager(restaurantEntity)
-    }
-
     private fun initViewPager(state: RestaurantEntity) {
 
         viewPagerAdapter = StoreDetailFragmentPagerAdapter(
@@ -85,15 +85,14 @@ class StoreDetailActivity : AppCompatActivity() {
         TabLayoutMediator(
             binding.menuAndReviewTabLayout,
             binding.menuAndReviewViewPager
-        ) { tab, position ->
-            tab.setText(storeMarketDetailCategory[position].categoryNameId)
+        ) { tab, position -> tab.setText(storeMarketDetailCategory[position].categoryNameId)
         }.attach()
     }
 
     private fun handleSuccess(state: StoreDetailResult.Success) = with(binding) {
         progressBar.isGone = true
 
-       val restaurantEntity = state.restaurantEntity
+        val restaurantEntity = state.restaurantEntity
 
         TownMarketMainTitleTextView.text = restaurantEntity.restaurantTitle
         TownMarketImage.load(restaurantEntity.restaurantImageUrl)
