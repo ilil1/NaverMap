@@ -227,8 +227,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         viewPager2.adapter = SliderAdapter(items, viewPager2)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         viewPager2.adapter = null
     }
 

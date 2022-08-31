@@ -25,11 +25,13 @@ object MapModule {
     @Provides
     fun provideMarkerFactory() = MarkerFactory()
 
+    //Activity가 생성 됬을 때 inject가 이루어져서 naverMap가 아직 null이다.
+    //naverMap의 경우 OnMapReadyCallback 이 후에 값이 들어옴.
+    //lazy하게 이루어질 수 있도록 해야함.
     @Provides
     @FragmentScoped
     fun provideNaverMapHandler(
         markerFactory: MarkerFactory,
         naverMap: NaverMap
     ) = NaverMapHandler(markerFactory, naverMap)
-
 }

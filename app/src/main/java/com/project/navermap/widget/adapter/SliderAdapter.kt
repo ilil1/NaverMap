@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.project.navermap.databinding.SlideItemContainerBinding
@@ -39,11 +40,15 @@ class SliderAdapter(
     }
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
-        holder.bind(sliderItems[position])
+        try {
+            holder.bind(sliderItems[position])
+        } catch (ex: Exception) {
+            viewPager2.post(runnable)
+        }
         //holder.bind(sliderItems[(position % 3)])
         Log.d("sliderItems", sliderItems.size.toString())
         Log.d("position", position.toString())
-        if (position == sliderItems.size - 2) {
+        if (position == sliderItems.size - 1) {
             viewPager2.post(runnable)
         }
     }

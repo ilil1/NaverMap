@@ -1,18 +1,8 @@
 package com.project.navermap.presentation.mainActivity.map.mapFragment
 
-import android.app.Dialog
-import android.os.Build
-import android.os.Message
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
@@ -23,15 +13,10 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.project.navermap.*
 import com.project.navermap.R
-import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.data.url.Key
-import com.project.navermap.data.url.Url
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.extensions.showToast
-import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.mainActivity.MainState
 import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerClickListener
@@ -65,6 +50,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
     @Inject
     lateinit var markerFactory: MarkerFactory
 
+    //네이버지도 불러와지고 핸들러에 지도를 주입해준다
     @Inject
     lateinit var naverMapHandlerProvider: Provider<NaverMapHandler>
     private val naverMapHandler get() = naverMapHandlerProvider.get()
@@ -198,6 +184,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
         btnDestLocation.setOnClickListener {
             activityViewModel.destLocation?.let {
+                //naverMapHandler.moveCameraTo(it, { showToast("DestLocation 초기화 중") })
                 naverMapHandler.moveCameraTo(it) { showToast("DestLocation 초기화 중") }
                 naverMapHandler.updateDestMarker(
                     destMarker,

@@ -14,6 +14,7 @@ import com.project.navermap.widget.adapter.listener.ChatModelListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class ChatFragment : BaseFragment<FragmentChatBinding>() {
 

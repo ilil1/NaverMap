@@ -27,12 +27,12 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
     val locationEntity
     by lazy<LocationEntity> { arguments?.getParcelable(LOCATION_KEY)!! }
 
-//    @Inject
-//    lateinit var viewModelFactoryProvider: Provider<RestaurantListViewModel.RestaurantAssistedFactory>
-//    //get()이 불리기 전까지는 초기화되는것을 늦출 수 있다.
-//    private val viewModelFactory get() = viewModelFactoryProvider.get()
+    //lazy 하게
+    @Inject
+    lateinit var viewModelFactoryProvider: Provider<RestaurantListViewModel.RestaurantAssistedFactory>
+    private val viewModelFactory get() = viewModelFactoryProvider.get()
 
-    @Inject lateinit var viewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
+    //@Inject lateinit var viewModelFactory: RestaurantListViewModel.RestaurantAssistedFactory
 
     /**
      * hilt를 활용한 런타임 주입인데 Hilt의 의존성 관리상 저장되는 위치가 달라서 생기는 문제가 있음.

@@ -59,8 +59,8 @@ class StoreDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityStoreDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.fetchData()
 
+        viewModel.fetchData()
         observeData()
 
         binding.back.setOnClickListener {

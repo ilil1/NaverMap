@@ -15,11 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class StoreFragment : BaseFragment<FragmentStoreBinding>() {
 
+    override fun getViewBinding() = FragmentStoreBinding.inflate(layoutInflater)
+
     private val activityViewModel by activityViewModels<MainViewModel>()
     private lateinit var viewPagerAdapter: RestaurantListFragmentPagerAdapter
-
-    override fun getViewBinding(): FragmentStoreBinding =
-        FragmentStoreBinding.inflate(layoutInflater)
 
     override fun observeData() {
         activityViewModel.locationData.observe(viewLifecycleOwner) {

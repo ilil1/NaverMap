@@ -19,10 +19,12 @@ import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMainBinding
 import com.project.navermap.presentation.myLocation.MyLocationActivity
+import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 import javax.inject.Provider
+
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -45,8 +47,12 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var navControllerProvider: Provider<NavController>
-    //fragment가 생성이되면 그때 그 id값을 반환하면서 get으로 가져오게된다.
+    //fragment가 생성이되고 fragment가 있어야 navController가 그때 그 id값을 반환하면서 get으로 가져오게된다.
     private val navController get() = navControllerProvider.get()
+
+//    @Inject
+//    lateinit var lazy : Lazy<NavController>
+//    private val navController get() = lazy.get()
 
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -78,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //navController
         binding.bottomNav.setupWithNavController(navController)
         binding.locationTitleTextView.setOnClickListener {
 
