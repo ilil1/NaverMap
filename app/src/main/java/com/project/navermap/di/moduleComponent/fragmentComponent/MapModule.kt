@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.FragmentComponent
+package com.project.navermap.di.moduleComponent.fragmentComponent
 
 import androidx.fragment.app.Fragment
 import com.naver.maps.map.NaverMap

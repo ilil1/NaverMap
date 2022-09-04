@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.SingletonComponent
+package com.project.navermap.di.moduleComponent.singletonComponent
 
 import com.example.YUmarket.data.repository.suggest.SuggestRepositoryImpl
 import com.project.navermap.data.repository.chat.ChatRepository

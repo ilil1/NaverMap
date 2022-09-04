@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.SingletonComponent
+package com.project.navermap.di.moduleComponent.singletonComponent
 
 import com.project.navermap.di.annotation.dispatchermodule.DefaultDispatcher
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher

@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.ActivityComponent
+package com.project.navermap.di.moduleComponent.activityComponent
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity

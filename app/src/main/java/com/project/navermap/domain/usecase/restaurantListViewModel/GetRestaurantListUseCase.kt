@@ -8,7 +8,7 @@ import com.project.navermap.presentation.mainActivity.store.restaurant.Restautan
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class GetRestaurantListUseCaseImpl(
+class GetRestaurantListUseCase(
     private val restaurantRepositoryImpl: RestaurantRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {

@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.ActivityComponent
+package com.project.navermap.di.moduleComponent.activityComponent
 
 import dagger.Module
 import dagger.hilt.InstallIn

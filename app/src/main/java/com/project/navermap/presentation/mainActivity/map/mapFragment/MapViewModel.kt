@@ -1,31 +1,24 @@
 package com.project.navermap.presentation.mainActivity.map.mapFragment
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
-import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
+import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
-import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
+    private val getRestaurantListUseCase: GetRestaurantListUseCase,
     private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase
 ) : ViewModel() {
 
@@ -50,7 +43,7 @@ class MapViewModel @Inject constructor(
         restaurantList.clear()
         val restaurantCategories = RestaurantCategory.values()
         restaurantCategories.map {
-            when (val result = getRestaurantListUseCaseImpl.fetchData(it, location)) {
+            when (val result = getRestaurantListUseCase.fetchData(it, location)) {
                 is RestaurantResult.Success -> {
                     val mutableResult = result.data.toMutableList()
                     var i = 0

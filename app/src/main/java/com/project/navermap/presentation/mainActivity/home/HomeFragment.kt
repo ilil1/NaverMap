@@ -204,6 +204,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         viewPager2 = binding.pager
         viewPager2.post(runnable) //0번 position으로 초기화
         viewPager2.getChildAt(0)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        viewPager2.adapter = SliderAdapter(items, viewPager2)
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -224,6 +225,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun onStart() {
         super.onStart()
+        //AVD 기준으로 Data 삭제후 처음 실행시 이렇게 onStart에서만 adapter을 선언하면 작동을 안함
+        //그래서 initView에 추가했음
         viewPager2.adapter = SliderAdapter(items, viewPager2)
     }
 

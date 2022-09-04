@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.SingletonComponent
+package com.project.navermap.di.moduleComponent.singletonComponent
 
 import android.content.Context
 import androidx.room.Room

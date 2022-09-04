@@ -3,7 +3,7 @@ package com.project.navermap.presentation.mainActivity.store.restaurant
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
+import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class RestaurantListViewModel @AssistedInject constructor(
-    private val getRestaurantListUseCaseImpl: GetRestaurantListUseCaseImpl,
+    private val getRestaurantListUseCase: GetRestaurantListUseCase,
     @Assisted private val restaurantCategory: RestaurantCategory,
     @Assisted private var locationEntity: LocationEntity
 ) : ViewModel() {
@@ -43,7 +43,7 @@ class RestaurantListViewModel @AssistedInject constructor(
     val restaurantListLiveData: LiveData<List<RestaurantModel>> get() = _restaurantListLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
-        when (val result = getRestaurantListUseCaseImpl.fetchData(restaurantCategory, locationEntity)) {
+        when (val result = getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity)) {
             is RestaurantResult.Success -> {
 //                val it = getRestaurantListUseCaseImpl.getRestaurantList()
                 _restaurantListLiveData.value = result.data
