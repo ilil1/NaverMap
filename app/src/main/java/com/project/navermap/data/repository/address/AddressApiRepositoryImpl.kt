@@ -10,12 +10,13 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AddressApiRepositoryImpl @Inject constructor(
-    private val kakaoAdressApiService: KakaoAdressApiService,
+    private val kakaoAddressApiService: KakaoAdressApiService,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AddressApiRepository {
+
     override suspend fun getAddressInformation(address: String) =
         withContext(ioDispatcher) {
-            val response = kakaoAdressApiService.getAddress(
+            val response = kakaoAddressApiService.getAddress(
                 address = address
             )
             if (response.isSuccessful) {

@@ -21,6 +21,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
     override fun getViewBinding() = FragmentChatBinding.inflate(layoutInflater)
 
     private val viewModel: ChatViewModel by viewModels()
+
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
 
