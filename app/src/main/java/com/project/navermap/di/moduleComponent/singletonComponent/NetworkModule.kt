@@ -2,7 +2,7 @@ package com.project.navermap.di.moduleComponent.singletonComponent
 
 import com.project.navermap.BuildConfig
 import com.project.navermap.data.network.FoodApiService
-import com.project.navermap.data.network.KakaoAdressApiService
+import com.project.navermap.data.network.KakaoAddressApiService
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.data.network.ShopController
 import com.project.navermap.data.url.Url
@@ -123,7 +123,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKakaoController(@KakaoRetrofitInstance retrofit: Retrofit): KakaoAdressApiService {
-        return retrofit.create(KakaoAdressApiService::class.java)
+    fun provideKakaoController(@KakaoRetrofitInstance retrofit: Retrofit): KakaoAddressApiService {
+        return retrofit.create(KakaoAddressApiService::class.java)
     }
 }

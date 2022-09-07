@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-interface KakaoAdressApiService {
+interface KakaoAddressApiService {
     @GET(Url.KakaoAdress_URL)
     suspend fun getAddress(
         @Header("Authorization") key: String = Key.GEOCODE_USER_INFO,
