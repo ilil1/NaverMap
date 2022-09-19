@@ -22,8 +22,10 @@ class RestaurantListViewModel @AssistedInject constructor(
      */
     @AssistedFactory
     interface RestaurantAssistedFactory {
-        fun create(restaurantCategory: RestaurantCategory,
-                   locationEntity: LocationEntity): RestaurantListViewModel
+        fun create(
+            restaurantCategory: RestaurantCategory,
+            locationEntity: LocationEntity
+        ): RestaurantListViewModel
     }
 
     companion object {
