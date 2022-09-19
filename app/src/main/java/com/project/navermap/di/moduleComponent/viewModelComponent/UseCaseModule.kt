@@ -17,9 +17,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 object UseCaseModule {
     @Provides
     fun provideGetShopListUseCase(
-        repository: RestaurantRepository,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ) = GetRestaurantListUseCase(repository, ioDispatcher)
+        repository: RestaurantRepository
+    ) = GetRestaurantListUseCase(repository)
 
     @Provides
     fun provideGetItemsByRestaurantIdUseCase(repository: RestaurantRepository) =

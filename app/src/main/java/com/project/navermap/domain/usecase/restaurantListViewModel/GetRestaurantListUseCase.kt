@@ -1,45 +1,42 @@
 package com.project.navermap.domain.usecase.restaurantListViewModel
 
 import com.project.navermap.data.entity.LocationEntity
-import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestautantFilterOrder
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.transform
 
 class GetRestaurantListUseCase(
-    private val restaurantRepositoryImpl: RestaurantRepository,
-    private val ioDispatcher: CoroutineDispatcher
+    private val restaurantRepository: RestaurantRepository,
 ) {
-    suspend fun fetchData(
+    fun fetchData(
         restaurantCategory: RestaurantCategory,
         locationEntity: LocationEntity,
         filterOrder: RestautantFilterOrder = RestautantFilterOrder.DEFAULT
-    ): RestaurantResult = withContext(ioDispatcher) {
-        val sortedList = sortList(
-            restaurantRepositoryImpl.getList(restaurantCategory, locationEntity),
-            filterOrder//DEFAULT
-        ).map { it.toRestaurantModel() }
-
-        RestaurantResult.Success(data = sortedList)
+    ): Flow<RestaurantResult> {
+        return restaurantRepository.getList(restaurantCategory, locationEntity)
+            .transform {
+                emit(RestaurantResult.Success(data = it.sortList(filterOrder)))
+            }
     }
 
-    private fun sortList(
-        restaurantList: List<RestaurantEntity>,
+
+    private fun List<RestaurantModel>.sortList(
         filterOrder: RestautantFilterOrder
     ) = when (filterOrder) {
         RestautantFilterOrder.DEFAULT -> {
-            restaurantList
+            this
         }
         RestautantFilterOrder.LOW_DELIVERY_TIP -> {
-            restaurantList.sortedBy { it.deliveryTipRange.first }
+            sortedBy { it.deliveryTipRange.first }
         }
         RestautantFilterOrder.FAST_DELIVERY -> {
-            restaurantList.sortedBy { it.deliveryTimeRange.first }
+            sortedBy { it.deliveryTimeRange.first }
         }
         RestautantFilterOrder.TOP_RATE -> {
-            restaurantList.sortedByDescending { it.grade }
+            sortedByDescending { it.grade }
         }
     }
 }

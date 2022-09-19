@@ -22,8 +22,10 @@ class RestaurantListViewModel @AssistedInject constructor(
      */
     @AssistedFactory
     interface RestaurantAssistedFactory {
-        fun create(restaurantCategory: RestaurantCategory,
-                   locationEntity: LocationEntity): RestaurantListViewModel
+        fun create(
+            restaurantCategory: RestaurantCategory,
+            locationEntity: LocationEntity
+        ): RestaurantListViewModel
     }
 
     companion object {
@@ -43,10 +45,10 @@ class RestaurantListViewModel @AssistedInject constructor(
     val restaurantListLiveData: LiveData<List<RestaurantModel>> get() = _restaurantListLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
-        when (val result = getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity)) {
-            is RestaurantResult.Success -> {
-//                val it = getRestaurantListUseCaseImpl.getRestaurantList()
-                _restaurantListLiveData.value = result.data
+        getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity).collect {
+            when (it) {
+                is RestaurantResult.Success -> _restaurantListLiveData.value = it.data
+                else -> _restaurantListLiveData.value = emptyList() /* TODO: 2022-09-20 화 00:33, Error 구현 */
             }
         }
     }

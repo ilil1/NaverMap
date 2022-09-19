@@ -2,7 +2,6 @@ package com.project.navermap.data.entity.restaurant
 
 import android.os.Parcelable
 import androidx.room.PrimaryKey
-import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import kotlinx.parcelize.Parcelize
 
@@ -22,22 +21,4 @@ data class RestaurantEntity(
     var longitude: Double = 0.0,
     val isMarketOpen: Boolean,
     val distance: Float
-):  Parcelable {
-
-    fun toRestaurantModel() = RestaurantModel(
-        id = id,
-        restaurantInfoId = restaurantInfoId,
-        restaurantCategory = restaurantCategory,
-        restaurantTitle = restaurantTitle,
-        restaurantImageUrl = restaurantImageUrl,
-        grade = grade,
-        reviewCount = reviewCount,
-        deliveryTimeRange = deliveryTimeRange,
-        deliveryTipRange = deliveryTipRange,
-        restaurantTelNumber = restaurantTelNumber,
-        latitude = latitude,
-        longitude = longitude,
-        isMarketOpen = isMarketOpen,
-        distance = distance
-    )
-}
+) : Parcelable

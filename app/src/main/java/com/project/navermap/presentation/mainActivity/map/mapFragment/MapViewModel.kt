@@ -43,17 +43,20 @@ class MapViewModel @Inject constructor(
         restaurantList.clear()
         val restaurantCategories = RestaurantCategory.values()
         restaurantCategories.map {
-            when (val result = getRestaurantListUseCase.fetchData(it, location)) {
-                is RestaurantResult.Success -> {
-                    val mutableResult = result.data.toMutableList()
-                    var i = 0
-                    repeat(mutableResult.size) {
-                        if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
-                            restaurantList.add(mutableResult[i])
+            getRestaurantListUseCase.fetchData(it, location).collect {
+                /* TODO: 2022-09-20 화 00:34, Error 구현 */
+                when (it) {
+                    is RestaurantResult.Success -> {
+                        val mutableResult = it.data.toMutableList()
+                        var i = 0
+                        repeat(mutableResult.size) {
+                            if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
+                                restaurantList.add(mutableResult[i])
+                            }
+                            i++
                         }
-                        i++
+                        _data.value = MapState.Success(restaurantList)
                     }
-                    _data.value = MapState.Success(restaurantList)
                 }
             }
         }
