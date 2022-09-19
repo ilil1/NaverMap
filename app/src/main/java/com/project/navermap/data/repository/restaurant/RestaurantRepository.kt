@@ -8,10 +8,10 @@ import com.project.navermap.presentation.mainActivity.store.restaurant.Restauran
 import kotlinx.coroutines.flow.Flow
 
 interface RestaurantRepository {
-    fun getList(
+    suspend fun getList(
         restaurantCategory: RestaurantCategory,
         locationLatLngEntity: LocationEntity
-    ): Flow<List<RestaurantModel>>
+    ): List<RestaurantModel>
 
     suspend fun getItemsByRestaurantId(id: Long): List<FoodModel>
 }

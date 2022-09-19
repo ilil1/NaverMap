@@ -11,7 +11,7 @@ class MapDataSource(
     private val api: MapApiService,
     private val dao: MapSearchCacheDao
 ) {
-    fun getSearchLocationAround(
+    suspend fun getSearchLocationAround(
         categories: String,
         centerLat: String,
         centerLon: String,
@@ -20,7 +20,7 @@ class MapDataSource(
         resCoordType: String = "",
         searchtypCd: String = "A",
         reqCoordType: String = "WGS84GEO"
-    ): Flow<List<MapSearchCacheEntity>> = flow {
+    ): List<MapSearchCacheEntity> {
         val response = api.getSearchLocationAround(
             categories = categories,
             centerLat = centerLat,
@@ -44,6 +44,6 @@ class MapDataSource(
             dao.insertSearchResults(pois)
         }
 
-        emit(dao.getSearchResultCaches())
+        return dao.getSearchResultCaches()
     }
 }

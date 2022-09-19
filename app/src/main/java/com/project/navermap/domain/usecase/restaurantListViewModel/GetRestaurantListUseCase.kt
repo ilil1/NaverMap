@@ -5,21 +5,19 @@ import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestautantFilterOrder
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.transform
 
 class GetRestaurantListUseCase(
     private val restaurantRepository: RestaurantRepository,
 ) {
-    fun fetchData(
+    suspend fun fetchData(
         restaurantCategory: RestaurantCategory,
         locationEntity: LocationEntity,
         filterOrder: RestautantFilterOrder = RestautantFilterOrder.DEFAULT
-    ): Flow<RestaurantResult> {
-        return restaurantRepository.getList(restaurantCategory, locationEntity)
-            .transform {
-                emit(RestaurantResult.Success(data = it.sortList(filterOrder)))
-            }
+    ): RestaurantResult {
+        return RestaurantResult.Success(
+            data = restaurantRepository.getList(restaurantCategory, locationEntity)
+                .sortList(filterOrder)
+        )
     }
 
 

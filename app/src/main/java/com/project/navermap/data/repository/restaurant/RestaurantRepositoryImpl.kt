@@ -9,8 +9,6 @@ import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -21,18 +19,16 @@ class RestaurantRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : RestaurantRepository {
 
-    override fun getList(
+    override suspend fun getList(
         restaurantCategory: RestaurantCategory,
         locationLatLngEntity: LocationEntity
-    ): Flow<List<RestaurantModel>> {
+    ): List<RestaurantModel> {
         return mapDataSource.getSearchLocationAround(
             categories = resourcesProvider.getString(restaurantCategory.categoryTypeId),
             centerLat = locationLatLngEntity.latitude.toString(),
             centerLon = locationLatLngEntity.longitude.toString()
         ).map {
-            it.map { entity ->
-                entity.toRestaurantEntity(restaurantCategory).toRestaurantModel()
-            }
+            it.toRestaurantEntity(restaurantCategory).toRestaurantModel()
         }
     }
 
