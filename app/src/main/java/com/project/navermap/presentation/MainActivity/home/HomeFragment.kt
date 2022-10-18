@@ -53,7 +53,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(),
             viewModel,
             resourcesProvider,
-             object : TownMarketListener {
+            object : TownMarketListener {
                 override fun onClickItem(model: TownMarketModel) {
                 }
             }
@@ -184,13 +184,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val sliderRunnable by lazy {
         Runnable {
-            viewPager2.currentItem =  viewPager2.currentItem + 1
+            viewPager2.currentItem = viewPager2.currentItem + 1
         }
     }
 
-    private val items by lazy  {
+    private val items by lazy {
         mutableListOf<SliderItemModel>().apply {
-           for (i: Int in 1..4) {
+            for (i: Int in 1..4) {
                 add(SliderItemModel(R.drawable.testimage3))
             }
         }

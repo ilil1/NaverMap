@@ -25,6 +25,9 @@ abstract class RepositoryBindModule {
         restaurantRepositoryImpl: RestaurantRepositoryImpl
     ): RestaurantRepository
 
+    
+
+
     @Binds
     abstract fun bindSuggestRepository(
         suggestRepositoryImpl: SuggestRepositoryImpl

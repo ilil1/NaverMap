@@ -28,7 +28,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
 
-    private val chatadapter by lazy {
+    private val chatAdapter by lazy {
         ModelRecyclerAdapter<ChatModel, ChatViewModel>(
             listOf(),
             viewModel,
@@ -56,7 +56,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
 
     override fun initViews() {
         super.initViews()
-        binding.chatRecy.adapter = chatadapter
+        binding.chatRecy.adapter = chatAdapter
+
         binding.back.setOnClickListener {
             activity?.finish()
         }
@@ -64,7 +65,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
 
     override fun observeData() = with(viewModel) {
         chatListData.observe(viewLifecycleOwner) {
-            chatadapter.submitList(it)
+            chatAdapter.submitList(it)
         }
     }
 }

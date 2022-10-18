@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".MapApplication"
@@ -15,6 +16,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".presentation.MainActivity.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".presentation.login.LoginActivity"
+            android:exported="true"/>
+        <activity android:name=".presentation.login.SignUpActivity"
+            android:exported="true"/>
         <activity
             android:name=".presentation.MainActivity.chat.ChatActivity"
             android:exported="true" />
@@ -37,6 +51,8 @@
             android:name=".presentation.MainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
         <activity android:name=".presentation.MainActivity.store.storeDetail.StoreDetailActivty"
+            android:exported="true"/>
+        <activity android:name=".presentation.MainActivity.myinfo.MyInfoActivity"
             android:exported="true"/>
 
         <meta-data
