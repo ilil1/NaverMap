@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity
+package com.project.navermap.presentation.mainActivity
 
 import android.content.Context
 import android.location.Location
@@ -9,8 +9,6 @@ import com.naver.maps.geometry.LatLng
 import com.project.navermap.R
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.data.repository.map.MapApiRepository
-import com.project.navermap.data.response.TmapAddress.AddressInfo
 import com.project.navermap.domain.usecase.GetReverseGeoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

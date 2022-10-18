@@ -15,7 +15,7 @@ import com.google.firebase.auth.*
 import com.project.navermap.R
 import com.project.navermap.databinding.ActivityLoginBinding
 import com.project.navermap.databinding.ActivitySignupBinding
-import com.project.navermap.presentation.MainActivity.MainActivity
+import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.base.BaseActivity
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import dagger.hilt.android.AndroidEntryPoint

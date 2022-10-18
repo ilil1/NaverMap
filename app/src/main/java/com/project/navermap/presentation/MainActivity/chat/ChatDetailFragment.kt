@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.chat
+package com.project.navermap.presentation.mainActivity.chat
 
 import androidx.navigation.Navigation
 import com.project.navermap.R

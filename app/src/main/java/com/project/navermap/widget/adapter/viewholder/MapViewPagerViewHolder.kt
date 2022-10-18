@@ -3,8 +3,8 @@ package com.project.navermap.widget.adapter.viewholder
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.viewpager2.widget.ViewPager2
-import com.project.navermap.data.extensions.clear
-import com.project.navermap.data.extensions.load
+import com.project.navermap.extensions.clear
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderMapViewpagerBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.util.provider.ResourcesProvider

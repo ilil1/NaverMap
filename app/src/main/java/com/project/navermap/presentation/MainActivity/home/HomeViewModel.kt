@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.home
+package com.project.navermap.presentation.mainActivity.home
 
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable

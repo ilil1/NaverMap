@@ -7,7 +7,7 @@ import com.project.navermap.data.network.FoodApiService
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import com.project.navermap.domain.model.FoodModel
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

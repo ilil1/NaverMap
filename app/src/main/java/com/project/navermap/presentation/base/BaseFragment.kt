@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.project.navermap.util.provider.ResourcesProvider
 import kotlinx.coroutines.Job
 
 abstract class BaseFragment<VB: ViewBinding>: Fragment() {

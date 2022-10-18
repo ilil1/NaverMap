@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.list
+//package com.project.navermap.presentation.mainActivity.myinfo.list
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
@@ -16,15 +16,15 @@ import com.project.navermap.widget.adapter.listener.CSModelListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class CSListFragment : BaseFragment<FragmentCsListBinding>() {
+//@AndroidEntryPoint
+//class CSListFragment : BaseFragment<FragmentCsListBinding>() {
 
 
-    private val viewModel by viewModels<CSListViewModel>()
+    //private val viewModel by viewModels<CSListViewModel>()
 
-    private val csCategory by lazy {
-        arguments?.getSerializable(CS_CATEGORY_KEY) as CSCategory
-    }
+  //  private val csCategory by lazy {
+ //       arguments?.getSerializable(CS_CATEGORY_KEY) as CSCategory
+   // }
 
 
 //    private val viewModel by viewModel<CSListViewModel> {
@@ -33,33 +33,33 @@ class CSListFragment : BaseFragment<FragmentCsListBinding>() {
 //
 //   // private val args by navArgs<CSFragmentArgs>()
 
-    override fun getViewBinding(): FragmentCsListBinding =
-        FragmentCsListBinding.inflate(layoutInflater)
+  //  override fun getViewBinding(): FragmentCsListBinding =
+   //     FragmentCsListBinding.inflate(layoutInflater)
 
-    override fun observeData() = with(viewModel) {
-        csListData.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-    }
+   // override fun observeData() = with(viewModel) {
+   //     csListData.observe(viewLifecycleOwner) {
+   //         adapter.submitList(it)
+   //     }
+ //   }
 
-    @Inject
-    lateinit var resourcesProvider: ResourcesProvider
+  //  @Inject
+   // lateinit var resourcesProvider: ResourcesProvider
 
-    private val adapter by lazy {
-        ModelRecyclerAdapter<CSModel, CSListViewModel>(
-            listOf(), viewModel, resourcesProvider,
-            object : CSModelListener {
-                override fun onClickItem(listModel: CSModel) {
-                    val data = ImageData(listModel.csTitle, listModel.csContentTitle,listModel.csContentBody,listModel.csAuthor)
-                    val bundle = Bundle()
-                    bundle.putParcelable("data", data)
-                    view?.let{
-                        backStack()
-                    }
-                    view?.let { it1 ->
-                        Navigation.findNavController(it1)
-                            .navigate(R.id.action_CSCenterFragment_to_CSDetailFragment, bundle)
-                    }
+   // private val adapter by lazy {
+   //     ModelRecyclerAdapter<CSModel, CSListViewModel>(
+    //        listOf(), viewModel, resourcesProvider,
+     //       object : CSModelListener {
+     //           override fun onClickItem(listModel: CSModel) {
+      //              val data = ImageData(listModel.csTitle, listModel.csContentTitle,listModel.csContentBody,listModel.csAuthor)
+      //              val bundle = Bundle()
+     //               bundle.putParcelable("data", data)
+     //               view?.let{
+      //                  backStack()
+       //             }
+        //            view?.let { it1 ->
+        //                Navigation.findNavController(it1)
+      //                      .navigate(R.id.action_CSCenterFragment_to_CSDetailFragment, bundle)
+       //             }
 //                        val intent = Intent(context, CSDetailFragment::class.java).apply {
 //                           val data = ImageData(listModel.csTitle,listModel.csContent,listModel.csAuthor)
 //                            putExtra(CS_CATEGORY_KEY,data)
@@ -69,45 +69,45 @@ class CSListFragment : BaseFragment<FragmentCsListBinding>() {
 //                            putExtra("CSid", listModel.id)
                     //                       }
 //                        startActivity(intent)
-                }
-            }
+             //   }
+        //    }
 
-        )
+    //    )
 
-    }
+   // }
 
-    override fun initState() = with(viewModel) {
-        fetchData()
-        super.initState()
-    }
+  //  override fun initState() = with(viewModel) {
+   //     fetchData()
+  //      super.initState()
+  //  }
 
-    override fun initViews() = with(viewModel) {
+   // override fun initViews() = with(viewModel) {
 
-        super.initViews()
-        binding.csRecyclerView.adapter = adapter
-        binding.csRecyclerView.layoutManager = LinearLayoutManager(this@CSListFragment.context)
-
-
+    //    super.initViews()
+     //   binding.csRecyclerView.adapter = adapter
+    //    binding.csRecyclerView.layoutManager = LinearLayoutManager(this@CSListFragment.context)
 
 
-    }
 
-    companion object {
-        const val CS_CATEGORY_KEY = "CSCategoryKey"
-        fun newInstance(csCategory: CSCategory): CSListFragment {
-            val bundle = Bundle().apply {
-                putSerializable(CS_CATEGORY_KEY, csCategory)
-            }
 
-            return CSListFragment().apply {
-                arguments = bundle
-            }
-        }
-    }
+ //   }
+//
+   // companion object {
+   //     const val CS_CATEGORY_KEY = "CSCategoryKey"
+    //    fun newInstance(csCategory: CSCategory): CSListFragment {
+     //       val bundle = Bundle().apply {
+      //          putSerializable(CS_CATEGORY_KEY, csCategory)
+    //        }
 
-    private fun backStack() {
-        view?.let { it1 ->
-            Navigation.findNavController(it1).popBackStack()
-        }
-    }
-}
+     //       return CSListFragment().apply {
+    //            arguments = bundle
+     //       }
+    //    }
+   // }
+
+   // private fun backStack() {
+     //   view?.let { it1 ->
+       //     Navigation.findNavController(it1).popBackStack()
+      //  }
+    //}
+//}

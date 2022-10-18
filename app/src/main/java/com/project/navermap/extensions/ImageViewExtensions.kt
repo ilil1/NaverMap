@@ -1,4 +1,4 @@
-package com.project.navermap.data.extensions
+package com.project.navermap.extensions
 
 import android.graphics.Bitmap
 import android.widget.ImageView
@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
+
 //애니메이션을 구현하기위한 용도.
 private val factory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
 

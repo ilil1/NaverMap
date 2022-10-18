@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.ViewModelComponent
+package com.project.navermap.di.moduleComponent.viewModelComponent
 
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepository

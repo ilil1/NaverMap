@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store.restaurant
+package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import androidx.annotation.StringRes
 import com.project.navermap.R

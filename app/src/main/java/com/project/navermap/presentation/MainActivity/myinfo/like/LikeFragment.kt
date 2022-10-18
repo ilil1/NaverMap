@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.like
+package com.project.navermap.presentation.mainActivity.myinfo.like
 
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.databinding.FragmentLikeBinding
@@ -18,29 +18,10 @@ class LikeFragment  : BaseFragment<FragmentLikeBinding>() {
 
     override fun initViews() {
         super.initViews()
-        if (!::viewPagerAdapter.isInitialized) initViewPager()
+
     }
 
-    private fun initViewPager() = with(binding) {
-        val likeCategories = LikeCategory.values()
 
-        val likeListFragments = likeCategories.map {
-            LikeListFragment.newInstance(it)
-        }
-
-        viewPagerAdapter = HomeListFragmentAdapter(
-            requireActivity(),
-            this@LikeFragment,
-            fragmentList = likeListFragments
-        )
-
-        likeFragmentViewPager.adapter = viewPagerAdapter
-        likeFragmentViewPager.offscreenPageLimit = likeCategories.size
-
-        TabLayoutMediator(likeFragmentTabLayout, likeFragmentViewPager) { tab, position ->
-            tab.setText(likeCategories[position].likeCategoryId)
-        }.attach()
-    }
 
     override fun observeData() {
 

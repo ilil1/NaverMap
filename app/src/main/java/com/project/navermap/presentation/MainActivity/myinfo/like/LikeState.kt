@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.like
+package com.project.navermap.presentation.mainActivity.myinfo.like
 
 import androidx.annotation.StringRes
 import com.project.navermap.domain.model.Model

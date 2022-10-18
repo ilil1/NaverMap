@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.home
+package com.project.navermap.presentation.mainActivity.home
 
 import android.content.ContentValues.TAG
 import android.graphics.Typeface
@@ -22,8 +22,8 @@ import com.project.navermap.databinding.FragmentHomeBinding
 import com.project.navermap.domain.model.SliderItemModel
 import com.project.navermap.domain.model.SuggestItemModel
 import com.project.navermap.domain.model.TownMarketModel
-import com.project.navermap.presentation.MainActivity.MainState
-import com.project.navermap.presentation.MainActivity.MainViewModel
+import com.project.navermap.presentation.mainActivity.MainState
+import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter

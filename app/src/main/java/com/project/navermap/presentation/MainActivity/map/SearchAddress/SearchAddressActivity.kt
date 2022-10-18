@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.map.SearchAddress
+package com.project.navermap.presentation.mainActivity.map.SearchAddress
 
 import android.app.Dialog
 import android.content.Intent
@@ -11,7 +11,7 @@ import android.webkit.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.project.navermap.databinding.ActivitySearchAddressBinding
-import com.project.navermap.presentation.MainActivity.MainActivity.Companion.MY_LOCATION_KEY
+import com.project.navermap.presentation.mainActivity.MainActivity.Companion.MY_LOCATION_KEY
 
 
 class SearchAddressActivity : AppCompatActivity() {

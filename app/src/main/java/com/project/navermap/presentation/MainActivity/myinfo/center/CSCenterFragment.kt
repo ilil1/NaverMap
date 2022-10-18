@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.center
+package com.project.navermap.presentation.mainActivity.myinfo.center
 
 import android.app.AlertDialog
 import android.content.DialogInterface

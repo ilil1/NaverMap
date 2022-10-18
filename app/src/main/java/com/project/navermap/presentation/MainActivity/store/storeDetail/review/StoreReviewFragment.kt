@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store.storeDetail.review
+package com.project.navermap.presentation.mainActivity.store.storeDetail.review
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store.storeDetail.menu
+package com.project.navermap.presentation.mainActivity.store.storeDetail.menu
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

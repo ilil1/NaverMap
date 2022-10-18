@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.map.mapFragment
+package com.project.navermap.presentation.mainActivity.map.mapFragment
 
 import android.app.Dialog
 import android.content.Intent
@@ -32,14 +32,13 @@ import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.extensions.showToast
-import com.project.navermap.presentation.MainActivity.MainActivity
-import com.project.navermap.presentation.MainActivity.MainState
-import com.project.navermap.presentation.MainActivity.MainViewModel
-import com.project.navermap.presentation.MainActivity.map.SearchAddress.SearchAddressActivity
-import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerClickListener
-import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.MarkerFactory
-import com.project.navermap.presentation.MainActivity.map.mapFragment.navermap.NaverMapHandler
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.MainActivity
+import com.project.navermap.presentation.mainActivity.MainState
+import com.project.navermap.presentation.mainActivity.MainViewModel
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerClickListener
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerFactory
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener

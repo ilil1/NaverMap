@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store
+package com.project.navermap.presentation.mainActivity.store
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,14 +9,11 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.FragmentStoreBinding
-import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.MainState
-import com.project.navermap.presentation.MainActivity.MainViewModel
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantListFragment
-import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailActivty
+import com.project.navermap.presentation.mainActivity.MainState
+import com.project.navermap.presentation.mainActivity.MainViewModel
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
 import com.project.navermap.widget.RestaurantListFragmentPagerAdapter
-import com.project.navermap.widget.adapter.listener.StoreListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

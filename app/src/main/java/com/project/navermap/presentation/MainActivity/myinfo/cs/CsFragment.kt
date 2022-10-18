@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.cs
+package com.project.navermap.presentation.mainActivity.myinfo.cs
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -6,8 +6,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.R
 import com.project.navermap.databinding.FragmentCsBinding
 import com.project.navermap.domain.model.category.CSCategory
-import com.project.navermap.presentation.MainActivity.myinfo.list.CSListViewModel
-import com.project.navermap.presentation.MainActivity.myinfo.list.CSListFragment
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.widget.HomeListFragmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +17,7 @@ class CsFragment : BaseFragment<FragmentCsBinding>() {
 
     // private val args by navArgs<CSFragmentArgs>()
 
-    private val viewModel by viewModels<CSListViewModel>()
+   // private val viewModel by viewModels<CSListViewModel>()
 
     override fun getViewBinding(): FragmentCsBinding =
         FragmentCsBinding.inflate(layoutInflater)
@@ -33,14 +31,14 @@ class CsFragment : BaseFragment<FragmentCsBinding>() {
             val csCategory = CSCategory.values()
 
             val CSListfragmnet = csCategory.map {
-                CSListFragment.newInstance(it)
+           //     CSListFragment.newInstance(it)
             }
 
-            viewAdapter = HomeListFragmentAdapter(
-                requireActivity(),
-                this@CsFragment,
-                CSListfragmnet
-            )
+           // viewAdapter = HomeListFragmentAdapter(
+            //    requireActivity(),
+                //this@CsFragment,
+               // CSListfragmnet
+            //)
             viewPagerCs.adapter = viewAdapter
 
             viewPagerCs.offscreenPageLimit = csCategory.size

@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.list
+//package com.project.navermap.presentation.mainActivity.myinfo.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,25 +13,22 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class CSListViewModel @Inject constructor(
-    private val csCategory: CSCategory,
-    private val csRepository: CSRepository
-) : BaseViewModel() {
-    private val _csListData = MutableLiveData<List<CSModel>>()
-    val csListData: LiveData<List<CSModel>>
-        get() = _csListData
+//@HiltViewModel
+//class CSListViewModel : BaseViewModel() {
+ //   private val _csListData = MutableLiveData<List<CSModel>>()
+ //   val csListData: LiveData<List<CSModel>>
+  //      get() = _csListData
 
 
-    override fun fetchData(): Job = viewModelScope.launch {
-        _csListData.value = when (csCategory) {
-            CSCategory.LOGIN -> csRepository.findCsByCategory(CSCategory.LOGIN)
-            CSCategory.REVIEW -> csRepository.findCsByCategory(CSCategory.REVIEW)
-            CSCategory.ORDER -> csRepository.findCsByCategory(CSCategory.ORDER)
-            CSCategory.USE -> csRepository.findCsByCategory(CSCategory.USE)
-            CSCategory.ETC -> csRepository.findCsByCategory(CSCategory.ETC)
-        }
-    }
+ //   override fun fetchData(): Job = viewModelScope.launch {
+ //       _csListData.value = when (csCategory) {
+  //          CSCategory.LOGIN -> csRepository.findCsByCategory(CSCategory.LOGIN)
+  //          CSCategory.REVIEW -> csRepository.findCsByCategory(CSCategory.REVIEW)
+  //          CSCategory.ORDER -> csRepository.findCsByCategory(CSCategory.ORDER)
+  //          CSCategory.USE -> csRepository.findCsByCategory(CSCategory.USE)
+  //          CSCategory.ETC -> csRepository.findCsByCategory(CSCategory.ETC)
+  //      }
+   // }
 
 
-}
+//}

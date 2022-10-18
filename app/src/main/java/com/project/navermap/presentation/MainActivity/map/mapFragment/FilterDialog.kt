@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.map.mapFragment
+package com.project.navermap.presentation.mainActivity.map.mapFragment
 
 import android.app.Activity
 import android.app.AlertDialog

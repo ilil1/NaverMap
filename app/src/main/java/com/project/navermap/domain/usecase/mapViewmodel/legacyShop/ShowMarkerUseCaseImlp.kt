@@ -1,14 +1,4 @@
-package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
-
-import android.graphics.Color
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
-import com.project.navermap.R
-import com.project.navermap.data.entity.ShopInfoEntity
-import com.project.navermap.domain.model.RestaurantModel
-import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Inject
+package com.project.navermap.domain.usecase.mapViewmodel.legacyShop
 
 //class ShowMarkerUseCaseImlp @Inject constructor(
 //    private val getUpdateMarkerUseCaseImpl : GetUpdateMarkerUseCaseImpl

@@ -16,7 +16,7 @@ import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
 import com.project.navermap.databinding.ActivityMyLocationBinding
-import com.project.navermap.presentation.MainActivity.MainActivity
+import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint

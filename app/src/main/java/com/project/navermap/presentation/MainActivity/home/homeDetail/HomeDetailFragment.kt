@@ -1,14 +1,13 @@
-package com.project.navermap.presentation.MainActivity.home.homeDetail
+package com.project.navermap.presentation.mainActivity.home.homeDetail
 
 import com.project.navermap.databinding.FragmentHomeDetailBinding
-import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailViewModel
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailViewModel
 import com.project.navermap.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation
 import com.project.navermap.R
-import com.project.navermap.domain.usecase.StoreViewModel.StoreDetailResult
+import com.project.navermap.domain.usecase.storeViewModel.StoreDetailResult
 import com.project.navermap.util.provider.ResourcesProvider
 import javax.inject.Inject
 

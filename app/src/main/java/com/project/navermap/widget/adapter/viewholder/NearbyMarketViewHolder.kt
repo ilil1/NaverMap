@@ -1,8 +1,8 @@
 package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
-import com.project.navermap.data.extensions.clear
-import com.project.navermap.data.extensions.load
+import com.project.navermap.extensions.clear
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderNearbyMarketBinding
 import com.project.navermap.domain.model.TownMarketModel
 import com.project.navermap.util.provider.ResourcesProvider

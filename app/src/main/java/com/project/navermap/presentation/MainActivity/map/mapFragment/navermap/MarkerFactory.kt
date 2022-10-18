@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.map.mapFragment.navermap
+package com.project.navermap.presentation.mainActivity.map.mapFragment.navermap
 
 import android.graphics.Color
 import com.naver.maps.geometry.LatLng
@@ -6,7 +6,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.MarkerIcons
 import com.project.navermap.R
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 
 class MarkerFactory {
 

@@ -3,7 +3,7 @@ package com.project.navermap.data.repository.restaurant
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.domain.model.FoodModel
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 
 interface RestaurantRepository {
     suspend fun getList(

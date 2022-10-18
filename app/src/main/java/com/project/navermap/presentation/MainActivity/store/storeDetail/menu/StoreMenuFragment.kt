@@ -1,11 +1,9 @@
-package com.project.navermap.presentation.MainActivity.store.storeDetail.menu
+package com.project.navermap.presentation.mainActivity.store.storeDetail.menu
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,10 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.databinding.FragmentStoreMarketMenuBinding
 import com.project.navermap.domain.model.FoodModel
-import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.store.StoreFragment
-import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailViewModel
-import com.project.navermap.presentation.MainActivity.store.storeDetail.review.StoreReviewFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.StoreDetailItemListener

@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.configurationFragment
+package com.project.navermap.presentation.mainActivity.myinfo.configurationFragment
 
 import androidx.navigation.Navigation
 import com.project.navermap.BuildConfig

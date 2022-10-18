@@ -1,11 +1,10 @@
-package com.project.navermap.presentation.MainActivity.myinfo
+package com.project.navermap.presentation.mainActivity.myinfo
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.Navigation
 import com.google.protobuf.Method
 import com.project.navermap.R
@@ -25,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.Exception
+import java.util.prefs.Preferences
 
 @AndroidEntryPoint
 class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {

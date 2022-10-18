@@ -1,12 +1,4 @@
-package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
-
-import android.content.Context
-import com.naver.maps.map.overlay.InfoWindow
-import com.naver.maps.map.overlay.Marker
-import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Inject
+package com.project.navermap.domain.usecase.mapViewmodel.legacyShop
 
 //class MarkerListenerUseCaseImpl @Inject constructor(
 //    private val context: Context

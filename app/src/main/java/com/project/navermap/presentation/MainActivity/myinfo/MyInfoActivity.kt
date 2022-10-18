@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo
+package com.project.navermap.presentation.mainActivity.myinfo
 
 import android.os.Bundle
 import com.project.navermap.databinding.ActivityMyinfoBinding

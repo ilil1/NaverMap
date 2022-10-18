@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store.restaurant
+package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import android.content.ContextWrapper
 import android.os.Bundle
@@ -11,8 +11,8 @@ import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.FragmentListBinding
 import com.project.navermap.databinding.FragmentStoreBinding
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.MainActivity.map.mapFragment.MapViewModel
-import com.project.navermap.presentation.MainActivity.store.storeDetail.StoreDetailActivty
+import com.project.navermap.presentation.mainActivity.map.mapFragment.MapViewModel
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivty
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.RestaurantListListener

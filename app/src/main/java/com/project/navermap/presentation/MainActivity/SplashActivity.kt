@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity
+package com.project.navermap.presentation.mainActivity
 
 import android.content.Intent
 import android.os.Bundle

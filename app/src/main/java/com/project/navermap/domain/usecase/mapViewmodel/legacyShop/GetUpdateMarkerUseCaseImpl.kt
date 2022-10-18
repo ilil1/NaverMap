@@ -1,4 +1,4 @@
-package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
+package com.project.navermap.domain.usecase.mapViewmodel.legacyShop
 
 //일단은 이렇게 UseCase를 구성하지만 서버로 비즈니스 로직을 옮겨야함.
 //class GetUpdateMarkerUseCaseImpl @Inject constructor(

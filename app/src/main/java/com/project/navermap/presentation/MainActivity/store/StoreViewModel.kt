@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store
+package com.project.navermap.presentation.mainActivity.store
 
 import androidx.lifecycle.ViewModel
 

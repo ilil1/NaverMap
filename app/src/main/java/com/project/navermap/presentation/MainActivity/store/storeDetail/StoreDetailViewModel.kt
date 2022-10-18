@@ -1,11 +1,10 @@
-package com.project.navermap.presentation.MainActivity.store.storeDetail
+package com.project.navermap.presentation.mainActivity.store.storeDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.navermap.domain.model.FoodModel
-import com.project.navermap.domain.usecase.StoreViewModel.StoreDetailResult
+import com.project.navermap.domain.usecase.storeViewModel.StoreDetailResult
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

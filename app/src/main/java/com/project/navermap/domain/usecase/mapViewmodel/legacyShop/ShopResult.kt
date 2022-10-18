@@ -1,4 +1,4 @@
-package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
+package com.project.navermap.domain.usecase.mapViewmodel.legacyShop
 
 //sealed class ShopResult {
 //    object Success : ShopResult()

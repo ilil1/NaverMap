@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store.restaurant
+package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import javax.inject.Inject
 

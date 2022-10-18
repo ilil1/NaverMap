@@ -1,32 +1,24 @@
-package com.project.navermap.presentation.MainActivity.store.storeDetail
+package com.project.navermap.presentation.mainActivity.store.storeDetail
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.data.extensions.load
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ActivityStoreDetailBinding
-import com.project.navermap.domain.model.FoodModel
-import com.project.navermap.domain.usecase.StoreViewModel.StoreDetailResult
-import com.project.navermap.presentation.MainActivity.store.StoreFragment
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
-import com.project.navermap.presentation.MainActivity.store.storeDetail.information.StoreInformFragment
-import com.project.navermap.presentation.MainActivity.store.storeDetail.menu.StoreMenuFragment
-import com.project.navermap.presentation.MainActivity.store.storeDetail.review.StoreReviewFragment
+import com.project.navermap.domain.usecase.storeViewModel.StoreDetailResult
+import com.project.navermap.presentation.mainActivity.store.StoreFragment
+import com.project.navermap.presentation.mainActivity.store.storeDetail.information.StoreInformFragment
+import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
+import com.project.navermap.presentation.mainActivity.store.storeDetail.review.StoreReviewFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.StoreDetailFragmentPagerAdapter
-import com.project.navermap.widget.adapter.ModelRecyclerAdapter
-import com.project.navermap.widget.adapter.listener.StoreDetailItemListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @AndroidEntryPoint

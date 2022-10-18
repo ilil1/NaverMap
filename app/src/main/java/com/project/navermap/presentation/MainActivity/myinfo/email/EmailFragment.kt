@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.email
+package com.project.navermap.presentation.mainActivity.myinfo.email
 
 import android.content.Intent
 import android.net.Uri

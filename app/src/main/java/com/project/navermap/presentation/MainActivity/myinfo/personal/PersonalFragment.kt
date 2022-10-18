@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.personal
+package com.project.navermap.presentation.mainActivity.myinfo.personal
 
 import androidx.navigation.Navigation
 import com.project.navermap.R

@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.myinfo.like
+//package com.project.navermap.presentation.mainActivity.myinfo.like
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,22 +11,20 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class LikeListViewModel<T : Model> @Inject constructor(
-    private val likeListRepository: LikeListRepository<T>
-) : BaseViewModel() {
-    private val _likeData = MutableLiveData<LikeState>(LikeState.Uninitialized)
-    val likeData: LiveData<LikeState> = _likeData
+//@HiltViewModel
+//class LikeListViewModel<T : Model> : BaseViewModel() {
+//    private val _likeData = MutableLiveData<LikeState>(LikeState.Uninitialized)
+//    val likeData: LiveData<LikeState> = _likeData
 
-    override fun fetchData(): Job = viewModelScope.launch {
-        _likeData.value = LikeState.Loading
-        _likeData.value = LikeState.Success(
-            modelList = likeListRepository.getAll()
-        )
-    }
+  //  override fun fetchData(): Job = viewModelScope.launch {
+  //      _likeData.value = LikeState.Loading
+  //      _likeData.value = LikeState.Success(
+  //          modelList = likeListRepository.getAll()
+  //      )
+  //  }
 
-    fun delete(model: T) = viewModelScope.launch {
-        likeListRepository.delete(model)
-        fetchData()
-    }
-}
+ //   fun delete(model: T) = viewModelScope.launch {
+ //       likeListRepository.delete(model)
+  //      fetchData()
+  //  }
+//}

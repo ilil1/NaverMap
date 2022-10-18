@@ -1,4 +1,4 @@
-package com.project.navermap.domain.usecase.mapViewmodel.LegacyShop
+package com.project.navermap.domain.usecase.mapViewmodel.legacyShop
 
 import com.project.navermap.data.entity.ShopInfoEntity
 import com.project.navermap.data.repository.shop.ShopApiRepository

@@ -1,4 +1,4 @@
-package com.project.navermap.di.ModuleComponent.FragmentComponent
+package com.project.navermap.di.moduleComponent.fragmentComponent
 
 import dagger.Module
 import dagger.hilt.InstallIn

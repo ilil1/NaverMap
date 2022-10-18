@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.map.mapFragment
+package com.project.navermap.presentation.mainActivity.map.mapFragment
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
@@ -10,7 +10,7 @@ import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

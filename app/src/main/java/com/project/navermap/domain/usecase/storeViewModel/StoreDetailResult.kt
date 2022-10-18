@@ -1,4 +1,4 @@
-package com.project.navermap.domain.usecase.StoreViewModel
+package com.project.navermap.domain.usecase.storeViewModel
 
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 

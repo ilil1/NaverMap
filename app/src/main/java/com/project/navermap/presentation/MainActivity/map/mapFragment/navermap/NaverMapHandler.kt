@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.map.mapFragment.navermap
+package com.project.navermap.presentation.mainActivity.map.mapFragment.navermap
 
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition

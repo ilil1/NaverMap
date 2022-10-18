@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity
+package com.project.navermap.presentation.mainActivity
 
 import android.Manifest
 import android.annotation.SuppressLint

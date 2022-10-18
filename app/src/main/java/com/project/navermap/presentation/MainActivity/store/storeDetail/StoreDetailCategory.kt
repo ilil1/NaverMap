@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.MainActivity.store.storeDetail
+package com.project.navermap.presentation.mainActivity.store.storeDetail
 
 import androidx.annotation.StringRes
 import com.project.navermap.R
