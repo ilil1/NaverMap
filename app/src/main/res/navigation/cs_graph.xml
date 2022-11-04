@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/myInfoFragment"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.MyInfoFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.MyInfoFragment"
         android:label="MyInfoFragment"
         tools:layout="@layout/fragment_my_info"
         >
@@ -23,15 +23,12 @@
         <action
             android:id="@+id/action_myInfoFragment_to_personalFragment"
             app:destination="@id/personalFragment" />
-        <action
-            android:id="@+id/action_myInfoFragment_to_likeFragment"
-            app:destination="@id/likeFragment" />
 
     </fragment>
     <fragment
         android:id="@+id/termsFragment"
         tools:layout="@layout/fragment_terms"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.terms.TermsFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.terms.TermsFragment"
         android:label="TermsFragment" >
         <action
             app:popUpTo="@id/termsFragment"
@@ -42,7 +39,7 @@
     <fragment
         android:id="@+id/CSCenterFragment"
         tools:layout="@layout/fragment_cs_center"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.center.CSCenterFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.center.CSCenterFragment"
         android:label="CSCenterFragment" >
         <action
             android:id="@+id/action_CSCenterFragment_to_CSFragment"
@@ -62,7 +59,7 @@
     <fragment
         android:id="@+id/configurationFragment"
         tools:layout="@layout/fragment_configuration"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.configurationFragment.ConfigurationFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.configurationFragment.ConfigurationFragment"
         android:label="ConfigurationFragment" >
         <action
             app:popUpTo="@id/configurationFragment"
@@ -73,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/personalFragment"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.personal.PersonalFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.personal.PersonalFragment"
         android:label="PersonalFragment" >
         <action
             app:popUpTo="@id/personalFragment"
@@ -84,7 +81,7 @@
     <fragment
         android:id="@+id/CSFragment"
         tools:layout="@layout/fragment_cs"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.cs.CsFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.cs.CsFragment"
         android:label="CSFragment" >
         <action
             app:popUpTo="@id/CSFragment"
@@ -103,7 +100,7 @@
     <fragment
         android:id="@+id/emailFragment"
         tools:layout="@layout/fragment_email"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.email.EmailFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.email.EmailFragment"
         android:label="EmailFragment" >
         <action
             app:popUpTo="@id/emailFragment"
@@ -114,7 +111,7 @@
     <fragment
         android:id="@+id/CSDetailFragment"
         tools:layout="@layout/fragment_detail"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.list.detail.CSDetailFragment"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.list.detail.CSDetailFragment"
         android:label="CSDetailFragment"
         >
         <action
@@ -123,31 +120,5 @@
             android:id="@+id/action_CSDetailFragment_to_CSFragment"
             app:destination="@id/CSFragment" />
     </fragment>
-    <argument android:name="list"
-        app:argType="com.example.YUmarket.model.customerservicelist.ImageData"/>
-    <fragment
-        android:id="@+id/likeFragment"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.like.LikeFragment"
-        tools:layout="@layout/fragment_like"
-        android:label="LikeFragment" >
-        <action
-            android:id="@+id/action_likeFragment_to_likeListFragment"
-            app:destination="@id/likeListFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/likeListFragment"
-        tools:layout="@layout/fragment_like_list"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.like.LikeListFragment"
-        android:label="LikeListFragment" >
-        <action
-            android:id="@+id/action_likeListFragment_to_likeFragment"
-            app:destination="@id/likeFragment" />
-    </fragment>
 
-
-    <!--    <fragment-->
-    <!--        android:id="@+id/CSListFragment"-->
-    <!--        tools:layout="@layout/fragment_cs_list"-->
-    <!--        android:name="com.example.YUmarket.screen.myinfo.customerservice.list.CSListFragment"-->
-    <!--        android:label="CSListFragment" />-->
 </navigation>

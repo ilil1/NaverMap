@@ -53,6 +53,8 @@
 
         <activity android:name=".presentation.mainActivity.myinfo.MyInfoActivity"
             android:exported="true"/>
+        <activity android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivty"
+            android:exported="true"/>
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
