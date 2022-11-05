@@ -18,12 +18,12 @@ import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.extensions.showToast
 import com.project.navermap.presentation.mainActivity.MainState
-import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerClickListener
 import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerFactory
 import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener

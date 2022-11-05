@@ -45,7 +45,7 @@ class RestaurantListViewModel @AssistedInject constructor(
     val restaurantListLiveData: LiveData<List<RestaurantModel>> get() = _restaurantListLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
-        getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity).collect {
+        getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity).let {
             when (it) {
                 is RestaurantResult.Success -> _restaurantListLiveData.value = it.data
                 else -> _restaurantListLiveData.value = emptyList() /* TODO: 2022-09-20 화 00:33, Error 구현 */

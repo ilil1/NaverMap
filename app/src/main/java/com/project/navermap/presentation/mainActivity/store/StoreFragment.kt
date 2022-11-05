@@ -5,10 +5,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.FragmentStoreBinding
 import com.project.navermap.presentation.mainActivity.MainState
-import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
-import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.MainViewModel
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
 import com.project.navermap.widget.RestaurantListFragmentPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 

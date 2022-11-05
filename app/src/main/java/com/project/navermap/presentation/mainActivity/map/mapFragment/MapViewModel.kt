@@ -43,7 +43,7 @@ class MapViewModel @Inject constructor(
         restaurantList.clear()
         val restaurantCategories = RestaurantCategory.values()
         restaurantCategories.map {
-            getRestaurantListUseCase.fetchData(it, location).collect {
+            getRestaurantListUseCase.fetchData(it, location).let {
                 /* TODO: 2022-09-20 화 00:34, Error 구현 */
                 when (it) {
                     is RestaurantResult.Success -> {
