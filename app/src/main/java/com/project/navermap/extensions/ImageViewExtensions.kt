@@ -1,4 +1,4 @@
-package com.project.navermap.data.extensions
+package com.project.navermap.extensions
 
 import android.graphics.Bitmap
 import android.widget.ImageView
