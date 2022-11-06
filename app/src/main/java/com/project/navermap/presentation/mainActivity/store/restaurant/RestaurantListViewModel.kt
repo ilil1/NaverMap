@@ -28,6 +28,12 @@ class RestaurantListViewModel @AssistedInject constructor(
         ): RestaurantListViewModel
     }
 
+//    @AssistedFactory
+//    interface StoreAssistedFactory {
+//        fun create(storeCategory: StoreCategory,
+//                   locationEntity: LocationEntity): RestaurantListViewModel
+//    }
+
     companion object {
         fun provideFactory(
             assistedFactory: RestaurantAssistedFactory,
@@ -39,6 +45,17 @@ class RestaurantListViewModel @AssistedInject constructor(
                 return assistedFactory.create(restaurantCategory, locationEntity) as T
             }
         }
+
+//        fun provideStoreFactory(
+//            assistedFactory: StoreAssistedFactory,
+//            storeCategory: StoreCategory,
+//            locationEntity: LocationEntity
+//        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+//            @Suppress("UNCHECKED_CAST")
+//            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//                return assistedFactory.create(storeCategory, locationEntity) as T
+//            }
+//        }
     }
 
     private var _restaurantListLiveData = MutableLiveData<List<RestaurantModel>>()

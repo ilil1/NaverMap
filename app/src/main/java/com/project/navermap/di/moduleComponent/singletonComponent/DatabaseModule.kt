@@ -2,6 +2,7 @@ package com.project.navermap.di.moduleComponent.singletonComponent
 
 import android.content.Context
 import androidx.room.Room
+import com.project.navermap.data.db.ImageDB
 import com.project.navermap.data.db.MapDB
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,14 @@ object DatabaseModule {
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()
+
+
+//    @Provides
+//    @Singleton
+//    fun provideImageDB(@ApplicationContext context : Context): ImageDB =
+//        Room.databaseBuilder(context, ImageDB::class.java,"profile")
+//            .fallbackToDestructiveMigration()
+//            .allowMainThreadQueries()
+//            .build()
+
 }

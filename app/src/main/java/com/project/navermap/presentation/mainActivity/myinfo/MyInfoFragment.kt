@@ -1,9 +1,13 @@
 package com.project.navermap.presentation.mainActivity.myinfo
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -13,11 +17,15 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.datastore.core.DataStore
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.google.protobuf.Method
 import com.project.navermap.R
 import com.project.navermap.databinding.FragmentMyInfoBinding
+import com.project.navermap.domain.model.ProfileData
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.login.LoginActivity
+import com.project.navermap.presentation.myLocation.MyLocationActivity
 import com.project.navermap.util.ConvertBitmap
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
@@ -33,7 +41,9 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
     private lateinit var getResultImage: ActivityResultLauncher<Intent>
     private lateinit var sharedManager : com.project.navermap.util.PreferenceManager
 
-    private lateinit var dataStore: DataStore<Preferences>
+
+
+//    private val viewModel by viewModels<MyInfoViewModel>()
 
     private fun popUp() {
         requireContext().let { it1 -> Method().popUp(it1) }
@@ -101,6 +111,15 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
     override fun initViews() {
         super.initViews()
 
+//        if (!viewModel.isEmpty()){
+//            viewModel.getAllProfile()
+//            binding.profileImage.setImageBitmap(viewModel.imageData)
+//
+//        }
+
+        binding.addressChagneTextview.setOnClickListener { startActivity(Intent(requireActivity(),MyLocationActivity::class.java)) }
+
+        binding.logout.setOnClickListener { startActivity(Intent(requireActivity(),LoginActivity::class.java)) }
 
         binding.terms.setOnClickListener { openTerms() }
 
@@ -118,8 +137,8 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
         binding.back.setOnClickListener { back() }
 
 
-        binding.heart.setOnClickListener { openHeart() }
-        binding.heartText.setOnClickListener { openHeart()  }
+//        binding.heart.setOnClickListener { openHeart() }
+//        binding.heartText.setOnClickListener { openHeart()  }
 
         getResultImage = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -130,6 +149,11 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
 
                     val bitmap: Bitmap =
                         MediaStore.Images.Media.getBitmap(context?.contentResolver, dataUri)
+
+//                    val imageBitmap  =  ImageDecoder.createSource(context?.contentResolver!!,dataUri!!)
+//                    val image = ImageDecoder.decodeBitmap(imageBitmap)
+//                    viewModel.insertProfile(ProfileData(0,image))
+
                     binding.profileImage.setImageBitmap(bitmap)
                     var My_ID : String = ""
                     val per = requireContext().getSharedPreferences("account", Activity.MODE_PRIVATE)
@@ -153,6 +177,8 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
         }
 
     }
+
+
 
 
 
@@ -216,12 +242,12 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
         activity?.finish()
     }
 
-    private fun openHeart(){
+//    private fun openHeart(){
 //        view?.let { it1 ->
 //            Navigation.findNavController(it1)
 //                .navigate(R.id.action_myInfoFragment_to_likeFragment)
 //        }
-    }
+//    }
 }
 
 

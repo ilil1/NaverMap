@@ -20,6 +20,31 @@
     <string name="fast_food_type">패스트푸드</string>
     <string name="chicken_pizza_type">치킨;피자</string>
 
+
+    <string name="market">동네마켓</string>
+    <string name="foodAndDrink">식/음료</string>
+    <string name="convenienceStore">편의점</string>
+    <string name="clothingStore">패션잡화</string>
+    <string name="flower">꽃집</string>
+    <string name="cleaningStore">청소업체</string>
+    <string name="educationalInstitute">학원</string>
+    <string name="exercise">운동</string>
+    <string name="moving">이사업체</string>
+    <string name="toyStore">장난감</string>
+
+    <string name="market_type">동네마켓</string>
+    <string name="foodAndDrink_type">식/음료</string>
+    <string name="convenienceStore_type">편의점</string>
+    <string name="clothingStore_type">패션잡화</string>
+    <string name="flower_type">꽃집</string>
+    <string name="cleaningStore_type">청소업체</string>
+    <string name="educationalInstitute_type">학원</string>
+    <string name="exercise_type">운동</string>
+    <string name="moving_type">이사업체</string>
+    <string name="toyStore_type">장난감</string>
+
+
+
     <string name="itemList">상품정보</string>
     <string name="storeInfo">스토어 정보</string>
     <string name="storeReview">스토어 리뷰</string>

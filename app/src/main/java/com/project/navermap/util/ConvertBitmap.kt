@@ -32,4 +32,5 @@ object ConvertBitmap {
             null
         }
     }
+
 }

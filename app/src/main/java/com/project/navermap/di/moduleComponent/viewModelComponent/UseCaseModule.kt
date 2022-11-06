@@ -27,4 +27,8 @@ object UseCaseModule {
     @Provides
     fun provideGetReverseGeoUseCase(repository: MapApiRepository) =
         GetReverseGeoUseCase(repository)
+//
+//    @Provides
+//    fun provideProfileRepository(repository: ProfileRepository) = GetRoomUseCase(repository)
+
 }

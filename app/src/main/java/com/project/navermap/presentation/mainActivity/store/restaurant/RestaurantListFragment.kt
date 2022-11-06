@@ -2,6 +2,7 @@ package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import com.google.android.material.chip.Chip
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.FragmentListBinding
 import com.project.navermap.domain.model.RestaurantModel
@@ -24,6 +25,8 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
     private val restaurantCategory
     by lazy { arguments?.getSerializable(RESTAURANT_CATEGORY_KEY) as RestaurantCategory }
 
+    private val storeCategory by lazy{arguments?.getSerializable(STORE_KEY) as StoreCategory}
+
     val locationEntity
     by lazy<LocationEntity> { arguments?.getParcelable(LOCATION_KEY)!! }
 
@@ -40,6 +43,10 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
     val viewModel by viewModels<RestaurantListViewModel> {
         RestaurantListViewModel.provideFactory(viewModelFactory, restaurantCategory, locationEntity)
     }
+
+//    val storeViewModel by viewModels<RestaurantListViewModel> {
+//        RestaurantListViewModel.provideStoreFactory(viewModelStoreFactory, storeCategory, locationEntity)
+//    }
 
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
@@ -71,6 +78,7 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
     companion object {
         const val RESTAURANT_CATEGORY_KEY = "restaurantCategory"
         const val LOCATION_KEY = "location"
+        const val STORE_KEY = "storekey"
 
         fun newInstance(restaurantCategory: RestaurantCategory,
                         locationLatLng: LocationEntity): RestaurantListFragment {

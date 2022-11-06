@@ -7,4 +7,7 @@ interface MapApiRepository {
     suspend fun getReverseGeoInformation(
         locationLatLngEntity: LocationEntity
     ): AddressInfo?
+
+
+
 }
