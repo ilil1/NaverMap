@@ -2,10 +2,12 @@ package com.project.navermap.di.moduleComponent.singletonComponent
 
 import com.project.navermap.BuildConfig
 import com.project.navermap.data.network.FoodApiService
+import com.project.navermap.data.network.KakaoAddressApiService
 import com.project.navermap.data.network.MapApiService
 import com.project.navermap.data.network.ShopController
 import com.project.navermap.data.url.Url
 import com.project.navermap.di.annotation.networkmodule.FoodRetrofitInstance
+import com.project.navermap.di.annotation.networkmodule.KakaoRetrofitInstance
 import com.project.navermap.di.annotation.networkmodule.ShopRetrofitInstance
 import com.project.navermap.di.annotation.networkmodule.TmapRetrofitInstance
 import dagger.Module
@@ -87,6 +89,20 @@ object NetworkModule {
             .build()
     }
 
+    @KakaoRetrofitInstance
+    @Provides
+    @Singleton
+    fun provideKakaoRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Url.Kakao_URL)
+            .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient)
+            .build()
+    }
+
     @Provides
     @Singleton
     fun provideMapApiService(@TmapRetrofitInstance retrofit: Retrofit): MapApiService {
@@ -103,5 +119,11 @@ object NetworkModule {
     @Singleton
     fun provideFoodController(@FoodRetrofitInstance retrofit: Retrofit): FoodApiService {
         return retrofit.create(FoodApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideKakaoController(@KakaoRetrofitInstance retrofit: Retrofit): KakaoAddressApiService {
+        return retrofit.create(KakaoAddressApiService::class.java)
     }
 }

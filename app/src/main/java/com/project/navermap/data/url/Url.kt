@@ -9,4 +9,11 @@ object Url {
     const val GET_SHOP_LIST = "/v2/shop/simple/list"
 
     const val FOOD_URL = "https://60abc8f15a4de40017ccae3e.mockapi.io/"
+
+    const val GEOCODE_URL = "http://dapi.kakao.com/v2/local/search/address.json?query="
+
+    const val Kakao_URL = "http://dapi.kakao.com"
+    const val KakaoAdress_URL = "/v2/local/search/address.json"
+    //GET /v2/local/search/address.${FORMAT} HTTP/1.1
+
 }

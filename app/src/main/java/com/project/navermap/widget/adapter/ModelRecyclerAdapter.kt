@@ -40,7 +40,6 @@ open class ModelRecyclerAdapter<M : Model, VM : ViewModel> (
         super.submitList(list)
     }
 
-
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Model>() {
             override fun areItemsTheSame(oldItem: Model, newItem: Model): Boolean {

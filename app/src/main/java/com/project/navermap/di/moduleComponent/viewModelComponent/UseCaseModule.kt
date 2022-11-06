@@ -3,9 +3,9 @@ package com.project.navermap.di.moduleComponent.viewModelComponent
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
-import com.project.navermap.domain.usecase.GetReverseGeoUseCase
+import com.project.navermap.domain.usecase.mainViewmodel.GetReverseGeoUseCase
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
-import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCaseImpl
+import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,9 +17,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 object UseCaseModule {
     @Provides
     fun provideGetShopListUseCase(
-        repository: RestaurantRepository,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ) = GetRestaurantListUseCaseImpl(repository, ioDispatcher)
+        repository: RestaurantRepository
+    ) = GetRestaurantListUseCase(repository)
 
     @Provides
     fun provideGetItemsByRestaurantIdUseCase(repository: RestaurantRepository) =

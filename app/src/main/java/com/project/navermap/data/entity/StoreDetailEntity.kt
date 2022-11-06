@@ -1,7 +1,6 @@
 package com.project.navermap.data.entity
 
 import android.os.Parcelable
-import com.project.navermap.domain.model.CellType
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import kotlinx.parcelize.Parcelize
 

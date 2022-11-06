@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.project.navermap.domain.model.Model
-import com.project.navermap.presentation.base.BaseViewModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.listener.AdapterListener
 

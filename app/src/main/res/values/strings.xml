@@ -3,6 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cannot_load_address_info">위치 정보를 불러올 수 없습니다.</string>
+    <string name="cannot_load_data">데이터를 불러올 수 없습니다. 나중에 다시 시도해주세요.</string>
+    <string name="failed_get_restaurant_list">리스트를 불러오는데 실패했습니다.</string>
 
     <string name="grade_format">%1$,.1f</string>
     <string name="review_count">(%1$d++)</string>
@@ -14,7 +16,8 @@
     <string name="nearly"><b>가까운 곳</b>에서 빠르게 거래해보세요</string>
     <string name="annival"><b>5월의 기념일</b>을 준비해보세요</string>
 
-    <string name="cannot_load_data">데이터를 불러올 수 없습니다. 나중에 다시 시도해주세요.</string>
+    <string name="like_market">찜한 마켓</string>
+    <string name="like_item">찜한 상품</string>
 
 
     <string name="like_market">찜한 마켓</string>
@@ -26,6 +29,23 @@
     <string name="market_closed">CLOSED</string>
     <string name="menu">상품정보</string>
     <string name="shopinform">가게정보</string>
+    <string name="like">찜</string>
+
+    <string name="id_hint"><font size="15">아이디를 입력해주세요</font></string>
+    <string name="pw_hint"><font size="15">비밀번호를 입력해주세요</font></string>
+    <string name="map_search">도로명, 건물명 또는 지번으로 검색</string>
+
+    <string name="cs_login">로그인</string>
+    <string name="cs_order">주문</string>
+    <string name="cs_review">리뷰관리</string>
+    <string name="cs_use">이용문의</string>
+    <string name="cs_etc">기타</string>
+
+    <string name="cs_login_type">로그인</string>
+    <string name="cs_order_type">주문</string>
+    <string name="cs_review_type">리뷰관리</string>
+    <string name="cs_use_type">이용문의</string>
+    <string name="cs_etc_type">기타</string>
 
     <string name="id_hint"><font size="15">아이디를 입력해주세요</font></string>
     <string name="pw_hint"><font size="15">비밀번호를 입력해주세요</font></string>

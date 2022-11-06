@@ -65,8 +65,7 @@ class MapLocationSettingActivity : AppCompatActivity() {
 
         viewModel.locationData.observe(this@MapLocationSettingActivity) {
             when (it) {
-                is MapLocationSettingState.Uninitialized -> {
-                }
+                is MapLocationSettingState.Uninitialized -> {}
 
                 is MapLocationSettingState.Loading -> {}
 

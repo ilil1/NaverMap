@@ -2,6 +2,7 @@ package com.project.navermap.widget.adapter.viewholder
 
 
 import androidx.lifecycle.ViewModel
+import com.project.navermap.R
 import com.project.navermap.extensions.clear
 import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderSaleItemBinding
