@@ -6,6 +6,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.project.navermap.R
+import com.project.navermap.databinding.FragmentHomeDetailBinding
 import com.project.navermap.util.provider.ResourcesProvider
 import javax.inject.Inject
 

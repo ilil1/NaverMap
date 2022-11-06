@@ -2,7 +2,7 @@ package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
-import com.project.navermap.data.extensions.load
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderChatlistBinding
 import com.project.navermap.domain.model.ChatModel
 import com.project.navermap.util.provider.ResourcesProvider

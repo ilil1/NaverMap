@@ -9,7 +9,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.data.extensions.load
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ActivityStoreDetailBinding
 import com.project.navermap.presentation.mainActivity.store.StoreFragment
 import com.project.navermap.presentation.mainActivity.store.storeDetail.information.StoreInformFragment
