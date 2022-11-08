@@ -7,6 +7,8 @@ import com.project.navermap.data.repository.home.HomeRepository
 import com.project.navermap.data.repository.home.HomeRepositoryImpl
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.map.MapApiRepositoryImpl
+import com.project.navermap.data.repository.myinfo.ProfileRepository
+import com.project.navermap.data.repository.myinfo.ProfileRepositoryImpl
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
 import com.project.navermap.data.repository.restaurant.RestaurantRepositoryImpl
 import com.project.navermap.data.repository.shop.ShopApiRepository
@@ -25,6 +27,10 @@ abstract class RepositoryBindModule {
         restaurantRepositoryImpl: RestaurantRepositoryImpl
     ): RestaurantRepository
 
+    @Binds
+    abstract fun profileRepository(
+      profileRepositoryImpl: ProfileRepositoryImpl
+    ) : ProfileRepository
     
 
 

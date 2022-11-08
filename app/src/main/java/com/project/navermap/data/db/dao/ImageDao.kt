@@ -5,6 +5,7 @@ import com.project.navermap.data.entity.AddressHistoryEntity
 import com.project.navermap.domain.model.ImageData
 import com.project.navermap.domain.model.ProfileData
 import dagger.Provides
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ImageDao {
@@ -18,8 +19,5 @@ interface ImageDao {
     @Query("SELECT * FROM profile")
     suspend fun getAllAddresses() : ProfileData
 
-
-    @Query("SELECT (SELECT COUNT(*)FROM profile) == 0")
-    fun isEmpty() : Boolean
 
 }

@@ -24,12 +24,12 @@ object DatabaseModule {
             .build()
 
 
-//    @Provides
-//    @Singleton
-//    fun provideImageDB(@ApplicationContext context : Context): ImageDB =
-//        Room.databaseBuilder(context, ImageDB::class.java,"profile")
-//            .fallbackToDestructiveMigration()
-//            .allowMainThreadQueries()
-//            .build()
+    @Provides
+    @Singleton
+    fun provideImageDB(@ApplicationContext context : Context): ImageDB =
+        Room.databaseBuilder(context, ImageDB::class.java,"profile")
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
 
 }

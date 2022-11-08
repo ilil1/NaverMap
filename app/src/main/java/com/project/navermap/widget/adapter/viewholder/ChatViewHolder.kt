@@ -2,6 +2,7 @@ package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderChatlistBinding
 import com.project.navermap.domain.model.ChatModel
@@ -31,8 +32,6 @@ class ChatViewHolder(
             date.text = listModel.Data
             recentlyText.text = listModel.RecentlyText
         }
-
-
     }
 
     override fun bindViews(listModel: ChatModel, listener: AdapterListener) {
