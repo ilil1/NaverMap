@@ -1,5 +1,7 @@
 package com.project.navermap.presentation.login
 
+import android.app.Activity
+import com.kakao.sdk.common.util.Utility
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,8 +9,20 @@ import android.os.Looper
 import android.text.TextUtils
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Class
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import com.project.navermap.R
 import com.project.navermap.databinding.ActivityLoginBinding
 import com.project.navermap.presentation.mainActivity.MainActivity
@@ -21,12 +35,34 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
+
     private var auth : FirebaseAuth? = null
     private var doubleBackToExit = false
     private var checkEye =0
 
+    lateinit var mGoogleSignInClient : GoogleSignInClient
+    lateinit var resultLauncher : ActivityResultLauncher<Intent>
+
+
+    override fun onStart() {
+        super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+       setResultSignUp()
+        var keyHash = Utility.getKeyHash(this)
+        Log.d("hash",keyHash)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
 
         auth = FirebaseAuth.getInstance()
         binding.login.setOnClickListener {
@@ -45,7 +81,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                         Toast.makeText(this,"이메일 및 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show()
                     }
                 }
-
+        }
+        val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
+            if (error != null) {
+            } else if (token != null) {
+                UserApiClient.instance.me { user, error ->
+                    val kakaoId = user!!.id
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+            }
         }
 
         binding.sign.setOnClickListener {
@@ -61,7 +106,45 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         binding.eye.setOnClickListener {
             showAndHide()
         }
+        binding.google.setOnClickListener {
+            val signIntent : Intent = mGoogleSignInClient.signInIntent
+            resultLauncher.launch(signIntent)
+        }
+        binding.kakao.setOnClickListener {
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
+                UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
+            }
+        }
+    }
 
+
+    private fun setResultSignUp(){
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                val task : Task<GoogleSignInAccount> =
+                    GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                handleSignResult(task)
+
+            }
+        }
+    }
+
+    private fun handleSignResult(completeTask: Task<GoogleSignInAccount>){
+        try {
+            val account = completeTask.getResult(ApiException::class.java)
+            val email = account?.email.toString()
+            val photoUrl = account?.photoUrl.toString()
+
+
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            Toast.makeText(this, "$email 님 로그인되었습니다", Toast.LENGTH_LONG).show()
+        } catch (e : ApiException){
+
+        }
     }
 
     override fun initViews() {
@@ -106,8 +189,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     }
 
     override fun onBackPressed() {
-
-
         if (doubleBackToExit) {
             finishAffinity()
         } else {
