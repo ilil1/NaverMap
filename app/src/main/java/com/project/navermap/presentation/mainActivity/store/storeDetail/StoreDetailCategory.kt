@@ -8,7 +8,6 @@ enum class StoreDetailCategory(
     val categoryNameId: Int,
 ) {
     Items(R.string.itemList),
-    INFO(R.string.storeInfo),
     REVIEW(R.string.review)
 }
 

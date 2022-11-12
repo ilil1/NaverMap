@@ -74,7 +74,6 @@ class StoreDetailActivity : AppCompatActivity() {
             this@StoreDetailActivity,
             listOf(
                 StoreMenuFragment.newInstance(state),
-                StoreInformFragment.newInstance(),
                 StoreReviewFragment.newInstance(state)
             )
         )
