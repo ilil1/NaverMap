@@ -53,7 +53,7 @@ class SuggestItemMenuFragment : BaseFragment<FragmentSuggestItemMenuBinding>() {
     }
 
     override fun initState() {
-        val storeData = arguments?.getParcelable<SuggestItemEntity>(SuggestItemMenuFragment.SALE_LIST_KEY)!!
+        //val storeData = arguments?.getParcelable<SuggestItemEntity>(SuggestItemMenuFragment.SALE_LIST_KEY)!!
         //viewModel.loadRestaurantItems(storeData.marketName)//Data Request
         //binding.restaurantRecyclerView.adapter = adapter
         super.initState()
@@ -67,7 +67,7 @@ class SuggestItemMenuFragment : BaseFragment<FragmentSuggestItemMenuBinding>() {
                 putParcelable(SALE_LIST_KEY, menu)
             }
             return SuggestItemMenuFragment().apply {
-                arguments = bundle
+                //arguments = bundle
             }
         }
     }

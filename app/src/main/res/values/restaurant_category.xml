@@ -47,6 +47,7 @@
 
     <string name="itemList">상품정보</string>
     <string name="storeInfo">스토어 정보</string>
+    <string name="AllstoreInfo">추천하는 스토어 정보 모음</string>
     <string name="storeReview">스토어 리뷰</string>
 
 

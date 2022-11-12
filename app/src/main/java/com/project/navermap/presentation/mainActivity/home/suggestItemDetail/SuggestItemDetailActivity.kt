@@ -2,28 +2,16 @@ package com.project.navermap.presentation.mainActivity.home.suggestItemDetail
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.navermap.R
 import com.project.navermap.data.entity.SuggestItemEntity
-import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.databinding.ActivityStoreDetailBinding
 import com.project.navermap.databinding.ActivitySuggestItemDetailBinding
 import com.project.navermap.extensions.load
 import com.project.navermap.presentation.mainActivity.home.HomeFragment
 import com.project.navermap.presentation.mainActivity.home.suggestItemDetail.menu.SuggestItemMenuFragment
-import com.project.navermap.presentation.mainActivity.home.suggestItemDetail.review.SuggestItemReviewFragment
-import com.project.navermap.presentation.mainActivity.store.StoreFragment
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailCategory
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailResult
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailViewModel
-import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
-import com.project.navermap.presentation.mainActivity.store.storeDetail.review.StoreReviewFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.StoreDetailFragmentPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,6 +73,10 @@ class SuggestItemDetailActivity : AppCompatActivity() {
         viewModel.fetchData()
         observeData()
 
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frame, SuggestItemMenuFragment())
+            .commit()
+
         binding.back.setOnClickListener {
             finish()
         }
@@ -92,22 +84,22 @@ class SuggestItemDetailActivity : AppCompatActivity() {
 
     private fun initViewPager(state: SuggestItemEntity) {
 
-        viewPagerAdapter = StoreDetailFragmentPagerAdapter(
-            this@SuggestItemDetailActivity,
-            listOf(
-                SuggestItemMenuFragment.newInstance(state),
-                SuggestItemReviewFragment.newInstance(state)
-            )
-        )
-        val storeMarketDetailCategory = SuggestItemDetailCategory.values()
-
-        binding.menuAndReviewViewPager.adapter = viewPagerAdapter
-
-        TabLayoutMediator(
-            binding.menuAndReviewTabLayout,
-            binding.menuAndReviewViewPager
-        ) { tab, position -> tab.setText(storeMarketDetailCategory[position].categoryNameId)
-        }.attach()
+//        viewPagerAdapter = StoreDetailFragmentPagerAdapter(
+//            this@SuggestItemDetailActivity,
+//            listOf(
+//                SuggestItemMenuFragment.newInstance(state)
+//                //SuggestItemReviewFragment.newInstance(state)
+//            )
+//        )
+//        val storeMarketDetailCategory = SuggestItemDetailCategory.values()
+//
+//        binding.menuAndReviewViewPager.adapter = viewPagerAdapter
+//
+//        TabLayoutMediator(
+//            binding.menuAndReviewTabLayout,
+//            binding.menuAndReviewViewPager
+//        ) { tab, position -> tab.setText(storeMarketDetailCategory[position].categoryNameId)
+//        }.attach()
     }
 
 

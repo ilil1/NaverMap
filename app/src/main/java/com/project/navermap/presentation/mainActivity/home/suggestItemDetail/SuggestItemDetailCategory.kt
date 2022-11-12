@@ -7,6 +7,5 @@ enum class SuggestItemDetailCategory(
     @StringRes
     val categoryNameId: Int,
 ) {
-    Items(R.string.itemList),
-    REVIEW(R.string.review)
+    Items(R.string.AllstoreInfo)
 }

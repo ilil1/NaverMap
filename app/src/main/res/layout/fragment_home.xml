@@ -51,17 +51,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMoreSeason"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/season"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/season" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/season_recycler"
@@ -91,18 +80,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMorehobby"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/popular"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/popular" />
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/popular_recycler"
@@ -130,18 +107,6 @@
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMoreAnnival"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/annival"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/annival" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/annivalRecyclerView"

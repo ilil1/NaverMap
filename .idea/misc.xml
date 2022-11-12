@@ -78,16 +78,20 @@
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_sale_item.xml" value="0.2" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/layout/viewholder_town_market.xml" value="0.264" />
         <entry key="..\:/Users/LG/Desktop/NaverMap/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/activity_search_address.xml" value="0.10462962962962963" />
         <entry key="app/src/main/res/layout/activity_store_detail.xml" value="0.13880445795339413" />
-        <entry key="app/src/main/res/layout/activity_suggest_item_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_suggest_item_detail.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_home_detail.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_list.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.13722826086956522" />
+        <entry key="app/src/main/res/layout/fragment_store.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/fragment_store_market_menu.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_store_marketinform.xml" value="0.10462962962962963" />
         <entry key="app/src/main/res/layout/fragment_suggest_item_detail.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_suggest_item_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_suggest_item_menu.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_suggest_item_review.xml" value="0.1" />
       </map>
     </option>
