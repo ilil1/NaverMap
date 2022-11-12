@@ -94,6 +94,12 @@ object ViewHolderMapper {
                 viewModel,
                 resourcesProvider
             )
+
+            FIREBASE_CELL -> TownMarketViewHolder(
+                ViewholderTownMarketBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
         }
         return viewHolder as ModelViewHolder<M>
     }

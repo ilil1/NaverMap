@@ -2,6 +2,9 @@ package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.firebase.FirebaseEntity
+import com.project.navermap.data.repository.firebaserealtime.firebaseRepository
+import com.project.navermap.domain.model.FirebaseModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
@@ -9,10 +12,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class RestaurantListViewModel @AssistedInject constructor(
     private val getRestaurantListUseCase: GetRestaurantListUseCase,
+    private val firebaseRepository: firebaseRepository,
     @Assisted private val restaurantCategory: RestaurantCategory,
     @Assisted private var locationEntity: LocationEntity
 ) : ViewModel() {
@@ -58,16 +63,18 @@ class RestaurantListViewModel @AssistedInject constructor(
 //        }
     }
 
-    private var _restaurantListLiveData = MutableLiveData<List<RestaurantModel>>()
-    val restaurantListLiveData: LiveData<List<RestaurantModel>> get() = _restaurantListLiveData
+//    private var _restaurantListLiveData = MutableLiveData<List<RestaurantModel>>()
+    val restaurantListLiveData: LiveData<List<FirebaseModel>> = firebaseRepository.getMarkets()
+        .map { list -> list.map { entity -> entity.toModel() } }
+        .asLiveData()
 
     fun fetchData(): Job = viewModelScope.launch {
-        getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity).let {
-            when (it) {
-                is RestaurantResult.Success -> _restaurantListLiveData.value = it.data
-                else -> _restaurantListLiveData.value = emptyList() /* TODO: 2022-09-20 화 00:33, Error 구현 */
-            }
-        }
+//        getRestaurantListUseCase.fetchData(restaurantCategory, locationEntity).let {
+//            when (it) {
+//                is RestaurantResult.Success -> _restaurantListLiveData.value = it.data
+//                else -> _restaurantListLiveData.value = emptyList() /* TODO: 2022-09-20 화 00:33, Error 구현 */
+//            }
+//        }
     }
 
     fun setLocationLatLng(locationEntity: LocationEntity) {

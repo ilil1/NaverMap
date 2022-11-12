@@ -1,14 +1,18 @@
 package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.viewModels
 import com.project.navermap.data.entity.LocationEntity
+import com.project.navermap.data.entity.firebase.FirebaseEntity
 import com.project.navermap.databinding.FragmentListBinding
+import com.project.navermap.domain.model.FirebaseModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
+import com.project.navermap.widget.adapter.listener.FirebaseListener
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -49,13 +53,13 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
     lateinit var resourcesProvider: ResourcesProvider
 
     private val adapter by lazy {
-        ModelRecyclerAdapter<RestaurantModel, RestaurantListViewModel>(
+        ModelRecyclerAdapter<FirebaseModel, RestaurantListViewModel>(
             listOf(), viewModel, resourcesProvider,
-            adapterListener = object : RestaurantListListener {
-                override fun onClickItem(model: RestaurantModel) {
-                    startActivity(
-                        StoreDetailActivity.newIntent(requireContext(),model.toEntity())
-                    )
+            adapterListener = object : FirebaseListener {
+                override fun onClickItem(model: FirebaseModel) {
+//                    startActivity(
+//                        StoreDetailActivity.newIntent(requireContext(), model.toEntity())
+//                    )
                 }
             })
     }
@@ -67,12 +71,14 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
 
     override fun observeData() {
         viewModel.restaurantListLiveData.observe(viewLifecycleOwner) {
+            Log.d("TAG", "observeData: $it")
             adapter.submitList(it)
             binding.recyclerView.adapter = adapter
         }
     }
 
     companion object {
+        const val RestaurantListFragment_KEY = "RestaurantListFragment"
         const val RESTAURANT_CATEGORY_KEY = "restaurantCategory"
         const val LOCATION_KEY = "location"
         const val STORE_KEY = "storekey"

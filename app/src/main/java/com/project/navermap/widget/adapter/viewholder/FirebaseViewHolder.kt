@@ -2,36 +2,35 @@ package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
 import com.project.navermap.R
+import com.project.navermap.databinding.ViewholderFirebaseBinding
+import com.project.navermap.databinding.ViewholderTownMarketBinding
+import com.project.navermap.domain.model.FirebaseModel
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.extensions.clear
 import com.project.navermap.extensions.load
-import com.project.navermap.databinding.ViewholderTownMarketBinding
-import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.domain.model.TownMarketModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.listener.AdapterListener
+import com.project.navermap.widget.adapter.listener.FirebaseListener
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
-import com.project.navermap.widget.adapter.listener.TownMarketListener
 
-//백엔드 작업후 RestaurantModel을 TownMarketModel로 따로 분기해야함
-//viewholder_firebase
-class TownMarketViewHolder(
-    private val binding: ViewholderTownMarketBinding,
+class FirebaseViewHolder(
+    private val binding: ViewholderFirebaseBinding,
     viewModel: ViewModel,
     resourcesProvider: ResourcesProvider
-): ModelViewHolder<RestaurantModel>(binding, viewModel, resourcesProvider) {
+): ModelViewHolder<FirebaseModel>(binding, viewModel, resourcesProvider) {
 
     override fun reset() = with(binding) {
         marketImageView.clear()
     }
 
-    override fun bindData(model: RestaurantModel) {
+    override fun bindData(model: FirebaseModel) {
         super.bindData(model)
 
         with(binding) {
             // TODO 실제 데이터를 받아오는 경우 데이터가 잘 반영이 되도록 수정
             marketImageView.load(model.restaurantImageUrl, 16f)
             marketNameText.text = model.restaurantTitle
-            distanceTextView.text = model.distance.toString()+"km"
+            //distanceTextView.text = model.distance.toString()+"km"
             stockTextView.text = "2개 상품 판매중"
             likeCountTextView.text = "1"
             reviewCountTextView.text = "1"
@@ -52,8 +51,8 @@ class TownMarketViewHolder(
         }
     }
 
-    override fun bindViews(model: RestaurantModel, listener: AdapterListener) {
-        if(listener is RestaurantListListener) {
+    override fun bindViews(model: FirebaseModel, listener: AdapterListener) {
+        if(listener is FirebaseListener) {
             with(binding) {
                 root.setOnClickListener {
                     listener.onClickItem(model)

@@ -1,20 +1,24 @@
-package com.project.navermap.presentation.mainActivity.store.storeDetail
+package com.project.navermap.presentation.mainActivity.store.firebaseDetail
 
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
-import com.project.navermap.data.entity.SuggestItemEntity
 import com.project.navermap.data.entity.firebase.FirebaseEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.extensions.load
+import com.project.navermap.databinding.ActivityFirebaseDetailBinding
 import com.project.navermap.databinding.ActivityStoreDetailBinding
+import com.project.navermap.extensions.load
 import com.project.navermap.presentation.mainActivity.store.StoreFragment
-import com.project.navermap.presentation.mainActivity.store.storeDetail.information.StoreInformFragment
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailCategory
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailResult
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailViewModel
 import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
 import com.project.navermap.presentation.mainActivity.store.storeDetail.review.StoreReviewFragment
 import com.project.navermap.util.provider.ResourcesProvider
@@ -23,34 +27,34 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StoreDetailActivity : AppCompatActivity() {
+class FirebaseDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityStoreDetailBinding
+    private lateinit var binding: ActivityFirebaseDetailBinding
     private lateinit var viewPagerAdapter: StoreDetailFragmentPagerAdapter
 
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
     @Inject
-    lateinit var viewModelFactory: StoreDetailViewModel.StoreDetailAssistedFactory
+    lateinit var viewModelFactory: FirebaseDetailViewModel.FirebaseDetailAssistedFactory
 
     /**
      * hilt를 활용한 런타임 주입인데 Hilt의 의존성 관리상 저장되는 위치가 달라서 생기는 문제가 있음.
      */
-    val viewModel by viewModels<StoreDetailViewModel> {
-        StoreDetailViewModel.provideFactory(
+    val viewModel by viewModels<FirebaseDetailViewModel> {
+        FirebaseDetailViewModel.provideFactory(
             viewModelFactory,
             restaurantEntity = intent.getParcelableExtra(StoreFragment.StoreFragment_KEY)!!
         )
     }
 
     private fun observeData() = with(binding) {
-        viewModel.storeDetailResultLiveData.observe(this@StoreDetailActivity) {
+        viewModel.storeDetailResultLiveData.observe(this@FirebaseDetailActivity) {
             when (it) {
-                is StoreDetailResult.Uninitialized -> {}
-                is StoreDetailResult.Loading -> {
+                is FirebaseDetailResult.Uninitialized -> {}
+                is FirebaseDetailResult.Loading -> {
                     progressBar.isVisible = true
                 }
-                is StoreDetailResult.Success -> {
+                is FirebaseDetailResult.Success -> {
                     handleSuccess(it)
                 }
             }
@@ -59,7 +63,7 @@ class StoreDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityStoreDetailBinding.inflate(layoutInflater)
+        binding = ActivityFirebaseDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.fetchData()
@@ -70,13 +74,13 @@ class StoreDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViewPager(state: RestaurantEntity) {
+    private fun initViewPager(state: FirebaseEntity) {
 
         viewPagerAdapter = StoreDetailFragmentPagerAdapter(
-            this@StoreDetailActivity,
+            this@FirebaseDetailActivity,
             listOf(
-                StoreMenuFragment.newInstance(state),
-                StoreReviewFragment.newInstance(state)
+                //StoreMenuFragment.newInstance(state),
+                //StoreReviewFragment.newInstance(state)
             )
         )
         val storeMarketDetailCategory = StoreDetailCategory.values()
@@ -90,10 +94,10 @@ class StoreDetailActivity : AppCompatActivity() {
         }.attach()
     }
 
-    private fun handleSuccess(state: StoreDetailResult.Success) = with(binding) {
+    private fun handleSuccess(state: FirebaseDetailResult.Success) = with(binding) {
         progressBar.isGone = true
 
-        val restaurantEntity = state.restaurantEntity
+        val restaurantEntity = state.firebaseEntity
 
         TownMarketMainTitleTextView.text = restaurantEntity.restaurantTitle
         TownMarketImage.load(restaurantEntity.restaurantImageUrl)
@@ -104,9 +108,9 @@ class StoreDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context, restaurantEntity: RestaurantEntity) =
-            Intent(context, StoreDetailActivity::class.java).apply {
-                putExtra(StoreFragment.StoreFragment_KEY, restaurantEntity)
+        fun newIntent(context: Context, firebaseEntity: FirebaseEntity) =
+            Intent(context, FirebaseDetailActivity::class.java).apply {
+                putExtra(RestaurantListFragment.RestaurantListFragment_KEY, firebaseEntity)
             }
     }
 }

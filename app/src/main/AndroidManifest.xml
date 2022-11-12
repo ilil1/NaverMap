@@ -17,6 +17,9 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FirabaseDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.mainActivity.home.suggestItemDetail.SuggestItemDetailActivity"
             android:exported="true" />
         <activity

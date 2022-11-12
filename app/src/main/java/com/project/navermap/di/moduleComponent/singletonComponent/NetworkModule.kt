@@ -1,5 +1,8 @@
 package com.project.navermap.di.moduleComponent.singletonComponent
 
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.project.navermap.BuildConfig
 import com.project.navermap.data.network.FoodApiService
 import com.project.navermap.data.network.KakaoAddressApiService
@@ -126,4 +129,8 @@ object NetworkModule {
     fun provideKakaoController(@KakaoRetrofitInstance retrofit: Retrofit): KakaoAddressApiService {
         return retrofit.create(KakaoAddressApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabase(): FirebaseDatabase = Firebase.database
 }

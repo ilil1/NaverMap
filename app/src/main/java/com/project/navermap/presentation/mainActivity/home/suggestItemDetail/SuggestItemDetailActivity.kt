@@ -130,7 +130,7 @@ class SuggestItemDetailActivity : AppCompatActivity() {
             adapterListener = object : RestaurantListListener{
                 override fun onClickItem(model: RestaurantModel) {
                     startActivity(
-                        StoreDetailActivity.newIntent(this@SuggestItemDetailActivity,model.toEntity())
+                        StoreDetailActivity.newIntent(this@SuggestItemDetailActivity, model.toEntity())
                     )
                 }
 
