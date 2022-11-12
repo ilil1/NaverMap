@@ -114,7 +114,6 @@ class HomeFirstMockRepositoryImpl @Inject constructor(
                 restaurantImageUrl = "https://velog.velcdn.com/images/heetaeheo/post/e4b0a8ab-66e2-4f8d-a983-85324f5c0133/image.png",
                 restaurantTelNumber = "0"
             )
-
         )
         return mockList
     }
