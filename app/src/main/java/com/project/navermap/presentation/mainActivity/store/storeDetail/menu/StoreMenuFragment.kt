@@ -48,6 +48,7 @@ class StoreMenuFragment : BaseFragment<FragmentStoreMarketMenuBinding>() {
         val storeData = arguments?.getParcelable<RestaurantEntity>(SALE_LIST_KEY)!!
         viewModel.loadRestaurantItems(storeData.restaurantInfoId)//Data Request
         binding.restaurantRecyclerView.adapter = adapter
+
         super.initState()
     }
 

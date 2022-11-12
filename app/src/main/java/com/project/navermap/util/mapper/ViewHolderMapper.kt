@@ -72,7 +72,12 @@ object ViewHolderMapper {
                 resourcesProvider
             )
 
-            HOME_DETAIL_ITEM_CELL -> TODO()
+            HOME_DETAIL_ITEM_CELL -> TownMarketViewHolder(
+                ViewholderTownMarketBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
+
             HOME_MAIN_ITEM_CELL -> TODO()
             CUSTOMER_SERVICE_CELL -> CSViewHolder(
                 ViewholderCsItemBinding.inflate(inflater,parent,false),

@@ -3,6 +3,8 @@ package com.project.navermap.presentation.mainActivity.home.suggestItemDetail
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.SuggestItemEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
+import com.project.navermap.data.repository.home.HomeFirstMockRepository
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailResult
 import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailViewModel
@@ -13,7 +15,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SuggestItemDetailViewModel @AssistedInject constructor(
-    @Assisted private val suggestItemEntity: SuggestItemEntity
+    @Assisted private val suggestItemEntity: SuggestItemEntity,
+    private val firstMockRepository: HomeFirstMockRepository
 ): ViewModel() {
 
     /**
@@ -23,6 +26,14 @@ class SuggestItemDetailViewModel @AssistedInject constructor(
     interface SuggestItemDetailAssistedFactory {
         fun create(suggestItemEntity: SuggestItemEntity
         ): SuggestItemDetailViewModel
+    }
+
+
+    private val _homeListData = MutableLiveData<List<RestaurantModel>>()
+    val homeListData : LiveData<List<RestaurantModel>> = _homeListData
+
+    fun firstFetchData() : Job = viewModelScope.launch {
+        _homeListData.value = firstMockRepository.getAllData()
     }
 
     companion object {
@@ -46,6 +57,5 @@ class SuggestItemDetailViewModel @AssistedInject constructor(
             suggestItemEntity = suggestItemEntity
         )
     }
-
 
 }

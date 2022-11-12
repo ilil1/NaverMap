@@ -7,13 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.R
 import com.project.navermap.data.entity.SuggestItemEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.databinding.FragmentStoreMarketMenuBinding
 import com.project.navermap.databinding.FragmentSuggestItemMenuBinding
 import com.project.navermap.domain.model.FoodModel
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.home.suggestItemDetail.SuggestItemDetailViewModel
 import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
 import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuViewModel
 import com.project.navermap.util.provider.ResourcesProvider
@@ -29,11 +32,14 @@ class SuggestItemMenuFragment : BaseFragment<FragmentSuggestItemMenuBinding>() {
 
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
+
     private val viewModel by viewModels<StoreMenuViewModel>()
 
+    private val secondViewModel : SuggestItemDetailViewModel by viewModels()
+
     private val adapter by lazy {
-        ModelRecyclerAdapter<FoodModel, StoreMenuViewModel>(
-            listOf(), viewModel, resourcesProvider,
+        ModelRecyclerAdapter<RestaurantModel, SuggestItemDetailViewModel>(
+            listOf(), secondViewModel, resourcesProvider,
             object : StoreDetailItemListener {
                 override fun onClickItem(foodModel: FoodModel) {
                     Toast.makeText(
@@ -46,8 +52,8 @@ class SuggestItemMenuFragment : BaseFragment<FragmentSuggestItemMenuBinding>() {
         )
     }
 
-    override fun observeData() = with(viewModel) {
-        storeItem.observe(viewLifecycleOwner) {
+    override fun observeData() = with(secondViewModel) {
+        homeListData.observe(viewLifecycleOwner) {
             adapter.submitList(it)//Data callback
         }
     }
@@ -55,8 +61,14 @@ class SuggestItemMenuFragment : BaseFragment<FragmentSuggestItemMenuBinding>() {
     override fun initState() {
         //val storeData = arguments?.getParcelable<SuggestItemEntity>(SuggestItemMenuFragment.SALE_LIST_KEY)!!
         //viewModel.loadRestaurantItems(storeData.marketName)//Data Request
-        //binding.restaurantRecyclerView.adapter = adapter
+        secondViewModel.firstFetchData()
         super.initState()
+    }
+
+    override fun initViews() {
+        super.initViews()
+        binding.restaurantRecyclerView.adapter = adapter
+        binding.restaurantRecyclerView.layoutManager = LinearLayoutManager(this@SuggestItemMenuFragment.context)
     }
 
     companion object {
@@ -67,7 +79,7 @@ class SuggestItemMenuFragment : BaseFragment<FragmentSuggestItemMenuBinding>() {
                 putParcelable(SALE_LIST_KEY, menu)
             }
             return SuggestItemMenuFragment().apply {
-                //arguments = bundle
+                arguments = bundle
             }
         }
     }

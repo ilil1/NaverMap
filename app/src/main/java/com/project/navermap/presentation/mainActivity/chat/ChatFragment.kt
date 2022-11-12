@@ -30,7 +30,6 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : ChatModelListener {
                 override fun onClickItem(model: ChatModel) {
-
                     val data = ChatEntity(model.StoreName)
                     val bundle = Bundle()
                     bundle.putParcelable("data", data)
