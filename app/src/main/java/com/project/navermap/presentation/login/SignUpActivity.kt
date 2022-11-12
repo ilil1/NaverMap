@@ -72,19 +72,19 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
             }
 
         }
-
-        binding.confirmButton.setOnClickListener {
-            val otp = binding.confirm.text.toString()
-            if (otp.isNotEmpty()) {
-                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
-                    storedVerificationId, otp
-                )
-                binding.confirmButton.setBackgroundResource(R.drawable.radius_btn_onclick)
-                signInWithPhoneAuthCredential(credential)
-            } else {
-                Toast.makeText(this@SignUpActivity, "Enter CheckNumer", Toast.LENGTH_SHORT).show()
-            }
-        }
+//
+//        binding.confirmButton.setOnClickListener {
+//            val otp = binding.confirm.text.toString()
+//            if (otp.isNotEmpty()) {
+//                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
+//                    storedVerificationId, otp
+//                )
+//                binding.confirmButton.setBackgroundResource(R.drawable.radius_btn_onclick)
+//                signInWithPhoneAuthCredential(credential)
+//            } else {
+//                Toast.makeText(this@SignUpActivity, "Enter CheckNumer", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
 
     }
@@ -101,29 +101,28 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
 
 
 
-        binding.confirm.visibility = View.INVISIBLE
-        binding.confirmButton.visibility = View.INVISIBLE
+//        binding.confirm.visibility = View.INVISIBLE
+//        binding.confirmButton.visibility = View.INVISIBLE
 
         binding.signBtn.setOnClickListener {
-
-            if (checkPhone == 1) {
+            if (true) {
                 performRegister()
             } else {
                 Toast.makeText(this@SignUpActivity, "전화번호 인증을 하지않았습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        sendBtn.setOnClickListener {
-            binding.sendBtn.setBackgroundResource(R.drawable.radius_btn_onclick)
-            sendotp()
-            val phone = editphone.text.toString()
-            if (phone.isNotEmpty()) {
-                confirm.visibility = View.VISIBLE
-                confirmButton.visibility = View.VISIBLE
-            } else {
-                Toast.makeText(this@SignUpActivity, "전화번호를 입력해주세요", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        sendBtn.setOnClickListener {
+//            binding.sendBtn.setBackgroundResource(R.drawable.radius_btn_onclick)
+//            sendotp()
+//            val phone = editphone.text.toString()
+//            if (phone.isNotEmpty()) {
+//                confirm.visibility = View.VISIBLE
+//                confirmButton.visibility = View.VISIBLE
+//            } else {
+//                Toast.makeText(this@SignUpActivity, "전화번호를 입력해주세요", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
         //callback functuon for Phone Auth
 
@@ -201,7 +200,7 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
     }
 
     private fun sendotp() {
-        number = binding.editphone.text.toString()
+//        number = binding.editphone.text.toString()
 
         //get the phone number from edit text and append the country code
         if (number.isNotEmpty()) {
