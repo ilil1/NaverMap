@@ -34,9 +34,9 @@ class CSListFragment : BaseFragment<FragmentCsListBinding>() {
         FragmentCsListBinding.inflate(layoutInflater)
 
     override fun observeData() = with(viewModel) {
-//        csListData.observe(viewLifecycleOwner) {
-//            adapter.submitList(it)
-//        }
+        csListData.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 
     @Inject
@@ -47,27 +47,31 @@ class CSListFragment : BaseFragment<FragmentCsListBinding>() {
             listOf(), viewModel, resourcesProvider,
             object : CSModelListener {
                 override fun onClickItem(listModel: CSModel) {
-                    val data = ImageData(listModel.csTitle, listModel.csContentTitle,listModel.csContentBody,listModel.csAuthor)
+                    val data = ImageData(
+                        listModel.csTitle,
+                        listModel.csContentTitle,
+                        listModel.csContentBody,
+                        listModel.csAuthor
+                    )
                     val bundle = Bundle()
                     bundle.putParcelable("data", data)
-                    view?.let{
+                    view?.let {
                         backStack()
                     }
                     view?.let { it1 ->
                         Navigation.findNavController(it1)
                             .navigate(R.id.action_CSCenterFragment_to_CSDetailFragment, bundle)
                     }
-
-                        val intent = Intent(context, CSDetailFragment::class.java).apply {
-                           val data = ImageData(listModel.csTitle,listModel.csContentBody,listModel.csAuthor,listModel.csContentTitle)
-                            putExtra(CS_CATEGORY_KEY,data)
-                            putExtra("CSTitle", listModel.csTitle)
-                            putExtra("CSContent", listModel.csContentBody)
-                            putExtra("CSAuthor", listModel.csAuthor)
-                            putExtra("CSContentTitle", listModel.csContentTitle)
-                            putExtra("CSid", listModel.id)
-                                           }
-                        startActivity(intent)
+//                        val intent = Intent(context, CSDetailFragment::class.java).apply {
+//                           val data = ImageData(listModel.csTitle,listModel.csContentBody,listModel.csAuthor,listModel.csContentTitle)
+//                            putExtra(CS_CATEGORY_KEY,data)
+//                            putExtra("CSTitle", listModel.csTitle)
+//                            putExtra("CSContent", listModel.csContentBody)
+//                            putExtra("CSAuthor", listModel.csAuthor)
+//                            putExtra("CSContentTitle", listModel.csContentTitle)
+//                            putExtra("CSid", listModel.id)
+//                                           }
+//                        startActivity(intent)
                 }
             }
 
@@ -76,7 +80,7 @@ class CSListFragment : BaseFragment<FragmentCsListBinding>() {
     }
 
     override fun initState() = with(viewModel) {
-//        fetchData(csCategory)
+        fetchData(csCategory)
         super.initState()
     }
 
@@ -85,9 +89,6 @@ class CSListFragment : BaseFragment<FragmentCsListBinding>() {
         super.initViews()
         binding.csRecyclerView.adapter = adapter
         binding.csRecyclerView.layoutManager = LinearLayoutManager(this@CSListFragment.context)
-
-
-
 
     }
 

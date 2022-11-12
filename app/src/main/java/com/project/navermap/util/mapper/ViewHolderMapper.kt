@@ -74,7 +74,11 @@ object ViewHolderMapper {
 
             HOME_DETAIL_ITEM_CELL -> TODO()
             HOME_MAIN_ITEM_CELL -> TODO()
-            CUSTOMER_SERVICE_CELL -> TODO()
+            CUSTOMER_SERVICE_CELL -> CSViewHolder(
+                ViewholderCsItemBinding.inflate(inflater,parent,false),
+                viewModel,
+                resourcesProvider
+            )
             LIKE_MARKET_CELL -> TODO()
             LIKE_ITEM_CELL -> TODO()
             MAP_ITEM_CELL -> TODO()

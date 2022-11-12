@@ -59,7 +59,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         Log.d("hash",keyHash)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
-            .requestEmail()
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso)
@@ -121,13 +120,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
 
     private fun setResultSignUp(){
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result ->
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK){
                 val task : Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 handleSignResult(task)
-
+            } else{
+                Toast.makeText(applicationContext,"로그인에 실패했습니다.",Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -137,8 +136,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             val account = completeTask.getResult(ApiException::class.java)
             val email = account?.email.toString()
             val photoUrl = account?.photoUrl.toString()
-
-
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             Toast.makeText(this, "$email 님 로그인되었습니다", Toast.LENGTH_LONG).show()

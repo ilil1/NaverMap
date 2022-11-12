@@ -3,8 +3,7 @@ package com.project.navermap.di.moduleComponent.singletonComponent
 import com.project.navermap.data.repository.suggest.SuggestRepositoryImpl
 import com.project.navermap.data.repository.chat.ChatRepository
 import com.project.navermap.data.repository.chat.ChatRepositoryImpl
-import com.project.navermap.data.repository.home.HomeRepository
-import com.project.navermap.data.repository.home.HomeRepositoryImpl
+import com.project.navermap.data.repository.home.*
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.map.MapApiRepositoryImpl
 import com.project.navermap.data.repository.myinfo.CSRepository
@@ -65,6 +64,14 @@ abstract class RepositoryBindModule {
         defaultCSRepository: DefaultCSRepository
     ) : CSRepository
 
+    @Binds
+    abstract fun bindHomeFirstRepository(
+        homeFirstMockRepositoryImpl: HomeFirstMockRepositoryImpl
+    ) : HomeFirstMockRepository
 
+    @Binds
+    abstract fun bindHomeSecondRepository(
+        homeSecondMockRepositoryImpl: HomeSecondMockRepositoryImpl
+    ) : HomeSecondMockRepository
 
 }
