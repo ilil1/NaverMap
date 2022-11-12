@@ -8,15 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.project.navermap.R
 import com.project.navermap.databinding.FragmentHomeBinding
+import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.model.SliderItemModel
 import com.project.navermap.domain.model.SuggestItemModel
 import com.project.navermap.domain.model.TownMarketModel
 import com.project.navermap.presentation.mainActivity.MainState
 import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.home.suggestItemDetail.SuggestItemDetailActivity
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListViewModel
+import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.SliderAdapter
+import com.project.navermap.widget.adapter.listener.RestaurantListListener
 import com.project.navermap.widget.adapter.listener.SuggestListener
 import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,34 +41,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     @Inject
     lateinit var resourcesProvider: ResourcesProvider
 
+    companion object {
+        const val HomeFragment_KEY = "HomeFragment"
+    }
+
     /**
      * Adpater를 따로 관리하는 클래스 구조 필요
      */
-    private val nearbyMarketAdapter by lazy {
-        ModelRecyclerAdapter<TownMarketModel, HomeViewModel>(
-            listOf(), viewModel, resourcesProvider,
-            object : TownMarketListener {
-                override fun onClickItem(model: TownMarketModel) {
-                    Toast.makeText(
-                        context,
-                        R.string.cannot_load_data,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        )
-    }
-
     private val suggestAdapter by lazy {
         ModelRecyclerAdapter<SuggestItemModel, HomeViewModel>(
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    Toast.makeText(
-                        context,
-                        R.string.cannot_load_data,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    startActivity(
+                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+                    )
                 }
             }
         )
@@ -74,11 +66,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    Toast.makeText(
-                        context,
-                        R.string.cannot_load_data,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    startActivity(
+                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+                    )
                 }
             }
         )
@@ -89,11 +79,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    Toast.makeText(
-                        context,
-                        R.string.cannot_load_data,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    startActivity(
+                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+                    )
                 }
             }
         )
@@ -101,23 +89,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun observeData() = with(viewModel) {
 
-        marketData.observe(viewLifecycleOwner) {
-            when (it) {
-                is HomeMainState.Uninitialized -> {}
-                is HomeMainState.Loading -> {}
-                is HomeMainState.Success<*> -> {
-                    nearbyMarketAdapter.submitList(it.modelList)
-                }
-                is HomeMainState.Error -> {
-                    Toast.makeText(
-                        context,
-                        R.string.cannot_load_data,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else -> Unit
-            }
-        }
         suggestData.observe(viewLifecycleOwner) {
             when (it) {
                 is HomeMainState.Uninitialized -> {}
@@ -216,7 +187,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         with(binding) {
             searchView.isSubmitButtonEnabled = true
-            nearbyMarketRecyclerView.adapter = nearbyMarketAdapter
             seasonRecycler.adapter = seasonAdapter
             popularRecycler.adapter = suggestAdapter
             annivalRecyclerView.adapter = annivalAdapter

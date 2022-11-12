@@ -24,9 +24,6 @@ class HomeViewModel @Inject constructor(
     private val suggestRepository: SuggestRepository
 ) : ViewModel() {
 
-    private val _marketData = MutableLiveData<HomeMainState>(HomeMainState.Uninitialized)
-    val marketData: LiveData<HomeMainState> = _marketData
-
     private val _suggestData = MutableLiveData<HomeMainState>(HomeMainState.Uninitialized)
     val suggestData: LiveData<HomeMainState> = _suggestData
 
@@ -49,7 +46,7 @@ class HomeViewModel @Inject constructor(
     fun fetchData(): Job = viewModelScope.launch {
         // 더 이상 fetchData가 initState에서 실행되지 않고 위치 정보를 불러온 뒤에
         // 실행 되므로 위치 정보를 불러왔는지 확인할 필요가 없음
-        fetchMarketData()
+        // fetchMarketData()
         //   fetchItemData()
         fetchHobbyMarket()
         fetchSeasonMarket()
@@ -91,16 +88,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchMarketData() {
-        if (marketData.value !is HomeMainState.Success<*>) {
-            _marketData.value = HomeMainState.Loading
-
-            // sorted by distance
-            _marketData.value = HomeMainState.Success(
-                modelList = homeRepository.getAllMarketList().map {
-                    it.copy(type = CellType.HOME_MAIN_MARKET_CELL)
-                }.sortedBy { it.distance }
-            )
-        }
-    }
+//    private suspend fun fetchMarketData() {
+//        if (marketData.value !is HomeMainState.Success<*>) {
+//            _marketData.value = HomeMainState.Loading
+//
+//            // sorted by distance
+//            _marketData.value = HomeMainState.Success(
+//                modelList = homeRepository.getAllMarketList().map {
+//                    it.copy(type = CellType.HOME_MAIN_MARKET_CELL)
+//                }.sortedBy { it.distance }
+//            )
+//        }
+//    }
 }

@@ -17,27 +17,35 @@
         android:theme="@style/Theme.NaverMap"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".presentation.mainActivity.home.suggestItemDetail.SuggestItemDetailActivity"
+            android:exported="true" />
+        <activity
             android:name=".presentation.mainActivity.SplashActivity"
             android:exported="true"
             android:theme="@style/Splash">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN"/>-->
-<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
-<!--            </intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".presentation.login.LoginActivity"
+        <activity
+            android:name=".presentation.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="oauth"
                     android:scheme="@string/kakao_native_key" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.login.SignUpActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".presentation.login.SignUpActivity"
+            android:exported="true" />
         <activity
             android:name=".presentation.mainActivity.chat.ChatActivity"
             android:exported="true" />
@@ -59,11 +67,12 @@
         <activity
             android:name=".presentation.mainActivity.map.SearchAddress.SearchAddressActivity"
             android:exported="true" />
-
-        <activity android:name=".presentation.mainActivity.myinfo.MyInfoActivity"
-            android:exported="true"/>
-        <activity android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".presentation.mainActivity.myinfo.MyInfoActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

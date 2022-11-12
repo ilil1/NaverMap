@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
+import com.project.navermap.data.entity.SuggestItemEntity
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ActivityStoreDetailBinding

@@ -28,13 +28,11 @@ class SuggestViewHolder(
         }
     }
 
-    override fun bindViews(model: SuggestItemModel, listener: AdapterListener) {
+    override fun bindViews(model: SuggestItemModel, listener: AdapterListener) = with(binding) {
         if (listener is SuggestListener) {
-            with(binding) {
                 root.setOnClickListener {
                     listener.onClickItem(model)
                 }
-            }
         }
     }
 }

@@ -20,8 +20,6 @@
     <string name="like_item">찜한 상품</string>
 
 
-
-
     <string name="loading">로딩 중…</string>
     <string name="review">리뷰</string>
     <string name="market_open">OPEN</string>
@@ -45,7 +43,6 @@
     <string name="cs_review_type">리뷰관리</string>
     <string name="cs_use_type">이용문의</string>
     <string name="cs_etc_type">기타</string>
-
 
 
     <string name="home_item_stock">%1$d개 주문 가능</string>

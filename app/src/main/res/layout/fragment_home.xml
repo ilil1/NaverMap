@@ -122,46 +122,6 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/nearbyMarketTextView"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:text="@string/nearly"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMoreTextView"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/nearbyMarketTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/nearbyMarketTextView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/nearbyMarketRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/nearbyMarketTextView"
-                app:spanCount="1" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
-
-            <TextView
                 android:id="@+id/annival"
                 android:layout_width="145dp"
                 android:layout_height="wrap_content"
