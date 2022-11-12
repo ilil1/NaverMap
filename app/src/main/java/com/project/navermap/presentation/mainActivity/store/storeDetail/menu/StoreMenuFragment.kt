@@ -1,26 +1,17 @@
 package com.project.navermap.presentation.mainActivity.store.storeDetail.menu
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.navermap.R
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.databinding.FragmentChatBinding
 import com.project.navermap.databinding.FragmentStoreMarketMenuBinding
 import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.presentation.base.BaseFragment
-import com.project.navermap.presentation.mainActivity.map.mapFragment.MapState
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.StoreDetailItemListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint

@@ -2,17 +2,14 @@ package com.project.navermap.presentation.mainActivity.store.restaurant
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
-import com.google.android.material.chip.Chip
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.databinding.FragmentListBinding
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
 import com.project.navermap.presentation.base.BaseFragment
-import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.RestaurantListListener
-import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Provider

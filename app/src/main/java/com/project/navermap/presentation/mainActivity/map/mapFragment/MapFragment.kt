@@ -6,13 +6,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.google.gson.Gson
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
-import com.project.navermap.*
 import com.project.navermap.R
 import com.project.navermap.databinding.FragmentMapBinding
 import com.project.navermap.domain.model.FoodModel
@@ -30,9 +28,6 @@ import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 import javax.inject.Inject
 import javax.inject.Provider
 

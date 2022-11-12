@@ -7,7 +7,6 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-
 class MapApplication : Application(){
 
     override fun onCreate() {

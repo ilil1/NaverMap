@@ -5,15 +5,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.project.navermap.MapApplication
 import com.project.navermap.domain.model.CellType
 import com.project.navermap.domain.model.Model
 import com.project.navermap.util.mapper.ViewHolderMapper
-import com.project.navermap.util.provider.ResourcesProviderImpl
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.listener.AdapterListener
 import com.project.navermap.widget.adapter.viewholder.ModelViewHolder
-import javax.inject.Inject
 
 
 open class ModelRecyclerAdapter<M : Model, VM : ViewModel> (

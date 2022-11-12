@@ -40,4 +40,7 @@ class GetShopListUseCaseImpl(
             ShopResult.Success
         }
     }
+
+
+
 }
