@@ -2,67 +2,133 @@ package com.project.navermap.data.repository.home
 
 import com.project.navermap.domain.model.CellType
 import com.project.navermap.domain.model.FoodModel
+import com.project.navermap.domain.model.RestaurantModel
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import javax.inject.Inject
 
 class HomeFirstMockRepositoryImpl @Inject constructor(
 
 ) : HomeFirstMockRepository {
 
-    override fun getAllData(): List<FoodModel> {
+//    id = 4,
+//    type = CellType.HOME_DETAIL_ITEM_CELL,
+//    restaurantTitle = "동산동 노래레슨",
+//    distance = 1.4f,
+//    deliveryTimeRange = Pair(10,15),
+//    grade = 32f,
+//    reviewCount = 12,
+//    deliveryTipRange = Pair(2000,5000),
+//    latitude = 2.4,
+//    longitude = 3.6,
+//    isMarketOpen = true,
+//    restaurantInfoId = 0,
+//    restaurantCategory = RestaurantCategory.ALL,
+//    restaurantImageUrl = "",
+//    restaurantTelNumber = "0"
+
+    override fun getAllData(): List<RestaurantModel> {
         val mockList = listOf(
-            FoodModel(
+            RestaurantModel(
                 id = 0,
                 type = CellType.HOME_DETAIL_ITEM_CELL,
-                title = "동성로 필터",
-                description = "필터청소업체",
-                price = "40000 ~ 70000",
-                imageUrl = "",
-                restaurantId = 0
+                restaurantTitle = "동성로 필터",
+                distance = 1.4f,
+                deliveryTimeRange = Pair(10,15),
+                grade = 32f,
+                reviewCount = 12,
+                deliveryTipRange = Pair(2000,5000),
+                latitude = 2.4,
+                longitude = 3.6,
+                isMarketOpen = true,
+                restaurantInfoId = 0,
+                restaurantCategory = RestaurantCategory.ALL,
+                restaurantImageUrl = "",
+                restaurantTelNumber = "0"
             ),
-            FoodModel(
+            RestaurantModel(
                 id = 1,
                 type = CellType.HOME_DETAIL_ITEM_CELL,
-                title = "중구 필터",
-                description = "필터청소업체",
-                price = "20000 ~ 50000",
-                imageUrl = "",
-                restaurantId = 1
+                restaurantTitle = "중구 필터",
+                distance = 1.4f,
+                deliveryTimeRange = Pair(10,15),
+                grade = 32f,
+                reviewCount = 12,
+                deliveryTipRange = Pair(2000,5000),
+                latitude = 2.4,
+                longitude = 3.6,
+                isMarketOpen = true,
+                restaurantInfoId = 0,
+                restaurantCategory = RestaurantCategory.ALL,
+                restaurantImageUrl = "",
+                restaurantTelNumber = "0"
             ),
-            FoodModel(
+            RestaurantModel(
                 id = 2,
                 type = CellType.HOME_DETAIL_ITEM_CELL,
-                title = "영남대 필터",
-                description = "필터청소업체",
-                price = "30000 ~ 50000",
-                imageUrl = "",
-                restaurantId = 2
+                restaurantTitle = "영남대 필터",
+                distance = 1.7f,
+                deliveryTimeRange = Pair(10,15),
+                grade = 1f,
+                reviewCount = 2,
+                deliveryTipRange = Pair(2000,5000),
+                latitude = 2.4,
+                longitude = 3.6,
+                isMarketOpen = true,
+                restaurantInfoId = 0,
+                restaurantCategory = RestaurantCategory.ALL,
+                restaurantImageUrl = "",
+                restaurantTelNumber = "0"
             ),
-            FoodModel(
+            RestaurantModel(
                 id = 3,
                 type = CellType.HOME_DETAIL_ITEM_CELL,
-                title = "경산 필터",
-                description = "필터청소업체",
-                price = "40000 ~ 59000",
-                imageUrl = "",
-                restaurantId = 3
+                restaurantTitle = "경산 필터",
+                distance = 1.4f,
+                deliveryTimeRange = Pair(10,15),
+                grade = 32f,
+                reviewCount = 12,
+                deliveryTipRange = Pair(2000,5000),
+                latitude = 2.4,
+                longitude = 3.6,
+                isMarketOpen = true,
+                restaurantInfoId = 0,
+                restaurantCategory = RestaurantCategory.ALL,
+                restaurantImageUrl = "",
+                restaurantTelNumber = "0"
             ),
-            FoodModel(
+            RestaurantModel(
                 id = 4,
                 type = CellType.HOME_DETAIL_ITEM_CELL,
-                title = "복현동 필터",
-                description = "필터청소업체",
-                price = "60000 ~ 90000",
-                imageUrl = "",
-                restaurantId = 4
+                restaurantTitle = "복현동 필터",
+                distance = 1.4f,
+                deliveryTimeRange = Pair(10,15),
+                grade = 32f,
+                reviewCount = 12,
+                deliveryTipRange = Pair(2000,5000),
+                latitude = 2.4,
+                longitude = 3.6,
+                isMarketOpen = true,
+                restaurantInfoId = 0,
+                restaurantCategory = RestaurantCategory.ALL,
+                restaurantImageUrl = "",
+                restaurantTelNumber = "0"
             ),
-            FoodModel(
+            RestaurantModel(
                 id = 5,
                 type = CellType.HOME_DETAIL_ITEM_CELL,
-                title = "복현동 필터",
-                description = "필터청소업체",
-                price = "55000 ~ 65000",
-                imageUrl = "",
-                restaurantId = 5
+                restaurantTitle = "복현동 필터",
+                distance = 1.4f,
+                deliveryTimeRange = Pair(10,15),
+                grade = 32f,
+                reviewCount = 12,
+                deliveryTipRange = Pair(2000,5000),
+                latitude = 2.4,
+                longitude = 3.6,
+                isMarketOpen = true,
+                restaurantInfoId = 0,
+                restaurantCategory = RestaurantCategory.ALL,
+                restaurantImageUrl = "",
+                restaurantTelNumber = "0"
             )
 
         )
