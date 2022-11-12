@@ -6,17 +6,24 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import com.project.navermap.data.entity.firebase.ReviewEntity
 import com.project.navermap.presentation.mainActivity.myinfo.MyInfoFragment.Companion.TAG
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ReviewRepositoryImpl @Inject constructor(
   private val database : FirebaseDatabase
 ) :ReviewRepository {
+
+    private val nextId = AtomicLong(0L)
 
     @Volatile
     private lateinit var ref: DatabaseReference
@@ -26,7 +33,10 @@ class ReviewRepositoryImpl @Inject constructor(
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                trySend(snapshot.getValue<List<ReviewEntity>>() ?: emptyList())
+                val reviews = (snapshot.getValue<List<ReviewEntity>>() ?: emptyList()).also {
+                    nextId.set(it.size.toLong())
+                }
+                trySend(reviews)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -36,5 +46,18 @@ class ReviewRepositoryImpl @Inject constructor(
         })
 
         awaitClose()
+    }
+
+    override fun writeReviewData(marketId: String, title : String, content : String, rating : Int): Flow<ReviewEntity> = callbackFlow {
+        val database = database.getReference("/reviews/${marketId}")
+        val reviewContent = ReviewEntity(
+            id = nextId.getAndIncrement(),
+            marketId = marketId.toLong(),
+            title = title,
+            rating = rating,
+        )
+        database.setValue(reviewContent)
+        Log.d(TAG, "reviewContent: $reviewContent")
+
     }
 }
