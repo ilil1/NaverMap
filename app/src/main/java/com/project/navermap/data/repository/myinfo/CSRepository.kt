@@ -5,5 +5,5 @@ import com.project.navermap.domain.model.category.CSCategory
 
 
 interface CSRepository {
-    suspend fun findCsByCategory(csCategory: CSCategory) : List<CSModel>
+     fun findCsByCategory(csCategory: CSCategory) : List<CSModel>
 }

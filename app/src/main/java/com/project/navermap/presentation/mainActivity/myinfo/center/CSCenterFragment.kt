@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
 
-    lateinit var windowManager : WindowManager.LayoutParams
+    lateinit var windowManager: WindowManager.LayoutParams
 
     override fun getViewBinding(): FragmentCsCenterBinding =
         FragmentCsCenterBinding.inflate(layoutInflater)
@@ -32,7 +32,7 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
         binding.questionCenter.setOnClickListener {
             view?.let { it1 ->
                 Navigation.findNavController(it1)
-                    .navigate(R.id.action_CSDetailFragment_to_CSFragment)
+                    .navigate(R.id.action_CSCenterFragment_to_CSFragment)
             }
 
         }
@@ -44,14 +44,12 @@ class CSCenterFragment : BaseFragment<FragmentCsCenterBinding>() {
         binding.pollution.setOnClickListener {
             permissionCheck_food()
         }
-
         binding.emailCenter.setOnClickListener {
             view?.let { it1 ->
                 Navigation.findNavController(it1)
                     .navigate(R.id.action_CSCenterFragment_to_emailFragment)
             }
         }
-
         binding.back.setOnClickListener {
             backMove()
 

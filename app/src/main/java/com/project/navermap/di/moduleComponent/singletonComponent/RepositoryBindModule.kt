@@ -1,12 +1,14 @@
 package com.project.navermap.di.moduleComponent.singletonComponent
 
-import com.example.YUmarket.data.repository.suggest.SuggestRepositoryImpl
+import com.project.navermap.data.repository.suggest.SuggestRepositoryImpl
 import com.project.navermap.data.repository.chat.ChatRepository
 import com.project.navermap.data.repository.chat.ChatRepositoryImpl
 import com.project.navermap.data.repository.home.HomeRepository
 import com.project.navermap.data.repository.home.HomeRepositoryImpl
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.map.MapApiRepositoryImpl
+import com.project.navermap.data.repository.myinfo.CSRepository
+import com.project.navermap.data.repository.myinfo.DefaultCSRepository
 import com.project.navermap.data.repository.myinfo.ProfileRepository
 import com.project.navermap.data.repository.myinfo.ProfileRepositoryImpl
 import com.project.navermap.data.repository.restaurant.RestaurantRepository
@@ -22,6 +24,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryBindModule {
+
     @Binds
     abstract fun bindFoodApiRepository(
         restaurantRepositoryImpl: RestaurantRepositoryImpl
@@ -31,8 +34,6 @@ abstract class RepositoryBindModule {
     abstract fun profileRepository(
       profileRepositoryImpl: ProfileRepositoryImpl
     ) : ProfileRepository
-    
-
 
     @Binds
     abstract fun bindSuggestRepository(
@@ -58,4 +59,12 @@ abstract class RepositoryBindModule {
     abstract fun bindShopApiRepository(
         shopApiRepositoryImpl: ShopApiRepositoryImpl
     ): ShopApiRepository
+
+    @Binds
+    abstract fun bindCsRepository(
+        defaultCSRepository: DefaultCSRepository
+    ) : CSRepository
+
+
+
 }

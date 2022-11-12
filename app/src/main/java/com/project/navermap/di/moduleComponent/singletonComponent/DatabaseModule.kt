@@ -3,7 +3,9 @@ package com.project.navermap.di.moduleComponent.singletonComponent
 import android.content.Context
 import androidx.room.Room
 import com.project.navermap.data.db.ImageDB
+import com.project.navermap.data.db.LikeDB
 import com.project.navermap.data.db.MapDB
+import com.project.navermap.data.repository.login.UserNameRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +33,19 @@ object DatabaseModule {
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()
+
+    @Provides
+    @Singleton
+    fun provideLikeDB(@ApplicationContext context : Context): LikeDB =
+        Room.databaseBuilder(context, LikeDB::class.java,"Like.db")
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
+
+
+    @Provides
+    @Singleton
+    fun ProvideDataStoreRepository(@ApplicationContext context : Context) = UserNameRepository(context)
+
 
 }

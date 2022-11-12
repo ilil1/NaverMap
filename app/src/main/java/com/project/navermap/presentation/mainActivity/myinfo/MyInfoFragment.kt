@@ -40,7 +40,7 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
     private lateinit var bitmap: Bitmap
     private lateinit var getResultImage: ActivityResultLauncher<Intent>
     private lateinit var sharedManager : com.project.navermap.util.PreferenceManager
-
+    private val userName = arguments?.getString("data")
 
 
 //    private val viewModel by viewModels<MyInfoViewModel>()
@@ -116,6 +116,7 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
 //            binding.profileImage.setImageBitmap(viewModel.imageData)
 //
 //        }
+        binding.nameText.text = userName
 
         binding.addressChagneTextview.setOnClickListener { startActivity(Intent(requireActivity(),MyLocationActivity::class.java)) }
 
@@ -135,6 +136,16 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
         binding.personalTextview.setOnClickListener { openPersonal() }
 
         binding.back.setOnClickListener { back() }
+
+        binding.heart.setOnClickListener { moveLike() }
+
+        binding.heartText.setOnClickListener { moveLike() }
+
+        binding.categoryText.setOnClickListener { Toast.makeText(context,"업데이트 될 예정입니다.",Toast.LENGTH_SHORT).show() }
+        binding.category.setOnClickListener {Toast.makeText(context,"업데이트 될 예정입니다.",Toast.LENGTH_SHORT).show()  }
+        binding.reviewTextView.setOnClickListener { Toast.makeText(context,"업데이트 될 예정입니다.",Toast.LENGTH_SHORT).show() }
+        binding.orderReview.setOnClickListener { Toast.makeText(context,"업데이트 될 예정입니다.",Toast.LENGTH_SHORT).show() }
+        binding.imageOrder.setOnClickListener { Toast.makeText(context,"업데이트 될 예정입니다.",Toast.LENGTH_SHORT).show() }
 
 
 //        binding.heart.setOnClickListener { openHeart() }
@@ -178,10 +189,12 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
 
     }
 
-
-
-
-
+    private fun moveLike(){
+        view?.let { it1 ->
+            Navigation.findNavController(it1)
+                .navigate(R.id.action_myInfoFragment_to_likeFragment)
+        }
+    }
 
     private fun loadImage() {
 

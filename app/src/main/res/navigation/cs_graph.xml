@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_myInfoFragment_to_personalFragment"
             app:destination="@id/personalFragment" />
+        <action
+            android:id="@+id/action_myInfoFragment_to_likeFragment"
+            app:destination="@id/likeFragment" />
 
     </fragment>
     <fragment
@@ -119,6 +122,15 @@
             app:popUpToInclusive="true"
             android:id="@+id/action_CSDetailFragment_to_CSFragment"
             app:destination="@id/CSFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/likeFragment"
+        tools:layout="@layout/fragment_like"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.like.LikeFragment"
+        android:label="LikeFragment" >
+        <action
+            android:id="@+id/action_likeFragment_to_myInfoFragment"
+            app:destination="@id/myInfoFragment" />
     </fragment>
 
 </navigation>

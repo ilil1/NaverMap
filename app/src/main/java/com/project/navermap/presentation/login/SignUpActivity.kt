@@ -10,6 +10,7 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.project.navermap.R
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
 
+    private val viewModel : SignUpViewModel by viewModels()
 
     private var checkEye =0
     var number: String = ""
@@ -170,6 +172,10 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
 
 
     private fun performRegister() {
+        viewModel.name.value = binding.editname.text.toString()
+        viewModel.saveData()
+        viewModel.retrieveDate()
+
         val email = binding.editEmail.text.toString()
         val password = binding.editpassword.text.toString()
         val username = binding.editname.text.toString()

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity
+@Entity(tableName = "Like")
 data class LikeMarketEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
