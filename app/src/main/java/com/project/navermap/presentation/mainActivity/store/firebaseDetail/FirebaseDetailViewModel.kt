@@ -22,18 +22,18 @@ class FirebaseDetailViewModel @AssistedInject constructor(
      */
     @AssistedFactory
     interface FirebaseDetailAssistedFactory {
-        fun create(restaurantEntity: RestaurantEntity
+        fun create(firebaseEntity: FirebaseEntity
         ): FirebaseDetailViewModel
     }
 
     companion object {
         fun provideFactory(
             assistedFactory: FirebaseDetailAssistedFactory,
-            restaurantEntity: RestaurantEntity
+            firebaseEntity: FirebaseEntity
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(restaurantEntity) as T
+                return assistedFactory.create(firebaseEntity) as T
             }
         }
     }

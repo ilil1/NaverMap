@@ -95,8 +95,13 @@ object ViewHolderMapper {
                 resourcesProvider
             )
 
-            FIREBASE_CELL -> TownMarketViewHolder(
-                ViewholderTownMarketBinding.inflate(inflater),
+            FIREBASE_CELL -> FirebaseViewHolder(
+                ViewholderFirebaseBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
+            REVIEW_CELL -> ReviewItemViewHolder(
+                ReviewItemBinding.inflate(inflater),
                 viewModel,
                 resourcesProvider
             )

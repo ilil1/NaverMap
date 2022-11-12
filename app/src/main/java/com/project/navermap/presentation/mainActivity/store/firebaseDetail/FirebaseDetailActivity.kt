@@ -43,7 +43,7 @@ class FirebaseDetailActivity : AppCompatActivity() {
     val viewModel by viewModels<FirebaseDetailViewModel> {
         FirebaseDetailViewModel.provideFactory(
             viewModelFactory,
-            restaurantEntity = intent.getParcelableExtra(StoreFragment.StoreFragment_KEY)!!
+            firebaseEntity = intent.getParcelableExtra(RestaurantListFragment.RestaurantListFragment_KEY)!!
         )
     }
 
