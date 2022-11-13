@@ -13,6 +13,7 @@ import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.databinding.ActivityFirebaseDetailBinding
 import com.project.navermap.databinding.ActivityStoreDetailBinding
 import com.project.navermap.extensions.load
+import com.project.navermap.presentation.mainActivity.store.FirebaseReviewFragment
 import com.project.navermap.presentation.mainActivity.store.StoreFragment
 import com.project.navermap.presentation.mainActivity.store.firebaseDetail.menu.FirebaseMenuFragment
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListFragment
@@ -81,7 +82,7 @@ class FirebaseDetailActivity : AppCompatActivity() {
             this@FirebaseDetailActivity,
             listOf(
                 FirebaseMenuFragment.newInstance(state.restaurantId),
-                //StoreReviewFragment.newInstance(state)
+                FirebaseReviewFragment.newInstance(state.restaurantId.toString())
             )
         )
         val storeMarketDetailCategory = StoreDetailCategory.values()
