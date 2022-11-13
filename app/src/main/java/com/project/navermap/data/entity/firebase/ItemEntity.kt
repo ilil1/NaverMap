@@ -19,7 +19,7 @@ data class ItemEntity(
         name = name,
         originalPrice = price,
         discountedPrice = discountedPrice,
-        discountRatio = (price - discountedPrice) / price,
+        discountRatio = (price - discountedPrice) * 100 / price,
         imageUrl = imageUrl
     )
 }

@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:background="@color/base">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/radius"
-                app:iconifiedByDefault="false"
-                app:queryHint="검색어를 입력해주세요" />
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:id="@+id/searchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="15dp"-->
+<!--                android:background="@drawable/radius"-->
+<!--                app:iconifiedByDefault="false"-->
+<!--                app:queryHint="검색어를 입력해주세요" />-->
 
         </LinearLayout>
 

@@ -186,7 +186,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         })
 
         with(binding) {
-            searchView.isSubmitButtonEnabled = true
+            //searchView.isSubmitButtonEnabled = true
             seasonRecycler.adapter = seasonAdapter
             popularRecycler.adapter = suggestAdapter
             annivalRecyclerView.adapter = annivalAdapter

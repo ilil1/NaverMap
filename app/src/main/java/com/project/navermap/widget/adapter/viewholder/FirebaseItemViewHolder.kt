@@ -36,7 +36,7 @@ class FirebaseItemViewHolder(
             itemNameText.text = model.name // data
             originPriceTextView.text = model.originalPrice.toString()
 //                resourcesProvider.getString(R.string.home_item_price_format, model.originalPrice)
-            disCountPercentTextView.text = model.discountedPrice.toString()
+            disCountPercentTextView.text = "${model.discountRatio}%"
 //                resourcesProvider.getString(
 //                R.string.home_item_discount_percent_format,
 //                disCountPercent,

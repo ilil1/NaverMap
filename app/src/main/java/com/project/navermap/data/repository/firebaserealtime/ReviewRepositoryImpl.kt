@@ -53,8 +53,8 @@ class ReviewRepositoryImpl @Inject constructor(
     override suspend fun writeReviewData(marketId: String, title: String, content: String, rating: Int) = withContext<Unit>(ioDispatcher) {
         val reviewContent = ReviewEntity(
             id = nextId.getAndIncrement(),
-            marketId = marketId.toLong(),
             title = title,
+            content = content,
             rating = rating,
         )
         ref.child(reviewContent.id.toString()).setValue(reviewContent)

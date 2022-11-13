@@ -31,11 +31,11 @@ class FirebaseViewHolder(
             marketImageView.load(model.restaurantImageUrl, 16f)
             marketNameText.text = model.restaurantTitle
             //distanceTextView.text = model.distance.toString()+"km"
-            stockTextView.text = "2개 상품 판매중"
-            likeCountTextView.text = "1"
-            reviewCountTextView.text = "1"
-            likeTextView.text = resourcesProvider.getString(R.string.like)
-            reviewTextView.text = resourcesProvider.getString(R.string.review)
+            reviewItemRatingbar.rating = model.grade
+            //likeCountTextView.text = "1"
+            //reviewCountTextView.text = "1"
+            //likeTextView.text = resourcesProvider.getString(R.string.like)
+            //reviewTextView.text = resourcesProvider.getString(R.string.review)
 
             when(model.isMarketOpen) {
                 true -> marketOpenStatusView.apply {

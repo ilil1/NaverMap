@@ -98,7 +98,9 @@
         <entry key="app/src/main/res/layout/fragment_suggest_item_review.xml" value="0.1" />
         <entry key="app/src/main/res/layout/review_item.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/viewholder_firebase.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/viewholder_firebase_item.xml" value="0.375" />
         <entry key="app/src/main/res/layout/viewholder_home_item.xml" value="0.1921875" />
+        <entry key="app/src/main/res/layout/viewholder_map_viewpager.xml" value="0.25" />
         <entry key="app/src/main/res/layout/viewholder_restaurant.xml" value="0.375" />
         <entry key="app/src/main/res/layout/viewholder_sale_item.xml" value="0.1921875" />
         <entry key="app/src/main/res/layout/viewholder_town_market.xml" value="0.335" />
