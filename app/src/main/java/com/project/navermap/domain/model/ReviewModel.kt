@@ -14,9 +14,9 @@ data class ReviewModel(
     val reviewImages: List<String>
 ) : Model(id, type){
 
-    override fun isTheSame(item: Model): Boolean = if (item is ReviewModel) {
-        super.isTheSame(item) && item.reviewid == this.reviewid
-    } else {
-        false
-    }
+//    override fun isTheSame(item: Model): Boolean = if (item is ReviewModel) {
+//        super.isTheSame(item) && item.reviewid == this.reviewid
+//    } else {
+//        false
+//    }
 }

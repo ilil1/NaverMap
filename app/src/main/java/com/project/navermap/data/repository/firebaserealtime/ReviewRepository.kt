@@ -6,6 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ReviewRepository {
 
     fun getReviewData(marketid : String) : Flow<List<ReviewEntity>>
-
-    fun writeReviewData(marketId: String, title : String, content : String, rating : Int) : Flow<ReviewEntity>
+    suspend fun writeReviewData(marketId: String, title: String, content: String, rating: Int)
 }

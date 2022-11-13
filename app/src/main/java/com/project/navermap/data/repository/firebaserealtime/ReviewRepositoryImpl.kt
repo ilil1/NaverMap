@@ -6,21 +6,23 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
-import com.google.firebase.ktx.Firebase
 import com.project.navermap.data.entity.firebase.ReviewEntity
+import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import com.project.navermap.presentation.mainActivity.myinfo.MyInfoFragment.Companion.TAG
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ReviewRepositoryImpl @Inject constructor(
-  private val database : FirebaseDatabase
+  private val database : FirebaseDatabase,
+ @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) :ReviewRepository {
 
     private val nextId = AtomicLong(0L)
@@ -48,16 +50,14 @@ class ReviewRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
-    override fun writeReviewData(marketId: String, title : String, content : String, rating : Int): Flow<ReviewEntity> = callbackFlow {
-        val database = database.getReference("/reviews/${marketId}")
+    override suspend fun writeReviewData(marketId: String, title: String, content: String, rating: Int) = withContext<Unit>(ioDispatcher) {
         val reviewContent = ReviewEntity(
             id = nextId.getAndIncrement(),
             marketId = marketId.toLong(),
             title = title,
             rating = rating,
         )
-        database.setValue(reviewContent)
+        ref.child(reviewContent.id.toString()).setValue(reviewContent)
         Log.d(TAG, "reviewContent: $reviewContent")
-
     }
 }
