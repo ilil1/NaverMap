@@ -3,10 +3,7 @@ package com.project.navermap.di.moduleComponent.singletonComponent
 import com.project.navermap.data.repository.suggest.SuggestRepositoryImpl
 import com.project.navermap.data.repository.chat.ChatRepository
 import com.project.navermap.data.repository.chat.ChatRepositoryImpl
-import com.project.navermap.data.repository.firebaserealtime.ReviewRepository
-import com.project.navermap.data.repository.firebaserealtime.ReviewRepositoryImpl
-import com.project.navermap.data.repository.firebaserealtime.firebaseRepository
-import com.project.navermap.data.repository.firebaserealtime.firebaseRepositoryImpl
+import com.project.navermap.data.repository.firebaserealtime.*
 import com.project.navermap.data.repository.home.*
 import com.project.navermap.data.repository.map.MapApiRepository
 import com.project.navermap.data.repository.map.MapApiRepositoryImpl
@@ -88,5 +85,8 @@ abstract class RepositoryBindModule {
         reviewRepositoryImpl: ReviewRepositoryImpl
     ) : ReviewRepository
 
-
+    @Binds
+    abstract fun bindItemRepository(
+        repository: FirebaseItemRepository
+    ): ItemRepository
 }

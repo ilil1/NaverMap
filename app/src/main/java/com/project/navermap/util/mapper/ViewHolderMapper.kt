@@ -105,6 +105,11 @@ object ViewHolderMapper {
                 viewModel,
                 resourcesProvider
             )
+            FIREBASE_ITEM_CELL -> FirebaseItemViewHolder(
+                ViewholderFirebaseItemBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
         }
         return viewHolder as ModelViewHolder<M>
     }

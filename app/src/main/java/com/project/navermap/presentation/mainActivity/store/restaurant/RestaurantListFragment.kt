@@ -10,6 +10,7 @@ import com.project.navermap.domain.model.FirebaseModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.mainActivity.store.firebaseDetail.FirebaseDetailActivity
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.FirebaseListener
@@ -57,9 +58,9 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : FirebaseListener {
                 override fun onClickItem(model: FirebaseModel) {
-//                    startActivity(
-//                        StoreDetailActivity.newIntent(requireContext(), model.toEntity())
-//                    )
+                    startActivity(
+                        FirebaseDetailActivity.newIntent(requireContext(), model.toEntity())
+                    )
                 }
             })
     }
