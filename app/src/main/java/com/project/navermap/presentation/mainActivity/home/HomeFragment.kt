@@ -54,7 +54,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
                     startActivity(
-                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+                        SuggestItemDetailActivity.newIntent(requireContext(), model.toEntity())
                     )
                 }
             }
