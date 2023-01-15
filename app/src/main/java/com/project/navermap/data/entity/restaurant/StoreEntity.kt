@@ -22,19 +22,4 @@ data class StoreEntity(
     val restaurantTelNumber: String?,
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
-) : Parcelable {
-    fun toRestaurantModel() = StoreModel(
-        id = id,
-        storeInfoId = storeInfoId,
-        storeCategory = storeCategory,
-        storeTitle = storeTitle,
-        storeImageUrl = storeImageUrl,
-        grade = grade,
-        reviewCount = reviewCount,
-        deliveryTimeRange = deliveryTimeRange,
-        deliveryTipRange = deliveryTipRange,
-        storeTelNumber = restaurantTelNumber,
-        latitude = latitude,
-        longitude = longitude
-    )
-}
+) : Parcelable
