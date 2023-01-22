@@ -7,7 +7,9 @@ import com.project.navermap.domain.model.StoreModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.mainActivity.store.restaurant.StoreCategory
 import kotlinx.parcelize.Parcelize
-@Parcelize
+
+// TODO: Entity에 붙어있는 프레임워크는 제거하고 model을 통해서 데이터를 이동하게 해야함 
+//@Parcelize
 data class StoreEntity(
     val id: Long,
     val storeInfoId: Long,//api호출용도
@@ -22,4 +24,5 @@ data class StoreEntity(
     val restaurantTelNumber: String?,
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
-) : Parcelable
+)
+//: Parcelable
