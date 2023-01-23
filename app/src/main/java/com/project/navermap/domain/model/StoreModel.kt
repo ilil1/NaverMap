@@ -1,10 +1,13 @@
 package com.project.navermap.domain.model
 
+import android.os.Parcelable
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.data.entity.restaurant.StoreEntity
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.mainActivity.store.restaurant.StoreCategory
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class StoreModel(
     override val id: Long,
     override val type: CellType = CellType.STORE_CELL,
@@ -19,17 +22,4 @@ data class StoreModel(
     val storeTelNumber: String?,
     var latitude: Double = 0.0,
     var longitude: Double = 0.0
-) : Model(id, type) {
-    fun toEntity() = StoreEntity(
-        id,
-        storeInfoId,
-        storeCategory,
-        storeTitle,
-        storeImageUrl,
-        grade,
-        reviewCount,
-        deliveryTimeRange,
-        deliveryTipRange,
-        storeTelNumber
-    )
-}
+) : Model(id, type) , Parcelable

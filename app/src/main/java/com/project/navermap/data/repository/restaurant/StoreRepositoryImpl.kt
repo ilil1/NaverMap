@@ -36,6 +36,7 @@ class StoreRepositoryImpl @Inject constructor(
             searchtypCd = "A",
             reqCoordType = "WGS84GEO"
         )
+
         if (response.isSuccessful) {
             response.body()?.searchPoiInfo?.pois?.poi?.mapIndexed { index, poi ->
                 StoreEntity(
@@ -61,6 +62,4 @@ class StoreRepositoryImpl @Inject constructor(
     override suspend fun getItemByStoreId(id: Long): List<StoreModel> {
         TODO("Not yet implemented")
     }
-
-
 }
