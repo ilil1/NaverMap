@@ -1,5 +1,6 @@
 package com.project.navermap.data.repository.restaurant
 
+import com.project.navermap.data.datasource.restaurant.RestaurantDataSource
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.mapper.toRestaurantEntity
 import com.project.navermap.data.mapper.toRestaurantModel
@@ -12,11 +13,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+//repository에서 Entity를 Model로 변환해서 가져온다.
 class RestaurantRepositoryImpl @Inject constructor(
+    private val restaurantDataSource : RestaurantDataSource,
     private val mapDataSource: MapDataSource,
-    private val foodApiService: FoodApiService,
-    private val resourcesProvider: ResourcesProvider,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val resourcesProvider: ResourcesProvider
 ) : RestaurantRepository {
 
     override suspend fun getList(
@@ -32,14 +33,8 @@ class RestaurantRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getItemsByRestaurantId(id: Long) = withContext(ioDispatcher) {
-        val response = foodApiService.getRestaurantFoods(id)
-        if (response.isSuccessful) {
-            response.body()!!.map {
-                it.toModel(id)
-            }
-        } else {
-            emptyList()
+    override suspend fun getItemsByRestaurantId(id: Long) =
+        restaurantDataSource.getItemsByRestaurantId(id).map {
+            it.toModel(id)
         }
-    }
 }
