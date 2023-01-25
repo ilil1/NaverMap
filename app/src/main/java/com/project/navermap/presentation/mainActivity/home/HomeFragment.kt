@@ -53,12 +53,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    startActivity(
-                        SuggestItemDetailActivity.newIntent(requireContext(), model.toEntity())
-                    )
+//                    startActivity(
+//                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+//                    )
+                    test()
                 }
             }
         )
+    }
+
+    fun test() {
+        Toast.makeText(requireContext(), "?", Toast.LENGTH_LONG).show()
     }
 
     private val annivalAdapter by lazy {
@@ -66,9 +71,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    startActivity(
-                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
-                    )
+//                    startActivity(
+//                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+//                    )
                 }
             }
         )
@@ -79,9 +84,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-                    startActivity(
-                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
-                    )
+//                    startActivity(
+//                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+//                    )
                 }
             }
         )

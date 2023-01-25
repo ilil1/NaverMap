@@ -12,6 +12,7 @@ class RestaurantDataSourceImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : RestaurantDataSource {
 
+    //flow 를 통해서 entity 를 반환 받는다.
     override suspend fun getItemsByRestaurantId(id: Long) = withContext(ioDispatcher) {
         val response = foodApiService.getRestaurantFoods(id)
         if (response.isSuccessful) {

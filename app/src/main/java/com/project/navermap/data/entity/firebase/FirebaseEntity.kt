@@ -17,7 +17,7 @@ data class FirebaseEntity(
     var restaurantTelNumber: String? = null,
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
-    var isMarketOpen: Boolean = false,
+    var isMarketOpen: Boolean = true,
 ) : Parcelable {
     fun toModel() = FirebaseModel(
         restaurantId = restaurantId,

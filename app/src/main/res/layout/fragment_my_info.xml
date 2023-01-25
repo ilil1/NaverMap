@@ -82,7 +82,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="40dp"
                     android:layout_toEndOf="@+id/profile_image"
-                    android:hint="NickName"
+                    android:text="test999"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@id/profile_image"

@@ -9,6 +9,8 @@ import com.project.navermap.presentation.mainActivity.store.restaurant.Restautan
 class GetRestaurantListUseCase(
     private val restaurantRepository: RestaurantRepository,
 ) {
+
+    //상태관리와 함께 반환 해준다.
     suspend fun fetchData(
         restaurantCategory: RestaurantCategory,
         locationEntity: LocationEntity,

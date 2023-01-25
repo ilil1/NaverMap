@@ -116,7 +116,7 @@ class MyInfoFragment: BaseFragment<FragmentMyInfoBinding>() {
 //            binding.profileImage.setImageBitmap(viewModel.imageData)
 //
 //        }
-        binding.nameText.text = userName
+        binding.nameText.text = "test999"
 
         binding.addressChagneTextview.setOnClickListener { startActivity(Intent(requireActivity(),MyLocationActivity::class.java)) }
 

@@ -5,7 +5,9 @@ import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class HomeFirstMockRepositoryImpl @Inject constructor(
 
 ) : HomeFirstMockRepository {

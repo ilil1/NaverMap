@@ -13,13 +13,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-//repository에서 Entity를 Model로 변환해서 가져온다.
+//repository 에서 Entity 를 Model 로 변환해서 가져온다.
 class RestaurantRepositoryImpl @Inject constructor(
     private val restaurantDataSource : RestaurantDataSource,
     private val mapDataSource: MapDataSource,
     private val resourcesProvider: ResourcesProvider
 ) : RestaurantRepository {
 
+    //entity 를 반환 받은 다음에 여기서는 Model 를 return 만 해준다.
     override suspend fun getList(
         restaurantCategory: RestaurantCategory,
         locationLatLngEntity: LocationEntity
