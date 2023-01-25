@@ -10,7 +10,7 @@ import com.project.navermap.presentation.mainActivity.store.restaurant.Restauran
 import com.project.navermap.presentation.mainActivity.store.restaurant.StoreCategory
 import kotlinx.parcelize.Parcelize
 
-// TODO: Entity에 붙어있는 프레임워크는 제거하고 model을 통해서 데이터를 이동하게 해야함
+// TODO: Entity에 프레임워크를 달아야한다
 data class StoreEntity(
     val id: Long,
     val storeInfoId: Long,//api호출용도

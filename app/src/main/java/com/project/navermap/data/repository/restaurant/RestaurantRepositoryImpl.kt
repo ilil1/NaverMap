@@ -20,7 +20,7 @@ class RestaurantRepositoryImpl @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : RestaurantRepository {
 
-    //entity 를 반환 받은 다음에 여기서는 Model 를 return 만 해준다.
+    //entity 를 반환 받은 다음에 여기서는 Model 모 return 만 해준다.
     override suspend fun getList(
         restaurantCategory: RestaurantCategory,
         locationLatLngEntity: LocationEntity
