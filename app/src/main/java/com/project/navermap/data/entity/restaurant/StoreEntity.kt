@@ -11,6 +11,7 @@ import com.project.navermap.presentation.mainActivity.store.restaurant.StoreCate
 import kotlinx.parcelize.Parcelize
 
 // TODO: Entity에 프레임워크를 달아야한다
+@Parcelize
 data class StoreEntity(
     val id: Long,
     val storeInfoId: Long,//api호출용도
@@ -25,7 +26,7 @@ data class StoreEntity(
     val restaurantTelNumber: String?,
     var latitude: Double = 0.0,
     var longitude: Double = 0.0,
-)
+) : Parcelable
 
 fun StoreEntity.toStoreModel() = StoreModel(
     id = id,
