@@ -28,18 +28,3 @@ data class StoreEntity(
     var longitude: Double = 0.0,
 ) : Parcelable
 
-fun StoreEntity.toStoreModel() = StoreModel(
-    id = id,
-    type = CellType.STORE_CELL,
-    storeInfoId = storeInfoId,
-    storeCategory = storeCategory,
-    storeTitle = storeTitle,
-    storeImageUrl = storeImageUrl,
-    grade = grade,
-    reviewCount = reviewCount,
-    deliveryTimeRange = deliveryTimeRange,
-    deliveryTipRange = deliveryTipRange,
-    storeTelNumber = restaurantTelNumber,
-    latitude = latitude,
-    longitude = longitude
-)
