@@ -4,7 +4,7 @@ import com.project.navermap.data.entity.firebase.FirebaseEntity
 import com.project.navermap.domain.model.FirebaseModel
 import kotlinx.coroutines.flow.Flow
 
-interface firebaseRepository {
+interface FirebaseRepository {
 
     fun getMarkets() :  Flow<List<FirebaseEntity>>
 

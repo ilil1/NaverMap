@@ -77,8 +77,8 @@ abstract class RepositoryBindModule {
 
     @Binds
     abstract fun bindFirebaseRepository(
-        firebaseRepositoryImpl: firebaseRepositoryImpl
-    ): firebaseRepository
+        firebaseRepositoryImpl: FirebaseRepositoryImpl
+    ): FirebaseRepository
 
     @Binds
     abstract fun bindReviewRepository(

@@ -10,7 +10,7 @@ import com.project.navermap.presentation.mainActivity.store.restaurant.Restauran
 import com.project.navermap.presentation.mainActivity.store.restaurant.StoreCategory
 import kotlinx.parcelize.Parcelize
 
-// TODO: Entity에 프레임워크를 달아야한다
+// TODO: Entity에 프레임워크를 달아야한드
 @Parcelize
 data class StoreEntity(
     val id: Long,
