@@ -13,5 +13,7 @@ interface RestaurantRepository {
         locationLatLngEntity: LocationEntity
     ): List<RestaurantModel>
 
-    suspend fun getItemsByRestaurantId(id: Long): List<FoodModel>
+    //suspend fun getItemsByRestaurantId(id: Long): List<FoodModel>
+
+    suspend fun getItemsByRestaurantId(id: Long): Flow<FoodModel>
 }

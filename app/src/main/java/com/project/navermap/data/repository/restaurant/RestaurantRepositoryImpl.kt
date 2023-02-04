@@ -10,6 +10,7 @@ import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -34,6 +35,7 @@ class RestaurantRepositoryImpl @Inject constructor(
         }
     }
 
+    //플로우에 맞게 수정 필요함
     override suspend fun getItemsByRestaurantId(id: Long) =
         restaurantDataSource.getItemsByRestaurantId(id).map {
             it.toModel(id)
