@@ -1,3 +1,3 @@
 # NaverMap
 
-위드 마켓 구현시 Hilt를 활용하여 클린아키텍처 구조로 개편합니다.
+위드 마켓의 View를 xml -> Compose로 변환 작업 시작 

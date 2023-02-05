@@ -1,31 +1,30 @@
 package com.project.navermap.data.datasource.restaurant
 
 
-import android.accounts.NetworkErrorException
 import com.project.navermap.data.network.FoodApiService
 import com.project.navermap.data.response.restaurant.RestaurantFoodResponse
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RestaurantDataSourceImpl @Inject constructor(
     private val foodApiService: FoodApiService,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : RestaurantDataSource {
 
     //flow 를 통해서 entity 를 반환 받는다.
-    override suspend fun getItemsByRestaurantId(id: Long) = withContext(ioDispatcher) {
+    override suspend fun getItemsByRestaurantId(id: Long): List<RestaurantFoodResponse> = withContext(ioDispatcher) {
         val response = foodApiService.getRestaurantFoods(id)
         if (response.isSuccessful) {
-            response.body()!!
+            response?.body()!!
         } else {
             emptyList()
         }
     }
+
+
 
 //    override suspend fun getItemsByRestaurantId(id: Long): Flow<List<RestaurantFoodResponse>> =
 //
