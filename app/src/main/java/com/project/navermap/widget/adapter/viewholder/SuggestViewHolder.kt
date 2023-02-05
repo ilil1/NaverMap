@@ -1,8 +1,8 @@
 package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
-import com.project.navermap.data.extensions.clear
-import com.project.navermap.data.extensions.load
+import com.project.navermap.extensions.clear
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderSuggestSeasonBinding
 import com.project.navermap.domain.model.SuggestItemModel
 import com.project.navermap.util.provider.ResourcesProvider
@@ -28,13 +28,11 @@ class SuggestViewHolder(
         }
     }
 
-    override fun bindViews(model: SuggestItemModel, listener: AdapterListener) {
+    override fun bindViews(model: SuggestItemModel, listener: AdapterListener) = with(binding) {
         if (listener is SuggestListener) {
-            with(binding) {
                 root.setOnClickListener {
                     listener.onClickItem(model)
                 }
-            }
         }
     }
 }

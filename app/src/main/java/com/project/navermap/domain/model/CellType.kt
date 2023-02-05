@@ -2,6 +2,7 @@ package com.project.navermap.domain.model
 
 
 enum class CellType {
+    REVIEW_CELL,
     HOME_DETAIL_ITEM_CELL,
     HOME_MAIN_MARKET_CELL,
     HOME_MAIN_ITEM_CELL,
@@ -17,5 +18,7 @@ enum class CellType {
     HOME_REVIEW_ITEM_CELL,
     RESTAURANT_CELL,
     FOOD_CELL,
-    STORE_DETAIL_FOOD_CELL
+    STORE_DETAIL_FOOD_CELL,
+    FIREBASE_CELL,
+    FIREBASE_ITEM_CELL
 }

@@ -1,0 +1,37 @@
+package com.project.navermap.di.moduleComponent.fragmentComponent
+
+import androidx.fragment.app.Fragment
+import com.naver.maps.map.NaverMap
+import com.project.navermap.presentation.mainActivity.map.mapFragment.MapFragment
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.MarkerFactory
+import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+
+@ExperimentalCoroutinesApi
+@Module
+@InstallIn(FragmentComponent::class)
+object MapModule {
+    @Provides
+    fun provideMapFragment(fragment: Fragment) = fragment as MapFragment
+
+    @Provides
+    fun provideNaverMap(mapFragment: MapFragment) = mapFragment.naverMap
+
+    @Provides
+    fun provideMarkerFactory() = MarkerFactory()
+
+    //Activity가 생성 됬을 때 inject가 이루어져서 naverMap가 아직 null이다.
+    //naverMap의 경우 OnMapReadyCallback 이 후에 값이 들어옴.
+    //lazy하게 이루어질 수 있도록 해야함.
+    @Provides
+    @FragmentScoped
+    fun provideNaverMapHandler(
+        markerFactory: MarkerFactory,
+        naverMap: NaverMap
+    ) = NaverMapHandler(markerFactory, naverMap)
+}

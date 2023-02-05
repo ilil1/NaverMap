@@ -1,7 +1,6 @@
-package com.example.YUmarket.data.repository.suggest
+package com.project.navermap.data.repository.suggest
 
 
-import com.project.navermap.data.repository.suggest.SuggestRepository
 import com.project.navermap.domain.model.CellType
 import com.project.navermap.domain.model.SuggestItemModel
 import com.project.navermap.domain.model.category.SuggestCategory

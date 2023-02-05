@@ -72,9 +72,18 @@ object ViewHolderMapper {
                 resourcesProvider
             )
 
-            HOME_DETAIL_ITEM_CELL -> TODO()
+            HOME_DETAIL_ITEM_CELL -> TownMarketViewHolder(
+                ViewholderTownMarketBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
+
             HOME_MAIN_ITEM_CELL -> TODO()
-            CUSTOMER_SERVICE_CELL -> TODO()
+            CUSTOMER_SERVICE_CELL -> CSViewHolder(
+                ViewholderCsItemBinding.inflate(inflater,parent,false),
+                viewModel,
+                resourcesProvider
+            )
             LIKE_MARKET_CELL -> TODO()
             LIKE_ITEM_CELL -> TODO()
             MAP_ITEM_CELL -> TODO()
@@ -82,6 +91,22 @@ object ViewHolderMapper {
             HOME_REVIEW_ITEM_CELL -> TODO()
             STORE_DETAIL_FOOD_CELL -> SaleItemViewHolder(
                 ViewholderSaleItemBinding.inflate(inflater,parent,false),
+                viewModel,
+                resourcesProvider
+            )
+
+            FIREBASE_CELL -> FirebaseViewHolder(
+                ViewholderFirebaseBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
+            REVIEW_CELL -> ReviewItemViewHolder(
+                ReviewItemBinding.inflate(inflater),
+                viewModel,
+                resourcesProvider
+            )
+            FIREBASE_ITEM_CELL -> FirebaseItemViewHolder(
+                ViewholderFirebaseItemBinding.inflate(inflater),
                 viewModel,
                 resourcesProvider
             )

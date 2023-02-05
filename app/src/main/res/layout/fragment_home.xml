@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,14 +18,14 @@
             android:layout_height="wrap_content"
             android:background="@color/base">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/radius"
-                app:iconifiedByDefault="false"
-                app:queryHint="검색어를 입력해주세요" />
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:id="@+id/searchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="15dp"-->
+<!--                android:background="@drawable/radius"-->
+<!--                app:iconifiedByDefault="false"-->
+<!--                app:queryHint="검색어를 입력해주세요" />-->
 
         </LinearLayout>
 
@@ -50,17 +51,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMoreSeason"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/season"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/season" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/season_recycler"
@@ -90,18 +80,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMorehobby"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/popular"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/popular" />
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/popular_recycler"
@@ -121,46 +99,6 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/nearbyMarketTextView"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:text="@string/nearly"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMoreTextView"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/nearbyMarketTextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/nearbyMarketTextView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/nearbyMarketRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/nearbyMarketTextView"
-                app:spanCount="1" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
-
-            <TextView
                 android:id="@+id/annival"
                 android:layout_width="145dp"
                 android:layout_height="wrap_content"
@@ -169,18 +107,6 @@
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/showMoreAnnival"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:background="@drawable/radius_myinfo"
-                android:text="더보기"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/annival"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/annival" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/annivalRecyclerView"

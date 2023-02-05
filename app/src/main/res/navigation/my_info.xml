@@ -6,7 +6,7 @@
 
     <activity
         android:id="@+id/subFragment"
-        android:name="com.project.navermap.presentation.MainActivity.myinfo.MyInfoActivity"
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.MyInfoActivity"
         android:label="subFragment"/>
 
 </navigation>

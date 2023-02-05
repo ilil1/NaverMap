@@ -2,7 +2,6 @@ package com.project.navermap.presentation.myLocation.mapLocationSetting
 
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.presentation.MainActivity.MainState
 
 sealed class MapLocationSettingState {
 

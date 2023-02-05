@@ -1,14 +1,17 @@
 package com.project.navermap.data.repository.myinfo
 
+import com.project.navermap.data.repository.myinfo.CSRepository
+import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import com.project.navermap.domain.model.CSModel
 import com.project.navermap.domain.model.CellType
 import com.project.navermap.domain.model.category.CSCategory
 import kotlinx.coroutines.CoroutineDispatcher
+import javax.inject.Inject
 
-class DefaultCSRepository  (
-    private val ioDispatcher: CoroutineDispatcher //나중에 api용
+
+class DefaultCSRepository @Inject constructor(
+
 ) : CSRepository {
-
 
     override fun findCsByCategory(csCategory: CSCategory): List<CSModel> {
         return when (csCategory) {
@@ -24,8 +27,6 @@ class DefaultCSRepository  (
                     csContentBody ="로그인 오류시 앱을 재부팅하여 사용하고" +
                             "그래도 로그인이 되지않는다면 고객센터로 연락바랍니다."
                 )
-
-
             )
 
             CSCategory.USE -> listOf(
@@ -86,71 +87,7 @@ class DefaultCSRepository  (
 
                 )
             )
+            else -> return emptyList()
         }
-
-
-//        val csList = listOf(
-//            CSModel(
-//                0,
-//                CellType.CUSTOMER_SERVICE_CELL,
-//                0,
-//                csTitle = "   고객센터 이용방법                                        ",
-//                csCategory = CSCategory.USE,
-//                csAuthor = "관리자",
-//                csContent = "이 글은 고객센터 이용방법 입니다"
-//            ),
-//
-//            CSModel(
-//                1,
-//                CellType.CUSTOMER_SERVICE_CELL,
-//                1,
-//                csTitle = "   주문오류시 이용방법                                        ",
-//                csCategory = CSCategory.ORDER,
-//                csAuthor = "관리자",
-//                csContent = "이 글은 주문오류시 이용방법 입니다"
-//            ),
-//
-//            CSModel(
-//                2,
-//                CellType.CUSTOMER_SERVICE_CELL,
-//                2,
-//                csTitle = "   리뷰 오류시 이용방법                                           ",
-//                csCategory = CSCategory.REVIEW,
-//                csAuthor = "관리자",
-//                csContent = "이 글은 리뷰 오류시 입니다"
-//            ),
-//
-//
-//            CSModel(
-//                3,
-//                CellType.CUSTOMER_SERVICE_CELL,
-//                3,
-//                csTitle = "   로그인 오류시 이용방법                                                ",
-//                csCategory = CSCategory.LOGIN,
-//                csAuthor = "관리자",
-//                csContent = "이 글은 로그인 오류시 이용방법 입니다"
-//            ),
-//
-//            CSModel(
-//                4,
-//                CellType.CUSTOMER_SERVICE_CELL,
-//                4,
-//                csTitle = "   이용 오류시 이용방법                                           ",
-//                csCategory = CSCategory.USE,
-//                csAuthor = "관리자",
-//                csContent = "이 글은 이용 오류시 이용방법 입니다"
-//            ),
-//
-//            CSModel(
-//                5,
-//                CellType.CUSTOMER_SERVICE_CELL,
-//                5,
-//                csTitle = "   기타 오류시 이용방법                                           ",
-//                csCategory = CSCategory.ETC,
-//                csAuthor = "관리자",
-//                csContent = "이 글은 기타 오류시 입니다"
-//            ),
-//        )
-        return emptyList()
     }
 }

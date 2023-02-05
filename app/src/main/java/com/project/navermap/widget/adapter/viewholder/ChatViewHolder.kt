@@ -2,14 +2,14 @@ package com.project.navermap.widget.adapter.viewholder
 
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
-import com.project.navermap.data.extensions.clear
-import com.project.navermap.data.extensions.load
+import com.google.gson.Gson
+import com.project.navermap.extensions.load
 import com.project.navermap.databinding.ViewholderChatlistBinding
 import com.project.navermap.domain.model.ChatModel
+import com.project.navermap.extensions.clear
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.listener.AdapterListener
 import com.project.navermap.widget.adapter.listener.ChatModelListener
-import de.hdodenhof.circleimageview.CircleImageView
 
 
 class ChatViewHolder(
@@ -32,8 +32,6 @@ class ChatViewHolder(
             date.text = listModel.Data
             recentlyText.text = listModel.RecentlyText
         }
-
-
     }
 
     override fun bindViews(listModel: ChatModel, listener: AdapterListener) {

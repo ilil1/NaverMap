@@ -1,4 +1,4 @@
-package com.project.navermap.data.extensions
+package com.project.navermap.extensions
 
 import android.content.res.Resources
 //float형태를 dp를 픽셀로

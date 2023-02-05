@@ -5,6 +5,6 @@ android:id="@+id/store"
 app:startDestination="@id/storeFragment">
 <fragment
     android:id="@+id/storeFragment"
-    android:name="com.project.navermap.presentation.MainActivity.store.StoreFragment"
+    android:name="com.project.navermap.presentation.mainActivity.store.StoreFragment"
     android:label="StoreFragment" />
 </navigation>

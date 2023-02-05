@@ -11,6 +11,7 @@ data class LikeItemModel(
     val price: Int,
     val imageUrl: String
 ) : Model(id, CellType.LIKE_ITEM_CELL) {
+
     companion object {
         fun fromEntity(entity: LikeItemEntity) =
             LikeItemModel(

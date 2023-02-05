@@ -1,4 +1,4 @@
-package com.example.YUmarket.model.homelist.category
+package com.project.navermap.domain.model.category
 
 import androidx.annotation.StringRes
 import com.project.navermap.R

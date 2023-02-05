@@ -1,11 +1,11 @@
 package com.project.navermap.domain.model
 
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.presentation.MainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 
 data class RestaurantModel(
     override val id: Long,
-    override val type: CellType = CellType.RESTAURANT_CELL,
+    override val type: CellType = CellType.HOME_TOWN_MARKET_CELL,
     val restaurantInfoId: Long,
     val restaurantCategory: RestaurantCategory,
     val restaurantTitle: String,
@@ -16,7 +16,9 @@ data class RestaurantModel(
     val deliveryTipRange: Pair<Int, Int>,
     val restaurantTelNumber: String?,
     var latitude: Double = 0.0,
-    var longitude: Double = 0.0
+    var longitude: Double = 0.0,
+    val isMarketOpen: Boolean,
+    val distance: Float
 ) : Model(id, type) {
 
     fun toEntity() = RestaurantEntity(
@@ -29,6 +31,8 @@ data class RestaurantModel(
         reviewCount,
         deliveryTimeRange,
         deliveryTipRange,
-        restaurantTelNumber
+        restaurantTelNumber,
+        isMarketOpen = isMarketOpen,
+        distance = distance
     )
 }

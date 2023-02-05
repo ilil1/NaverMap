@@ -10,12 +10,13 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.project.navermap.R
 import com.project.navermap.databinding.ActivityLoginBinding
 import com.project.navermap.databinding.ActivitySignupBinding
-import com.project.navermap.presentation.MainActivity.MainActivity
+import com.project.navermap.presentation.mainActivity.MainActivity
 import com.project.navermap.presentation.base.BaseActivity
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
 
+    private val viewModel : SignUpViewModel by viewModels()
 
     private var checkEye =0
     var number: String = ""
@@ -72,19 +74,19 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
             }
 
         }
-
-        binding.confirmButton.setOnClickListener {
-            val otp = binding.confirm.text.toString()
-            if (otp.isNotEmpty()) {
-                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
-                    storedVerificationId, otp
-                )
-                binding.confirmButton.setBackgroundResource(R.drawable.radius_btn_onclick)
-                signInWithPhoneAuthCredential(credential)
-            } else {
-                Toast.makeText(this@SignUpActivity, "Enter CheckNumer", Toast.LENGTH_SHORT).show()
-            }
-        }
+//
+//        binding.confirmButton.setOnClickListener {
+//            val otp = binding.confirm.text.toString()
+//            if (otp.isNotEmpty()) {
+//                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
+//                    storedVerificationId, otp
+//                )
+//                binding.confirmButton.setBackgroundResource(R.drawable.radius_btn_onclick)
+//                signInWithPhoneAuthCredential(credential)
+//            } else {
+//                Toast.makeText(this@SignUpActivity, "Enter CheckNumer", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
 
     }
@@ -101,29 +103,28 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
 
 
 
-        binding.confirm.visibility = View.INVISIBLE
-        binding.confirmButton.visibility = View.INVISIBLE
+//        binding.confirm.visibility = View.INVISIBLE
+//        binding.confirmButton.visibility = View.INVISIBLE
 
         binding.signBtn.setOnClickListener {
-
-            if (checkPhone == 1) {
+            if (true) {
                 performRegister()
             } else {
                 Toast.makeText(this@SignUpActivity, "전화번호 인증을 하지않았습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        sendBtn.setOnClickListener {
-            binding.sendBtn.setBackgroundResource(R.drawable.radius_btn_onclick)
-            sendotp()
-            val phone = editphone.text.toString()
-            if (phone.isNotEmpty()) {
-                confirm.visibility = View.VISIBLE
-                confirmButton.visibility = View.VISIBLE
-            } else {
-                Toast.makeText(this@SignUpActivity, "전화번호를 입력해주세요", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        sendBtn.setOnClickListener {
+//            binding.sendBtn.setBackgroundResource(R.drawable.radius_btn_onclick)
+//            sendotp()
+//            val phone = editphone.text.toString()
+//            if (phone.isNotEmpty()) {
+//                confirm.visibility = View.VISIBLE
+//                confirmButton.visibility = View.VISIBLE
+//            } else {
+//                Toast.makeText(this@SignUpActivity, "전화번호를 입력해주세요", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
         //callback functuon for Phone Auth
 
@@ -171,6 +172,10 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
 
 
     private fun performRegister() {
+        viewModel.name.value = binding.editname.text.toString()
+        viewModel.saveData()
+        viewModel.retrieveDate()
+
         val email = binding.editEmail.text.toString()
         val password = binding.editpassword.text.toString()
         val username = binding.editname.text.toString()
@@ -201,7 +206,7 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>() {
     }
 
     private fun sendotp() {
-        number = binding.editphone.text.toString()
+//        number = binding.editphone.text.toString()
 
         //get the phone number from edit text and append the country code
         if (number.isNotEmpty()) {

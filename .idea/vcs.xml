@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/RxJava-Using-Retrofit2-Wtih-MVVM" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/iuttalk_new" vcs="Git" />
   </component>
 </project>

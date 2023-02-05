@@ -6,19 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.project.navermap.util.provider.ResourcesProvider
 import kotlinx.coroutines.Job
 
 abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
-    protected lateinit var binding: VB
+    private var _binding: VB? = null
+    protected val binding : VB get() = _binding!!
 
     abstract fun getViewBinding(): VB
 
-    private lateinit var fetchJob: Job
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = getViewBinding()
-        observeData()
+        _binding = getViewBinding()
         return binding.root
     }
 
@@ -29,10 +28,15 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
 
     open fun initState() {
         initViews()
+        observeData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     open fun initViews() = Unit
 
-    abstract fun observeData()
-
+    open fun observeData() = Unit
 }
