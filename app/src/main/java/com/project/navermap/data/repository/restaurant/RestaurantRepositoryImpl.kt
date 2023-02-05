@@ -1,17 +1,17 @@
 package com.project.navermap.data.repository.restaurant
 
+import android.content.ContentValues
+import android.util.Log
 import com.project.navermap.data.datasource.restaurant.RestaurantDataSource
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.mapper.toRestaurantEntity
 import com.project.navermap.data.mapper.toRestaurantModel
-import com.project.navermap.data.network.FoodApiService
-import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
+import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.util.provider.ResourcesProvider
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 //repository 에서 Entity 를 Model 로 변환해서 가져온다.
@@ -35,9 +35,18 @@ class RestaurantRepositoryImpl @Inject constructor(
         }
     }
 
-    //플로우에 맞게 수정 필요함
-    override suspend fun getItemsByRestaurantId(id: Long) =
+    //코루틴 ver
+//    override suspend fun getItemsByRestaurantId(id: Long) =
+//        restaurantDataSource.getItemsByRestaurantId(id).map {
+//            it.toModel(id)
+//        }
+
+    //플로우 ver
+    override suspend fun getItemsByRestaurantId(id: Long) : Flow<List<FoodModel>> =
+
         restaurantDataSource.getItemsByRestaurantId(id).map {
-            it.toModel(id)
+            it.map {
+                return@map it.toModel(id)
+            }
         }
 }

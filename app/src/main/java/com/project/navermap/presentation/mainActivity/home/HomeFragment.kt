@@ -8,22 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.project.navermap.R
 import com.project.navermap.databinding.FragmentHomeBinding
-import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.model.SliderItemModel
 import com.project.navermap.domain.model.SuggestItemModel
-import com.project.navermap.domain.model.TownMarketModel
 import com.project.navermap.presentation.mainActivity.MainState
 import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.presentation.mainActivity.home.suggestItemDetail.SuggestItemDetailActivity
-import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantListViewModel
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailActivity
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.SliderAdapter
-import com.project.navermap.widget.adapter.listener.RestaurantListListener
 import com.project.navermap.widget.adapter.listener.SuggestListener
-import com.project.navermap.widget.adapter.listener.TownMarketListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -53,10 +47,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-//                    startActivity(
-//                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
-//                    )
-                    test()
+                    startActivity(
+                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+                    )
+                    //test()
                 }
             }
         )

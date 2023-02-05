@@ -3,6 +3,7 @@ package com.project.navermap.presentation.mainActivity.store.storeDetail.menu
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.project.navermap.R
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.databinding.FragmentStoreMarketMenuBinding
@@ -12,6 +13,7 @@ import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.StoreDetailItemListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,12 +41,21 @@ class StoreMenuFragment : BaseFragment<FragmentStoreMarketMenuBinding>() {
     }
 
     override fun observeData() = with(viewModel) {
-        storeItem.observe(viewLifecycleOwner) {
-            adapter.submitList(it)//Data callback
+//        storeItem.observe(viewLifecycleOwner) {
+//            adapter.submitList(it)//Data callback
+//        }
+    }
+
+    private fun observeFlowData() = with(viewModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            storeItem.collect {
+                adapter.submitList(it)//Data callback
+            }
         }
     }
 
     override fun initState() {
+        observeFlowData()
         val storeData = arguments?.getParcelable<RestaurantEntity>(SALE_LIST_KEY)!!
         viewModel.loadRestaurantItems(storeData.restaurantInfoId)//Data Request
         binding.restaurantRecyclerView.adapter = adapter

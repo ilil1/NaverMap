@@ -46,6 +46,8 @@ class RestaurantListFragment : BaseFragment<FragmentListBinding>() {
         RestaurantListViewModel.provideFactory(viewModelFactory, restaurantCategory, locationEntity)
     }
 
+    //val viewModel : RestaurantListViewModel by viewModels()
+
 //    val storeViewModel by viewModels<RestaurantListViewModel> {
 //        RestaurantListViewModel.provideStoreFactory(viewModelStoreFactory, storeCategory, locationEntity)
 //    }

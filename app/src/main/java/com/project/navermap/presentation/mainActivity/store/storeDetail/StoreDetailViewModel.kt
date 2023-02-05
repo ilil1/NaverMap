@@ -2,7 +2,6 @@ package com.project.navermap.presentation.mainActivity.store.storeDetail
 
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -10,8 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class StoreDetailViewModel @AssistedInject constructor(
-    @Assisted private val restaurantEntity: RestaurantEntity,
-    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase
+    @Assisted private val restaurantEntity: RestaurantEntity
 ): ViewModel() {
 
     /**

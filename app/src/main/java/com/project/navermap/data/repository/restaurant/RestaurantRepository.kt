@@ -15,5 +15,5 @@ interface RestaurantRepository {
 
     //suspend fun getItemsByRestaurantId(id: Long): List<FoodModel>
 
-    suspend fun getItemsByRestaurantId(id: Long): Flow<FoodModel>
+    suspend fun getItemsByRestaurantId(id: Long): Flow<List<FoodModel>>
 }

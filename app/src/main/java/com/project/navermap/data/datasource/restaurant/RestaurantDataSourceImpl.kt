@@ -17,30 +17,30 @@ class RestaurantDataSourceImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : RestaurantDataSource {
 
-    //flow 를 통해서 entity 를 반환 받는다.
-    override suspend fun getItemsByRestaurantId(id: Long) = withContext(ioDispatcher) {
-        val response = foodApiService.getRestaurantFoods(id)
-        if (response.isSuccessful) {
-            response.body()!!
-        } else {
-            emptyList()
-        }
-    }
+// 코루틴
+//    override suspend fun getItemsByRestaurantId(id: Long) = withContext(ioDispatcher) {
+//        val response = foodApiService.getRestaurantFoods(id)
+//        if (response.isSuccessful) {
+//            response.body()!!
+//        } else {
+//            emptyList()
+//        }
+//    }
 
-//    override suspend fun getItemsByRestaurantId(id: Long): Flow<List<RestaurantFoodResponse>> =
-//
-//        flow {
-//            runCatching {
-//                foodApiService.getRestaurantFoods(id)
-//            }.onSuccess { response ->
-//                if (response.isSuccessful) {
-//                    emit(response.body()!!)
-//                } else {
-//                    val errorBody = response.errorBody()?.string()
-//                    throw NetworkErrorException(errorBody)
-//                }
-//            }.onFailure {
-//                throw it
-//            }
-//        }.flowOn(ioDispatcher)
+    //플로우
+    override suspend fun getItemsByRestaurantId(id: Long): Flow<List<RestaurantFoodResponse>> =
+        flow {
+            runCatching {
+                foodApiService.getRestaurantFoods(id)
+            }.onSuccess { response ->
+                if (response.isSuccessful) {
+                    emit(response.body()!!)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    throw NetworkErrorException(errorBody)
+                }
+            }.onFailure {
+                throw it
+            }
+        }.flowOn(ioDispatcher)
 }

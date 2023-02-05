@@ -2,10 +2,6 @@ package com.project.navermap.presentation.mainActivity.store.firebaseDetail
 
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.firebase.FirebaseEntity
-import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailResult
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,8 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class FirebaseDetailViewModel @AssistedInject constructor(
-    @Assisted private val firebaseEntity: FirebaseEntity,
-    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase
+    @Assisted private val firebaseEntity: FirebaseEntity
 ): ViewModel() {
 
     /**

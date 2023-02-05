@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.mainActivity.map.SearchAddress
+package com.project.navermap.presentation.mainActivity.map.searchAddress
 
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.MapSearchInfoEntity

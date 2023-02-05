@@ -1,23 +1,8 @@
 package com.project.navermap.presentation.mainActivity.store.storeDetail.information
 
-import android.app.Dialog
-import android.os.Build
-import android.os.Bundle
-import android.os.Message
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import com.project.navermap.data.entity.restaurant.RestaurantEntity
-import com.project.navermap.databinding.FragmentStoreMarketMenuBinding
 import com.project.navermap.databinding.FragmentStoreMarketinformBinding
 import com.project.navermap.presentation.base.BaseFragment
-import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

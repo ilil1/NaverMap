@@ -2,12 +2,8 @@ package com.project.navermap.presentation.mainActivity.home.suggestItemDetail
 
 import androidx.lifecycle.*
 import com.project.navermap.data.entity.SuggestItemEntity
-import com.project.navermap.data.entity.restaurant.RestaurantEntity
 import com.project.navermap.data.repository.home.HomeFirstMockRepository
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailResult
-import com.project.navermap.presentation.mainActivity.store.storeDetail.StoreDetailViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

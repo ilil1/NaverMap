@@ -93,8 +93,6 @@ class SuggestItemDetailActivity : AppCompatActivity() {
         binding.homeDetailRecyclerview.adapter = detailAdapter
         binding.homeDetailRecyclerview.layoutManager = LinearLayoutManager(this@SuggestItemDetailActivity)
 
-
-//
 //        supportFragmentManager.beginTransaction()
 //            .replace(R.id.main_frame, SuggestItemMenuFragment())
 //            .commit()
@@ -133,7 +131,6 @@ class SuggestItemDetailActivity : AppCompatActivity() {
                         StoreDetailActivity.newIntent(this@SuggestItemDetailActivity, model.toEntity())
                     )
                 }
-
             }
         )
     }
