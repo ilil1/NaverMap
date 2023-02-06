@@ -37,7 +37,9 @@ class RestaurantRepositoryImpl @Inject constructor(
 
     //플로우에 맞게 수정 필요함
     override suspend fun getItemsByRestaurantId(id: Long) =
-        restaurantDataSource.getItemsByRestaurantId(id).map {
-            it.toModel(id)
+        restaurantDataSource.getItemsByRestaurantId(id).map { it ->
+            it.map {
+                return@map it.toModel(id)
+            }
         }
 }

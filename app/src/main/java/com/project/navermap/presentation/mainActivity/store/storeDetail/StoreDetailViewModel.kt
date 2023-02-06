@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 
 class StoreDetailViewModel @AssistedInject constructor(
     @Assisted private val restaurantEntity: RestaurantEntity,
-    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase
 ): ViewModel() {
 
     /**

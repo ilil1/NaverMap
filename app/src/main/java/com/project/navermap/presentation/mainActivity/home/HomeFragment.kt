@@ -53,10 +53,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             listOf(), viewModel, resourcesProvider,
             adapterListener = object : SuggestListener {
                 override fun onClickItem(model: SuggestItemModel) {
-//                    startActivity(
-//                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
-//                    )
-                    test()
+                    startActivity(
+                        SuggestItemDetailActivity.newIntent(requireContext(),model.toEntity())
+                    )
+                    //test()
                 }
             }
         )

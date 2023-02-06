@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class FirebaseDetailViewModel @AssistedInject constructor(
     @Assisted private val firebaseEntity: FirebaseEntity,
-    private val getItemsByRestaurantIdUseCase: GetItemsByRestaurantIdUseCase
 ): ViewModel() {
 
     /**

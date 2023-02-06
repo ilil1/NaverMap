@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.mainActivity.map.SearchAddress.SearchAddressActivity"
+            android:name=".presentation.mainActivity.map.searchAddress.SearchAddressActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.mainActivity.myinfo.MyInfoActivity"
