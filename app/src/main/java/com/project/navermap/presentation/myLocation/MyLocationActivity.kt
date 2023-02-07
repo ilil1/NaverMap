@@ -1,36 +1,21 @@
 package com.project.navermap.presentation.myLocation
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.project.navermap.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.entity.MapSearchInfoEntity
-import com.project.navermap.data.url.Key
-import com.project.navermap.data.url.Url
 import com.project.navermap.databinding.ActivityMyLocationBinding
-import com.project.navermap.extensions.showToast
 import com.project.navermap.presentation.mainActivity.MainActivity
-import com.project.navermap.presentation.mainActivity.map.SearchAddress.SearchAddressActivity
-import com.project.navermap.presentation.mainActivity.store.StoreFragment
+import com.project.navermap.presentation.mainActivity.map.searchAddress.SearchAddressActivity
 import com.project.navermap.presentation.myLocation.mapLocationSetting.MapLocationSettingActivity
 import com.project.navermap.widget.RecentAddrAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 
 @AndroidEntryPoint
 class MyLocationActivity : AppCompatActivity() {

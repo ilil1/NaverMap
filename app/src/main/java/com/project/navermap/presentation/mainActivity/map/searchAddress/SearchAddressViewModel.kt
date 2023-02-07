@@ -1,4 +1,4 @@
-package com.project.navermap.presentation.mainActivity.map.SearchAddress
+package com.project.navermap.presentation.mainActivity.map.searchAddress
 
 import android.util.Log
 import androidx.lifecycle.LiveData

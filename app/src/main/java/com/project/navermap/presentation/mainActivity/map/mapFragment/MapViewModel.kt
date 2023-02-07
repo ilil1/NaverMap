@@ -13,8 +13,7 @@ import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurant
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -69,7 +68,16 @@ class MapViewModel @Inject constructor(
         restaurantId: Long
     ) = viewModelScope.launch {
         _items.apply {
-            getItemsByRestaurantIdUseCase(restaurantId)
+            //_items.value = getItemsByRestaurantIdUseCase(restaurantId)
+            getItemsByRestaurantIdUseCase(restaurantId).onStart {
+
+            }.onEach {
+                _items.value = it
+            }.onCompletion {
+
+            }.catch {
+
+            }.launchIn(viewModelScope)
         }
     }
 

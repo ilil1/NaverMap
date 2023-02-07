@@ -11,6 +11,7 @@ class GetItemsByRestaurantIdUseCase(
 //    suspend operator fun invoke(id: Long): List<FoodModel> =
 //        repository.getItemsByRestaurantId(id % 10 + 1) // 1 ~ 100000 -> 1 ~ 10
 
-    suspend operator fun invoke(id: Long): List<FoodModel> =
-        repository.getItemsByRestaurantId(id % 10 + 1) // 1 ~ 100000 -> 1 ~ 10
+    suspend operator fun invoke(id: Long): Flow<List<FoodModel>> {
+        return repository.getItemsByRestaurantId(id % 10 + 1) // 1 ~ 100000 -> 1 ~ 10
+    }
 }

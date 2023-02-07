@@ -7,5 +7,5 @@ interface RestaurantDataSource {
 
     //suspend fun getItemsByRestaurantId(id: Long): List<RestaurantFoodResponse>
 
-    suspend fun getItemsByRestaurantId(id: Long): List<RestaurantFoodResponse>
+    suspend fun getItemsByRestaurantId(id: Long): Flow<List<RestaurantFoodResponse>>
 }

@@ -1,7 +1,6 @@
-package com.project.navermap.presentation.mainActivity.map.SearchAddress
+package com.project.navermap.presentation.mainActivity.map.searchAddress
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
@@ -11,15 +10,8 @@ import android.webkit.*
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
 import com.project.navermap.databinding.ActivitySearchAddressBinding
-import com.project.navermap.presentation.mainActivity.MainActivity
-import com.project.navermap.presentation.mainActivity.MainActivity.Companion.MY_LOCATION_KEY
-import com.project.navermap.presentation.mainActivity.MainState
-import com.project.navermap.presentation.mainActivity.store.storeDetail.menu.StoreMenuFragment
-import com.project.navermap.presentation.myLocation.MyLocationActivity
 import com.project.navermap.presentation.myLocation.MyLocationActivity.Companion.SEARCH_LOCATION_KEY
-import com.project.navermap.presentation.myLocation.MyLocationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
