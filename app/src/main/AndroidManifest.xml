@@ -26,10 +26,10 @@
             android:name=".presentation.mainActivity.SplashActivity"
             android:exported="true"
             android:theme="@style/Splash">
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN"/>
-             <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".presentation.login.LoginActivity"
@@ -74,6 +74,9 @@
             android:exported="true" />
         <activity
             android:name=".presentation.mainActivity.store.storeDetail.StoreDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".presentation.mainActivity.myinfo.MyInfoComposeActivity"
             android:exported="true" />
 
         <meta-data

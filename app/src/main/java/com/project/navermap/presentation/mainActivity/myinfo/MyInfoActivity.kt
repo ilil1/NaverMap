@@ -20,8 +20,6 @@ class MyInfoActivity: BaseActivity<ActivityMyinfoBinding>() {
     override fun observeData() {
 
     }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,10 +30,6 @@ class MyInfoActivity: BaseActivity<ActivityMyinfoBinding>() {
         myinfo.arguments = bundle
 
     }
-
-
-
-
 
     override fun initViews() = with(binding) {
         super.initViews()
