@@ -1,11 +1,9 @@
-package com.project.navermap.data.repository.restaurant
+package com.project.navermap.data.datasource.mapData
 
 import com.project.navermap.data.db.dao.MapSearchCacheDao
 import com.project.navermap.data.entity.MapSearchCacheEntity
 import com.project.navermap.data.mapper.toMapSearchCacheEntity
 import com.project.navermap.data.network.MapApiService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class MapDataSource(
     private val api: MapApiService,

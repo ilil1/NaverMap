@@ -1,7 +1,6 @@
 package com.project.navermap.data.repository.restaurant
 
-import android.content.ContentValues
-import android.util.Log
+import com.project.navermap.data.datasource.mapData.MapDataSource
 import com.project.navermap.data.datasource.restaurant.RestaurantDataSource
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.mapper.toRestaurantEntity
