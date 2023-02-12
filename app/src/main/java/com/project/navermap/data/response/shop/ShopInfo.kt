@@ -13,6 +13,4 @@ data class ShopInfo(
     @SerializedName("data")
     val shopList: List<ShopData>
 )
-{
-}
 

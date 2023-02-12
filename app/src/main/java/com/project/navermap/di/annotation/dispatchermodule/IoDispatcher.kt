@@ -2,6 +2,12 @@ package com.project.navermap.di.annotation.dispatchermodule
 
 import javax.inject.Qualifier
 
-@Retention(AnnotationRetention.BINARY)
+@Target(
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.EXPRESSION
+)
+@Retention(AnnotationRetention.SOURCE)
 @Qualifier
 annotation class IoDispatcher

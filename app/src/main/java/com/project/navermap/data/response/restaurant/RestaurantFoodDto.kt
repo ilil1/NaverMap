@@ -2,7 +2,8 @@ package com.project.navermap.data.response.restaurant
 
 import com.project.navermap.domain.model.FoodModel
 
-data class RestaurantFoodResponse(
+//dto에서 model로 이동.
+data class RestaurantFoodDto(
     val id: String,
     val title: String,
     val description: String,

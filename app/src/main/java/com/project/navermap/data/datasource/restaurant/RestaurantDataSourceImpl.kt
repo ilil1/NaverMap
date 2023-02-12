@@ -3,13 +3,12 @@ package com.project.navermap.data.datasource.restaurant
 
 import android.accounts.NetworkErrorException
 import com.project.navermap.data.network.FoodApiService
-import com.project.navermap.data.response.restaurant.RestaurantFoodResponse
+import com.project.navermap.data.response.restaurant.RestaurantFoodDto
 import com.project.navermap.di.annotation.dispatchermodule.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RestaurantDataSourceImpl @Inject constructor(
@@ -28,7 +27,7 @@ class RestaurantDataSourceImpl @Inject constructor(
 //    }
 
     //플로우
-    override suspend fun getItemsByRestaurantId(id: Long): Flow<List<RestaurantFoodResponse>> =
+    override suspend fun getItemsByRestaurantId(id: Long): Flow<List<RestaurantFoodDto>> =
         flow {
             runCatching {
                 foodApiService.getRestaurantFoods(id)

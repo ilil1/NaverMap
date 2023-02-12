@@ -20,19 +20,35 @@ class RestaurantRepositoryImpl @Inject constructor(
     private val resourcesProvider: ResourcesProvider
 ) : RestaurantRepository {
 
-    //entity 를 반환 받은 다음에 여기서는 Model 모 return 만 해준다.
+    //코루틴 ver
+//    override suspend fun getList(
+//        restaurantCategory: RestaurantCategory,
+//        locationLatLngEntity: LocationEntity
+//    ): List<RestaurantModel> {
+//        return mapDataSource.getSearchLocationAround(
+//            categories = resourcesProvider.getString(restaurantCategory.categoryTypeId),
+//            centerLat = locationLatLngEntity.latitude.toString(),
+//            centerLon = locationLatLngEntity.longitude.toString()
+//        ).map {
+//            it.toRestaurantEntity(restaurantCategory).toRestaurantModel()
+//        }
+//    }
+
+    //플로우 ver
     override suspend fun getList(
         restaurantCategory: RestaurantCategory,
         locationLatLngEntity: LocationEntity
-    ): List<RestaurantModel> {
-        return mapDataSource.getSearchLocationAround(
+    ): Flow<List<RestaurantModel>> =
+        mapDataSource.getSearchLocationAround(
             categories = resourcesProvider.getString(restaurantCategory.categoryTypeId),
             centerLat = locationLatLngEntity.latitude.toString(),
             centerLon = locationLatLngEntity.longitude.toString()
         ).map {
-            it.toRestaurantEntity(restaurantCategory).toRestaurantModel()
+            it.map {
+                return@map it.toRestaurantEntity(restaurantCategory).toRestaurantModel()
+            }
         }
-    }
+
 
     //코루틴 ver
 //    override suspend fun getItemsByRestaurantId(id: Long) =

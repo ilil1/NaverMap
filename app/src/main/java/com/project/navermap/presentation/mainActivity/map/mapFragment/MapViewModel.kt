@@ -12,6 +12,7 @@ import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUs
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
+import com.project.navermap.presentation.mainActivity.store.restaurant.RestautantFilterOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -37,6 +38,33 @@ class MapViewModel @Inject constructor(
     /**
     백엔드 API를 좀더 유동적으로 사용할수있게 쿼리를 알아봐야함 현재는 필터 구현을 위한 임시방편
      */
+//    fun loadRestaurantList(
+//        restaurantCategory: RestaurantCategory,
+//        location: LocationEntity = destLocation
+//    ) = viewModelScope.launch {
+//        restaurantList.clear()
+//        val restaurantCategories = RestaurantCategory.values()
+//        restaurantCategories.map {
+//            getRestaurantListUseCase.fetchData(it, location).let {
+//                /* TODO: 2022-09-20 화 00:34, Error 구현 */
+//                when (it) {
+//                    is RestaurantResult.Success -> {
+//                        val mutableResult = it.data.toMutableList()
+//                        var i = 0
+//                        repeat(mutableResult.size) {
+//                            if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
+//                                restaurantList.add(mutableResult[i])
+//                            }
+//                            i++
+//                        }
+//                        _data.value = MapState.Success(restaurantList)
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+
     fun loadRestaurantList(
         restaurantCategory: RestaurantCategory,
         location: LocationEntity = destLocation
@@ -44,22 +72,41 @@ class MapViewModel @Inject constructor(
         restaurantList.clear()
         val restaurantCategories = RestaurantCategory.values()
         restaurantCategories.map {
-            getRestaurantListUseCase.fetchData(it, location).let {
-                /* TODO: 2022-09-20 화 00:34, Error 구현 */
-                when (it) {
-                    is RestaurantResult.Success -> {
-                        val mutableResult = it.data.toMutableList()
-                        var i = 0
-                        repeat(mutableResult.size) {
-                            if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
-                                restaurantList.add(mutableResult[i])
-                            }
-                            i++
+            getRestaurantListUseCase.fetchData(it, location).onStart {
+
+                }.onEach {
+                    val mutableResult = it.sortList(RestautantFilterOrder.DEFAULT).toMutableList()
+                    var i = 0
+                    repeat(mutableResult.size) {
+                        if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
+                            restaurantList.add(mutableResult[i])
                         }
-                        _data.value = MapState.Success(restaurantList)
+                        i++
                     }
-                }
-            }
+                    _data.value = MapState.Success(restaurantList)
+                }.onCompletion {
+
+                }.catch {
+
+                }.launchIn(viewModelScope)
+
+        }
+    }
+
+    private fun List<RestaurantModel>.sortList(
+        filterOrder: RestautantFilterOrder
+    ) = when (filterOrder) {
+        RestautantFilterOrder.DEFAULT -> {
+            this
+        }
+        RestautantFilterOrder.LOW_DELIVERY_TIP -> {
+            sortedBy { it.deliveryTipRange.first }
+        }
+        RestautantFilterOrder.FAST_DELIVERY -> {
+            sortedBy { it.deliveryTimeRange.first }
+        }
+        RestautantFilterOrder.TOP_RATE -> {
+            sortedByDescending { it.grade }
         }
     }
 

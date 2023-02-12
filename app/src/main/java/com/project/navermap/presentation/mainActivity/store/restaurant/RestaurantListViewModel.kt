@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.data.repository.firebaserealtime.FirebaseRepository
 import com.project.navermap.domain.model.FirebaseModel
-import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class RestaurantListViewModel @AssistedInject constructor(
-    private val getRestaurantListUseCase: GetRestaurantListUseCase,
     private val firebaseRepository: FirebaseRepository,
     @Assisted private val restaurantCategory: RestaurantCategory,
     @Assisted private var locationEntity: LocationEntity
