@@ -138,4 +138,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
+
+    //ui
+    implementation "com.github.ybq:Android-SpinKit:1.2.0"
 }

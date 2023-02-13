@@ -84,6 +84,7 @@
         <entry key="app/src/main/res/layout/activity_search_address.xml" value="0.10462962962962963" />
         <entry key="app/src/main/res/layout/activity_store_detail.xml" value="0.13880445795339413" />
         <entry key="app/src/main/res/layout/activity_suggest_item_detail.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/dialog_progress.xml" value="0.22083333333333333" />
         <entry key="app/src/main/res/layout/dialog_review_write.xml" value="0.16614583333333333" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/fragment_firebase_menu.xml" value="0.1875" />

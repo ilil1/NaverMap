@@ -17,7 +17,8 @@ class MapDataSource(
     private val dao: MapSearchCacheDao,
     private val ioDispatcher: CoroutineDispatcher
 ) {
-    //코루틴
+
+//코루틴
 //    suspend fun getSearchLocationAround(
 //        categories: String,
 //        centerLat: String,
