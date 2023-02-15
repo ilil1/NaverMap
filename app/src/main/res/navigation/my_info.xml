@@ -4,9 +4,15 @@
     android:id="@+id/my_info"
     app:startDestination="@id/subFragment">
 
+<!--    <activity-->
+<!--        android:id="@+id/subFragment"-->
+<!--        android:name="com.project.navermap.presentation.mainActivity.myinfo.MyInfoActivity"-->
+<!--        android:label="subFragment"/>-->
+
     <activity
         android:id="@+id/subFragment"
-        android:name="com.project.navermap.presentation.mainActivity.myinfo.MyInfoActivity"
-        android:label="subFragment"/>
+        android:name="com.project.navermap.presentation.mainActivity.myinfo.MyInfoComposeActivity"
+        android:label="subFragment"
+        />
 
 </navigation>
