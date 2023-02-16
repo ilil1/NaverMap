@@ -6,11 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.project.navermap.R
@@ -31,17 +33,27 @@ fun MyInfo(
             modifier = modifier
                 .fillMaxWidth()
         ) {
-            topBar(
-                modifier = Modifier
+
+            TopBar(
+                modifier = Modifier,
+                onBackPress = {}
             )
+
+            Profile(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                userName = "HeeTae"
+            )
+
         }
     }
 }
 
 
 @Composable
-private fun topBar(
+private fun TopBar(
     modifier: Modifier = Modifier,
+    onBackPress : () -> Unit
 ) {
     val screenWidth = LocalDensity.current.run { LocalConfiguration.current.screenWidthDp.dp }
 
@@ -59,6 +71,7 @@ private fun topBar(
             modifier = Modifier
                 .padding(start = 15.dp)
                 .size(20.dp)
+                .clickable { onBackPress() }
         )
 
         Text(
@@ -66,11 +79,45 @@ private fun topBar(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .padding(vertical = 12.dp)
-                .padding(start = ( (screenWidth/2) - 60.dp) ),
+                .padding(start = ((screenWidth / 2) - 60.dp)),
             textAlign = TextAlign.Center,
             fontSize = 20.dpToSp(),
             color = Color.White
         )
     }
+}
+
+@Composable
+private fun Profile(
+    modifier: Modifier = Modifier,
+    userName: String
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 3.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.profile),
+            contentDescription = "프로필 이미지",
+            modifier = Modifier
+                .padding(horizontal = 5.dp)
+                .size(110.dp)
+        )
+
+        Text(
+            text = userName,
+            textAlign = TextAlign.Center,
+            fontSize = 20.dpToSp(),
+            color = Color.Black,
+            fontStyle = FontStyle.Normal,
+            modifier = Modifier.padding(start = 5.dp)
+        )
+
+
+    }
 
 }
+

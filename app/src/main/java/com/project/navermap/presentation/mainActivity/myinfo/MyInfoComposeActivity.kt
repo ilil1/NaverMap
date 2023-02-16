@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import com.project.navermap.presentation.ui.theme.NaverMapTheme
 
 class MyInfoComposeActivity : ComponentActivity() {
 
@@ -15,11 +16,12 @@ class MyInfoComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-            MyInfo(
-                modifier = Modifier.fillMaxSize(),
-                viewModel = viewModel
-            )
+            NaverMapTheme{
+                MyInfo(
+                    modifier = Modifier.fillMaxSize(),
+                    viewModel = viewModel
+                )
+            }
         }
     }
 }
