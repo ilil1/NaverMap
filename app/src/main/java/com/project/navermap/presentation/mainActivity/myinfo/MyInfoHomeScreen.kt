@@ -15,15 +15,19 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.project.navermap.R
 import com.project.navermap.presentation.ui.extensions.dpToSp
 import com.project.navermap.presentation.ui.theme.ColorBase
 
 
 @Composable
-fun MyInfo(
+fun MyInfoHomeScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: MyInfoViewModel,
+    onClickBackPress: () -> Unit,
+    onClickProfileImage: () -> Unit,
 ) {
     Box(
         modifier = Modifier
