@@ -130,6 +130,11 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                             markerClickListener
                         )
                     }
+                    is MapState.Error -> Toast.makeText(
+                        context,
+                        R.string.failed_get_restaurant_list,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

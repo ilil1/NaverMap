@@ -73,22 +73,26 @@ class MapViewModel @Inject constructor(
         restaurantList.clear()
         val restaurantCategories = RestaurantCategory.values()
         restaurantCategories.map {
-            getRestaurantListUseCase.fetchData(it, location).onStart {
-                _mapDataState.emit(MapState.Loading(true))
-            }.onEach {
-                val mutableResult = it.sortList(RestautantFilterOrder.DEFAULT).toMutableList()
-                var i = 0
-                repeat(mutableResult.size) {
-                    if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
-                        restaurantList.add(mutableResult[i])
+            getRestaurantListUseCase.fetchData(it, location)
+                .onStart {
+                    _mapDataState.emit(MapState.Loading(true))
+                }.onEach {
+                    val mutableResult = it.toMutableList()
+                    var i = 0
+                    repeat(mutableResult.size) {
+                        if (filterCategoryChecked[
+                                    getCategoryNum(mutableResult[i].restaurantCategory.toString())]
+                        ) {
+                            restaurantList.add(mutableResult[i])
+                        }
+                        i++
                     }
-                    i++
-                }
-                _mapDataState.emit(MapState.Success(restaurantList))
-            }.catch {
-            }.onCompletion {
-                _mapDataState.emit(MapState.Loading(false))
-            }.launchIn(viewModelScope)
+                    _mapDataState.emit(MapState.Success(restaurantList))
+                }.catch {
+                    _mapDataState.emit(MapState.Error)
+                }.onCompletion {
+                    _mapDataState.emit(MapState.Loading(false))
+                }.launchIn(viewModelScope)
         }
     }
 

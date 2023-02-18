@@ -15,8 +15,10 @@ sealed class MapState {
         val restaurantInfoList: MutableList<RestaurantModel>,
         val destLocation: LocationEntity? = null
     ) : MapState()
+//
+//    data class Error(
+//        @StringRes val id: Int
+//    ) : MapState()
 
-    data class Error(
-        @StringRes val id: Int
-    ) : MapState()
+    object Error : MapState()
 }
