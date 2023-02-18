@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.InfoWindow
@@ -28,6 +29,8 @@ import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -110,6 +113,28 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 //        }
 //    }
 
+    private fun observeStateData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.mapDataState.collect {
+                when (it) {
+                    is MapState.Loading -> {
+                        if(it.data) {
+                            progressDialog.show()
+                        } else {
+                            progressDialog.dismiss()
+                        }
+                    }
+                    is MapState.Success -> {
+                        naverMapHandler.updateRestaurantMarkers(
+                            it.restaurantInfoList,
+                            markerClickListener
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun mapObserveData() {
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {
@@ -163,6 +188,7 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     override fun initState() {
         super.initState()
+        observeStateData()
         setupClickListeners()
         //hilt로 바꿔야함
         filterDialog = FilterDialog(requireActivity())

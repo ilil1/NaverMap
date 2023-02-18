@@ -10,7 +10,6 @@ import com.project.navermap.domain.model.FoodModel
 import com.project.navermap.domain.model.RestaurantModel
 import com.project.navermap.domain.usecase.mapViewmodel.GetItemsByRestaurantIdUseCase
 import com.project.navermap.domain.usecase.restaurantListViewModel.GetRestaurantListUseCase
-import com.project.navermap.domain.usecase.restaurantListViewModel.RestaurantResult
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestautantFilterOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +28,9 @@ class MapViewModel @Inject constructor(
 
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> get() = _data
+
+    var _mapDataState: MutableSharedFlow<MapState> = MutableSharedFlow()
+    val mapDataState: SharedFlow<MapState> get() = _mapDataState
 
     private val _items = MutableLiveData<List<FoodModel>>(emptyList())
     val items: LiveData<List<FoodModel>> get() = _items
@@ -64,7 +66,6 @@ class MapViewModel @Inject constructor(
 //        }
 //    }
 
-
     fun loadRestaurantList(
         restaurantCategory: RestaurantCategory,
         location: LocationEntity = destLocation
@@ -73,23 +74,21 @@ class MapViewModel @Inject constructor(
         val restaurantCategories = RestaurantCategory.values()
         restaurantCategories.map {
             getRestaurantListUseCase.fetchData(it, location).onStart {
-
-                }.onEach {
-                    val mutableResult = it.sortList(RestautantFilterOrder.DEFAULT).toMutableList()
-                    var i = 0
-                    repeat(mutableResult.size) {
-                        if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
-                            restaurantList.add(mutableResult[i])
-                        }
-                        i++
+                _mapDataState.emit(MapState.Loading(true))
+            }.onEach {
+                val mutableResult = it.sortList(RestautantFilterOrder.DEFAULT).toMutableList()
+                var i = 0
+                repeat(mutableResult.size) {
+                    if (filterCategoryChecked[getCategoryNum(mutableResult[i].restaurantCategory.toString())]) {
+                        restaurantList.add(mutableResult[i])
                     }
-                    _data.value = MapState.Success(restaurantList)
-                }.onCompletion {
-
-                }.catch {
-
-                }.launchIn(viewModelScope)
-
+                    i++
+                }
+                _mapDataState.emit(MapState.Success(restaurantList))
+            }.catch {
+            }.onCompletion {
+                _mapDataState.emit(MapState.Loading(false))
+            }.launchIn(viewModelScope)
         }
     }
 
