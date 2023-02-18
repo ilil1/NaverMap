@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="440dp"
-            android:text="위드마켓과      즐거운 거래해요"
+            android:text="위드마켓과\n즐거운 거래해요"
             android:textColor="@color/black"
             android:textSize="33sp"
             app:layout_constraintBottom_toBottomOf="parent"
