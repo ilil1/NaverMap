@@ -10,6 +10,7 @@ fun SetUpMyInfoNavGraph(
     viewModel: MyInfoViewModel,
     onClickBackPress: () -> Unit,
     onClickProfileImage: () -> Unit,
+    onBackActivity: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -20,7 +21,8 @@ fun SetUpMyInfoNavGraph(
             navController = navController,
             viewModel = viewModel,
             onClickBackPress = onClickBackPress,
-            onClickProfileImage = onClickProfileImage
+            onClickProfileImage = onClickProfileImage,
+            onBackActivity = onBackActivity
         )
     }
 }
