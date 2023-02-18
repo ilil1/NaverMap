@@ -26,7 +26,8 @@ class MyInfoComposeActivity : ComponentActivity() {
                     navController = navController,
                     viewModel = viewModel,
                     onClickBackPress = {},
-                    onClickProfileImage = {}
+                    onClickProfileImage = {},
+                    onBackActivity = { finish()}
                 )
             }
         }

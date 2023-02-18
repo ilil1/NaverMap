@@ -10,6 +10,7 @@ fun NavGraphBuilder.myInfoNavGraph(
     viewModel: MyInfoViewModel,
     onClickBackPress: () -> Unit,
     onClickProfileImage: () -> Unit,
+    onBackActivity: () -> Unit
 ){
     navigation(
         startDestination = MyInfoScreenNavs.MyInfoHome.route,
@@ -20,7 +21,8 @@ fun NavGraphBuilder.myInfoNavGraph(
                 navController = navController,
                 viewModel = viewModel,
                 onClickBackPress = onClickBackPress,
-                onClickProfileImage = onClickProfileImage
+                onClickProfileImage = onClickProfileImage,
+                onBackActivity = onBackActivity
             )
         }
     }

@@ -15,10 +15,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -26,6 +29,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.project.navermap.R
 import com.project.navermap.presentation.ui.extensions.dpToSp
 import com.project.navermap.presentation.ui.theme.ColorBase
@@ -38,6 +43,7 @@ fun MyInfoHomeScreen(
     viewModel: MyInfoViewModel,
     onClickBackPress: () -> Unit,
     onClickProfileImage: () -> Unit,
+    onBackActivity: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -50,7 +56,7 @@ fun MyInfoHomeScreen(
 
             TopBar(
                 modifier = Modifier,
-                onBackPress = {}
+                onClickActivityBackPress = { onBackActivity() }
             )
 
             Profile(
@@ -67,7 +73,7 @@ fun MyInfoHomeScreen(
 @Composable
 private fun TopBar(
     modifier: Modifier = Modifier,
-    onBackPress: () -> Unit
+    onClickActivityBackPress: () -> Unit
 ) {
     val screenWidth = LocalDensity.current.run { LocalConfiguration.current.screenWidthDp.dp }
 
@@ -85,7 +91,7 @@ private fun TopBar(
             modifier = Modifier
                 .padding(start = 15.dp)
                 .size(20.dp)
-                .clickable { onBackPress() }
+                .clickable {  onClickActivityBackPress() }
         )
 
         Text(
@@ -126,18 +132,18 @@ private fun Profile(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (imageUri != null) {
-            bitmap.value?.let {
-                Image(
-                    bitmap = it.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(400.dp)
-                        .clickable {
-                            imageLauncher.launch("image/*")
-                            ImageConverter(imageUri!!, context = context)
-                        }
-                )
-            }
+          Image(
+              painter = rememberAsyncImagePainter(model = imageUri),
+              contentDescription = "Image" ,
+              contentScale = ContentScale.Crop,
+              modifier = Modifier
+                  .size(110.dp)
+                  .clip(CircleShape)
+                  .clickable {
+                      imageLauncher.launch("image/*")
+                      ImageConverter(imageUri!!, context = context)
+                  }
+          )
         } else {
             Image(
                 painter = painterResource(id = R.drawable.profile),
@@ -145,9 +151,12 @@ private fun Profile(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
                     .size(110.dp)
+                    .clip(CircleShape)
                     .clickable {
                         imageLauncher.launch("image/*")
-                        ImageConverter(imageUri!!, context = context)
+                        if (imageUri != null) {
+                            ImageConverter(imageUri!!, context = context)
+                        }
                     }
             )
         }
@@ -167,11 +176,11 @@ private fun ImageConverter(imageUri: Uri, context: Context): Bitmap? {
 
     var bitmap: Bitmap? = null
 
-    imageUri?.let { imageUri ->
+    imageUri.let { imageUri ->
         if (Build.VERSION.SDK_INT < 28) {
             bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
-        }else{
-            val source = ImageDecoder.createSource(context.contentResolver,imageUri)
+        } else {
+            val source = ImageDecoder.createSource(context.contentResolver, imageUri)
             bitmap = ImageDecoder.decodeBitmap(source)
         }
     }
