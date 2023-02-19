@@ -1,4 +1,4 @@
-package com.project.navermap.data.response.TmapAddress
+package com.project.navermap.data.response.tmapAddress
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
