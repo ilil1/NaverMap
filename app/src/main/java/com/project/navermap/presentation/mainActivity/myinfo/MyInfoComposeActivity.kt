@@ -27,7 +27,7 @@ class MyInfoComposeActivity : ComponentActivity() {
                     viewModel = viewModel,
                     onClickBackPress = {},
                     onClickProfileImage = {},
-                    onBackActivity = { finish()}
+                    onBackActivity = { finish() }
                 )
             }
         }

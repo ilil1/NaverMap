@@ -1,11 +1,9 @@
 package com.project.navermap.presentation.mainActivity.myinfo
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.Text
@@ -20,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.project.navermap.R
 import com.project.navermap.presentation.ui.extensions.dpToSp
 import com.project.navermap.presentation.ui.theme.ColorBase
@@ -91,7 +87,7 @@ private fun TopBar(
             modifier = Modifier
                 .padding(start = 15.dp)
                 .size(20.dp)
-                .clickable {  onClickActivityBackPress() }
+                .clickable { onClickActivityBackPress() }
         )
 
         Text(
@@ -112,18 +108,16 @@ private fun Profile(
     modifier: Modifier = Modifier,
     userName: String,
 ) {
-
+    val appCnt = LocalContext.current.applicationContext as Application
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val bitmap = remember {
-        mutableStateOf<Bitmap?>(null)
-    }
 
     val imageLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            imageUri = uri
+            if (uri != null) {
+                saveImageToSharedPreferences(appCnt, uri)
+            }
         }
 
-    val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -131,19 +125,20 @@ private fun Profile(
             .padding(top = 3.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        imageUri = getImageUriFromSharedPreferences(appCnt)
+
         if (imageUri != null) {
-          Image(
-              painter = rememberAsyncImagePainter(model = imageUri),
-              contentDescription = "Image" ,
-              contentScale = ContentScale.Crop,
-              modifier = Modifier
-                  .size(110.dp)
-                  .clip(CircleShape)
-                  .clickable {
-                      imageLauncher.launch("image/*")
-                      ImageConverter(imageUri!!, context = context)
-                  }
-          )
+            Image(
+                painter = rememberAsyncImagePainter(model = imageUri),
+                contentDescription = "Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(110.dp)
+                    .clip(CircleShape)
+                    .clickable {
+                        imageLauncher.launch("image/*")
+                    }
+            )
         } else {
             Image(
                 painter = painterResource(id = R.drawable.profile),
@@ -154,9 +149,6 @@ private fun Profile(
                     .clip(CircleShape)
                     .clickable {
                         imageLauncher.launch("image/*")
-                        if (imageUri != null) {
-                            ImageConverter(imageUri!!, context = context)
-                        }
                     }
             )
         }
@@ -172,19 +164,27 @@ private fun Profile(
     }
 }
 
-private fun ImageConverter(imageUri: Uri, context: Context): Bitmap? {
+private fun saveImageToSharedPreferences(application: Application, imageUri: Uri) {
+    // SharedPreferences 인스턴스 가져오기
+    val sharedPreferences = application.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
 
-    var bitmap: Bitmap? = null
-
-    imageUri.let { imageUri ->
-        if (Build.VERSION.SDK_INT < 28) {
-            bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
-        } else {
-            val source = ImageDecoder.createSource(context.contentResolver, imageUri)
-            bitmap = ImageDecoder.decodeBitmap(source)
-        }
-    }
-    return bitmap
+    // 이미지 Uri를 문자열로 변환하여 SharedPreferences에 저장
+    val editor = sharedPreferences.edit()
+    editor.putString("imageUri", imageUri.toString())
+    editor.apply()
 }
+
+// 이미지 Uri를 가져오는 함수
+private fun getImageUriFromSharedPreferences(application: Application): Uri? {
+    // SharedPreferences 인스턴스 가져오기
+    val sharedPreferences = application.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+
+    // 저장된 이미지 Uri를 가져와서 Uri 객체로 변환하여 반환
+    val imageUriString = sharedPreferences.getString("imageUri", null)
+    return imageUriString?.let { Uri.parse(it) }
+}
+
+
+
 
 
