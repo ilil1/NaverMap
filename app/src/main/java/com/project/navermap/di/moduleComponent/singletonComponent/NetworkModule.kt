@@ -29,6 +29,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
+    @Singleton
     fun provideHttpClient(): OkHttpClient {
 
         val interceptor = HttpLoggingInterceptor()
