@@ -13,6 +13,6 @@ interface RestaurantItemCacheDao {
     @Query("SELECT * FROM restaurant_food_cache")
     suspend fun getSearchResultCaches(): List<RestaurantFoodEntity>
 
-    @Query("SELECT * FROM restaurant_food_cache")
+    @Query("DELETE FROM restaurant_food_cache")
     suspend fun clearSearchResultCaches()
 }
