@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity
+@Entity(tableName = "restaurant_food_cache")
 data class RestaurantFoodEntity(
     @PrimaryKey val id: String,
     val title: String,

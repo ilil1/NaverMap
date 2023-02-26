@@ -10,7 +10,9 @@ interface RestaurantItemCacheDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchResults(entities: List<RestaurantFoodEntity>)
 
+    @Query("SELECT * FROM restaurant_food_cache")
     suspend fun getSearchResultCaches(): List<RestaurantFoodEntity>
 
+    @Query("SELECT * FROM restaurant_food_cache")
     suspend fun clearSearchResultCaches()
 }
