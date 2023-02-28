@@ -17,13 +17,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides
-    @Singleton
-    fun provideRestaurantItemDB(@ApplicationContext context: Context): MapDB =
-        Room.databaseBuilder(context, MapDB::class.java, "restaurantItem.db")
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
+//    @Provides
+//    @Singleton
+//    fun provideRestaurantItemDB(@ApplicationContext context: Context): MapDB =
+//        Room.databaseBuilder(context, MapDB::class.java, "restaurantItem.db")
+//            .fallbackToDestructiveMigration()
+//            .allowMainThreadQueries()
+//            .build()
 
     @Provides
     @Singleton

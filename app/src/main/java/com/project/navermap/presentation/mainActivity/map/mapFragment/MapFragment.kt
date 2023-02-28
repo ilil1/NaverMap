@@ -23,13 +23,15 @@ import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.M
 import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.NaverMapHandler
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.base.BaseFragment
+import com.project.navermap.presentation.base.UiState
+import com.project.navermap.presentation.base.failOrNull
+import com.project.navermap.presentation.base.successOrNull
 import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
 import com.project.navermap.widget.adapter.listener.MapItemListAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
@@ -114,27 +116,34 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 //    }
 
     private fun observeStateData() {
+        observeState()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.mapDataState.collect {
+
+                uiState.value = it
+
                 when (it) {
-                    is MapState.Loading -> {
-                        if(it.data) {
-                            progressDialog.show()
-                        } else {
-                            progressDialog.dismiss()
+                    is UiState.Success -> {
+                        it.successOrNull()?.let {
+                            it.successOrNull()?.let {
+                                naverMapHandler.updateRestaurantMarkers(
+                                    it.first,
+                                    markerClickListener
+                                )
+                            }
                         }
                     }
-                    is MapState.Success -> {
-                        naverMapHandler.updateRestaurantMarkers(
-                            it.restaurantInfoList,
-                            markerClickListener
-                        )
+                    is UiState.Fail -> {
+                        it.failOrNull()?.let {
+                            it.failOrNull()?.let {
+                                Toast.makeText(
+                                    context,
+                                    R.string.failed_get_restaurant_list,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
-                    is MapState.Error -> Toast.makeText(
-                        context,
-                        R.string.failed_get_restaurant_list,
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }

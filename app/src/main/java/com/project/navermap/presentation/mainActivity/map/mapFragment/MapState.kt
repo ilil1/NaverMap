@@ -3,7 +3,7 @@ package com.project.navermap.presentation.mainActivity.map.mapFragment
 import androidx.annotation.StringRes
 import com.project.navermap.data.entity.LocationEntity
 import com.project.navermap.domain.model.RestaurantModel
-import com.project.navermap.presentation.base.UiState
+
 
 
 sealed class MapState {
@@ -19,6 +19,22 @@ sealed class MapState {
 //    data class Error(
 //        @StringRes val id: Int
 //    ) : MapState()
-
+    data class Fail(val data : String?): MapState()
     object Error : MapState()
+}
+
+fun MapState.successOrNull(): Pair<MutableList<RestaurantModel>, LocationEntity?>? {
+    return if (this is MapState.Success) {
+        Pair(restaurantInfoList, destLocation)
+    } else {
+        null
+    }
+}
+
+fun MapState.failOrNull(): String? {
+    return if (this is MapState.Fail) {
+        data
+    } else {
+        null
+    }
 }
