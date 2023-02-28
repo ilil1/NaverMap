@@ -67,8 +67,6 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
                             progressDialog.dismiss()
                         }
                     }
-                    is UiState.Success -> {}
-                    is UiState.Fail -> {}
                 }
             }
         }
