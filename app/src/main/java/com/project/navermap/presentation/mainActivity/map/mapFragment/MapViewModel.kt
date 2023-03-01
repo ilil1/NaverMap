@@ -31,8 +31,7 @@ class MapViewModel @Inject constructor(
     val data: LiveData<MapState> get() = _data
 
     var _mapDataState: MutableSharedFlow<UiState<MapState>> = MutableSharedFlow()
-    val mapDataState: SharedFlow<UiState<MapState>> =
-        _mapDataState as SharedFlow<UiState<MapState>>
+    val mapDataState: SharedFlow<UiState<MapState>> = _mapDataState
 
     private val _items = MutableLiveData<List<FoodModel>>(emptyList())
     val items: LiveData<List<FoodModel>> get() = _items
