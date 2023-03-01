@@ -119,29 +119,24 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
         observeState()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.mapDataState.collect {
-
                 uiState.value = it
-
                 when (it) {
                     is UiState.Success -> {
-                        it.successOrNull()?.let {
-                            it.successOrNull()?.let {
-                                naverMapHandler.updateRestaurantMarkers(
-                                    it.first,
-                                    markerClickListener
-                                )
-                            }
+                        it.data!!.successOrNull()?.let {
+                            naverMapHandler.updateRestaurantMarkers(
+                                it.first,
+                                markerClickListener
+                            )
                         }
                     }
                     is UiState.Fail -> {
-                        it.failOrNull()?.let {
-                            it.failOrNull()?.let {
-                                Toast.makeText(
-                                    context,
-                                    R.string.failed_get_restaurant_list,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        //이렇게 하면, 서버에서 fail message 를 받아서 처리할 수 있다.
+                        it.data!!.failOrNull()?.let {
+                            Toast.makeText(
+                                context,
+                                R.string.failed_get_restaurant_list,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
