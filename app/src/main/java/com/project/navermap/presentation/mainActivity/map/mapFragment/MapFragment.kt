@@ -270,7 +270,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             uiSettings.isScaleBarEnabled = true
             uiSettings.isCompassEnabled = true
         }
-        mapObserveData()
     }
 
 //    @SuppressLint("MissingPermission")
