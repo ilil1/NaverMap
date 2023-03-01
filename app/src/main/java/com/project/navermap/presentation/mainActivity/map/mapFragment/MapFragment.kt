@@ -142,6 +142,23 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                 }
             }
         }
+
+        viewModel.items.observe(viewLifecycleOwner) {
+            viewPagerAdapter.submitList(it)
+        }
+
+        activityViewModel.locationData.observe(viewLifecycleOwner) {
+            when (it) {
+                is MainState.Uninitialized -> Unit
+                is MainState.Loading -> {}
+                is MainState.Success -> {
+                    onMainStateSuccess(it)
+                    viewModel.destLocation = it.mapSearchInfoEntity.locationLatLng
+                    filterDialog.initDialog(viewModel, it.mapSearchInfoEntity.locationLatLng)
+                }
+                is MainState.Error -> {}
+            }
+        }
     }
 
     private fun mapObserveData() {
@@ -158,23 +175,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
                     R.string.failed_get_restaurant_list,
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-        }
-
-        viewModel.items.observe(viewLifecycleOwner) {
-            viewPagerAdapter.submitList(it)
-        }
-
-        activityViewModel.locationData.observe(viewLifecycleOwner) {
-            when (it) {
-                is MainState.Uninitialized -> Unit
-                is MainState.Loading -> {}
-                is MainState.Success -> {
-                    onMainStateSuccess(it)
-                    viewModel.destLocation = it.mapSearchInfoEntity.locationLatLng
-                    filterDialog.initDialog(viewModel, it.mapSearchInfoEntity.locationLatLng)
-                }
-                is MainState.Error -> {}
             }
         }
     }
@@ -197,7 +197,6 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     override fun initState() {
         super.initState()
-        observeStateData()
         setupClickListeners()
         //hilt로 바꿔야함
         filterDialog = FilterDialog(requireActivity())
@@ -270,6 +269,8 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             uiSettings.isScaleBarEnabled = true
             uiSettings.isCompassEnabled = true
         }
+
+        observeStateData()
     }
 
 //    @SuppressLint("MissingPermission")

@@ -30,7 +30,7 @@ class MapViewModel @Inject constructor(
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> get() = _data
 
-    var _mapDataState: MutableSharedFlow<UiState<Any>> = MutableSharedFlow()
+    var _mapDataState: MutableSharedFlow<UiState<MapState>> = MutableSharedFlow()
     val mapDataState: SharedFlow<UiState<MapState>> =
         _mapDataState as SharedFlow<UiState<MapState>>
 
@@ -77,7 +77,6 @@ class MapViewModel @Inject constructor(
         restaurantCategories.map {
             getRestaurantListUseCase.fetchData(it, location)
                 .onStart {
-                    //_mapDataState.emit(MapState.Loading(true))
                     _mapDataState.emit(UiState.Loading(true))
                 }.onEach {
                     val mutableResult = it.toMutableList()
