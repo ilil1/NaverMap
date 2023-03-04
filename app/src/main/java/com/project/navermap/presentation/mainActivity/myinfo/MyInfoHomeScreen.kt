@@ -2,7 +2,6 @@ package com.project.navermap.presentation.mainActivity.myinfo
 
 import android.app.Application
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,11 +13,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -28,8 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.project.navermap.R
+import com.project.navermap.presentation.mainActivity.myinfo.custom.UserSectionItem
 import com.project.navermap.presentation.ui.extensions.dpToSp
 import com.project.navermap.presentation.ui.theme.ColorBase
+import com.project.navermap.presentation.ui.theme.ColorC1C1C1
 
 
 @Composable
@@ -61,6 +62,30 @@ fun MyInfoHomeScreen(
                 userName = "HeeTae"
             )
 
+            Divider(
+                modifier = Modifier,
+                color = ColorC1C1C1,
+                thickness = 13.dp
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+
+                UserSectionItem(
+                    modifier = Modifier
+                        .weight(1f),
+                    onClickItem = {}
+                )
+
+            }
+
+            Divider(
+                modifier = Modifier,
+                color = ColorC1C1C1,
+                thickness = 10.dp
+            )
         }
     }
 }
@@ -127,19 +152,19 @@ private fun Profile(
     ) {
         imageUri = getImageUriFromSharedPreferences(appCnt)
 
-        if (imageUri != null) {
-            Image(
-                painter = rememberAsyncImagePainter(model = imageUri),
-                contentDescription = "Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(110.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        imageLauncher.launch("image/*")
-                    }
-            )
-        } else {
+//        if (imageUri != null) {
+//            Image(
+//                painter = rememberAsyncImagePainter(model = imageUri),
+//                contentDescription = "Image",
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .size(110.dp)
+//                    .clip(CircleShape)
+//                    .clickable {
+//                        imageLauncher.launch("image/*")
+//                    }
+//            )
+//        } else {
             Image(
                 painter = painterResource(id = R.drawable.profile),
                 contentDescription = "프로필 이미지",
@@ -151,7 +176,7 @@ private fun Profile(
                         imageLauncher.launch("image/*")
                     }
             )
-        }
+//        }
 
         Text(
             text = userName,
