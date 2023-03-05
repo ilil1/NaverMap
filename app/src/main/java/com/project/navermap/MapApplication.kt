@@ -21,7 +21,9 @@ class MapApplication : Application(){
 
         KakaoSdk.init(this,getString(R.string.kakao_app_key))
 
-        appConfig = context?.let { AppConfig(it) }!!
+        appConfig = context?.let {
+            AppConfig.create(it,"with_market")
+        }!!
     }
 
     override fun onTerminate() {

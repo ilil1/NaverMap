@@ -17,7 +17,10 @@ import com.project.navermap.presentation.ui.theme.ColorC1C1C1
 @Composable
 fun UserSectionItem(
     modifier: Modifier = Modifier,
-    onClickItem: () -> Unit
+    onClickOrderItem: () -> Unit,
+    onClickReviewItem: () -> Unit,
+    onClickFavoriteItem: () -> Unit,
+    onClickInterestingItem: () -> Unit,
 ) {
     Row(
         modifier = modifier

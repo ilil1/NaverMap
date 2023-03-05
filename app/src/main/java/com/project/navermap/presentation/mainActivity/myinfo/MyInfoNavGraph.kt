@@ -22,7 +22,7 @@ fun NavGraphBuilder.myInfoNavGraph(
                 viewModel = viewModel,
                 onClickBackPress = onClickBackPress,
                 onClickProfileImage = onClickProfileImage,
-                onBackActivity = onBackActivity
+                onClickClose = onBackActivity
             )
         }
     }

@@ -3,30 +3,26 @@ package com.project.navermap.presentation.mainActivity.myinfo
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import com.project.navermap.MapApplication.Companion.appConfig
 import com.project.navermap.R
+import com.project.navermap.presentation.mainActivity.myinfo.custom.MyInfoProfile
 import com.project.navermap.presentation.mainActivity.myinfo.custom.UserSectionItem
 import com.project.navermap.presentation.ui.extensions.dpToSp
 import com.project.navermap.presentation.ui.theme.ColorBase
@@ -40,8 +36,15 @@ fun MyInfoHomeScreen(
     viewModel: MyInfoViewModel,
     onClickBackPress: () -> Unit,
     onClickProfileImage: () -> Unit,
-    onBackActivity: () -> Unit
+    onClickClose: () -> Unit
 ) {
+    val nickName by remember {
+        mutableStateOf(appConfig.getNickName())
+    }
+    val appCnt = LocalContext.current.applicationContext as Application
+    val showClickBtn = viewModel.showSaveBtn.collectAsState().value
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,13 +56,15 @@ fun MyInfoHomeScreen(
 
             TopBar(
                 modifier = Modifier,
-                onClickActivityBackPress = { onBackActivity() }
+                onClickActivityBackPress = { onClickClose() }
             )
 
-            Profile(
+            MyInfoProfile(
+                viewModel = viewModel,
                 modifier = Modifier
                     .fillMaxWidth(),
-                userName = "HeeTae"
+                showClickBtn = showClickBtn,
+                onClickNickSaveBtn = { viewModel.saveNickname(appCnt, appConfig) }
             )
 
             Divider(
@@ -72,13 +77,14 @@ fun MyInfoHomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-
                 UserSectionItem(
                     modifier = Modifier
                         .weight(1f),
-                    onClickItem = {}
+                    onClickOrderItem = {},
+                    onClickReviewItem = {},
+                    onClickFavoriteItem = {},
+                    onClickInterestingItem = {},
                 )
-
             }
 
             Divider(
@@ -88,6 +94,8 @@ fun MyInfoHomeScreen(
             )
         }
     }
+
+
 }
 
 
@@ -128,66 +136,6 @@ private fun TopBar(
     }
 }
 
-@Composable
-private fun Profile(
-    modifier: Modifier = Modifier,
-    userName: String,
-) {
-    val appCnt = LocalContext.current.applicationContext as Application
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-
-    val imageLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            if (uri != null) {
-                saveImageToSharedPreferences(appCnt, uri)
-            }
-        }
-
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(top = 3.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        imageUri = getImageUriFromSharedPreferences(appCnt)
-
-//        if (imageUri != null) {
-//            Image(
-//                painter = rememberAsyncImagePainter(model = imageUri),
-//                contentDescription = "Image",
-//                contentScale = ContentScale.Crop,
-//                modifier = Modifier
-//                    .size(110.dp)
-//                    .clip(CircleShape)
-//                    .clickable {
-//                        imageLauncher.launch("image/*")
-//                    }
-//            )
-//        } else {
-            Image(
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "프로필 이미지",
-                modifier = Modifier
-                    .padding(horizontal = 5.dp)
-                    .size(110.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        imageLauncher.launch("image/*")
-                    }
-            )
-//        }
-
-        Text(
-            text = userName,
-            textAlign = TextAlign.Center,
-            fontSize = 20.dpToSp(),
-            color = Color.Black,
-            fontStyle = FontStyle.Normal,
-            modifier = Modifier.padding(start = 5.dp)
-        )
-    }
-}
 
 private fun saveImageToSharedPreferences(application: Application, imageUri: Uri) {
     // SharedPreferences 인스턴스 가져오기
