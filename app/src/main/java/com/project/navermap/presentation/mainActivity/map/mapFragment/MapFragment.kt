@@ -24,6 +24,7 @@ import com.project.navermap.presentation.mainActivity.map.mapFragment.navermap.N
 import com.project.navermap.presentation.mainActivity.store.restaurant.RestaurantCategory
 import com.project.navermap.presentation.base.BaseFragment
 import com.project.navermap.presentation.base.UiState
+import com.project.navermap.presentation.base.successOrNull
 import com.project.navermap.presentation.mainActivity.MainViewModel
 import com.project.navermap.util.provider.ResourcesProvider
 import com.project.navermap.widget.adapter.ModelRecyclerAdapter
@@ -143,6 +144,14 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.shopitems.collect {
+                it.successOrNull()?.let {
+                    viewPagerAdapter.submitList(it)
+                }
+            }
+        }
+
         activityViewModel.locationData.observe(viewLifecycleOwner) {
             when (it) {
                 is MainState.Uninitialized -> Unit
@@ -159,9 +168,9 @@ class MapFragment : BaseFragment<FragmentMapBinding>(), OnMapReadyCallback {
 
     private fun mapObserveData() {
 
-//        viewModel.items.observe(viewLifecycleOwner) {
-//            viewPagerAdapter.submitList(it)
-//        }
+        viewModel.items.observe(viewLifecycleOwner) {
+            viewPagerAdapter.submitList(it)
+        }
 
         viewModel.data.observe(viewLifecycleOwner) {
             when (it) {

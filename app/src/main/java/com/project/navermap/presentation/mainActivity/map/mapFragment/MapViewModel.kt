@@ -30,14 +30,14 @@ class MapViewModel @Inject constructor(
     private val _data = MutableLiveData<MapState>(MapState.Uninitialized)
     val data: LiveData<MapState> get() = _data
 
-//    private val _items = MutableLiveData<List<FoodModel>>(emptyList())
-//    val items: LiveData<List<FoodModel>> get() = _items
+    private val _items = MutableLiveData<List<FoodModel>>(emptyList())
+    val items: LiveData<List<FoodModel>> get() = _items
 
     var _mapDataState: MutableSharedFlow<UiState<MapState>> = MutableSharedFlow()
     val mapDataState: SharedFlow<UiState<MapState>> = _mapDataState
 
-    private val _items = MutableSharedFlow<UiState<List<FoodModel>>>()
-    val items: SharedFlow<UiState<List<FoodModel>>> get() = _items
+    private val _shopitems : MutableSharedFlow<UiState<List<FoodModel>>> = MutableSharedFlow()
+    val shopitems: SharedFlow<UiState<List<FoodModel>>> get() = _shopitems
 
     private var restaurantList: MutableList<RestaurantModel> = mutableListOf()
 
@@ -109,7 +109,7 @@ class MapViewModel @Inject constructor(
         getItemsByRestaurantIdUseCase(restaurantId).onStart {
 
         }.onEach {
-            _items.emit(UiState.Success(it))
+            _shopitems.emit(UiState.Success(it))
             //_items.value = it
         }.onCompletion {
 
