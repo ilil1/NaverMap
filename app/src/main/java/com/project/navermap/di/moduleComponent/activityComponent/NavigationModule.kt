@@ -16,6 +16,13 @@ import dagger.hilt.android.scopes.ActivityScoped
 @InstallIn(ActivityComponent::class)
 object NavigationModule {
 
+    /**
+    supportFragmentManager은 AppCompatActivity 클래스에서만 제공됩니다.
+    FragmentManager은 Android API 레벨 11부터 추가된 클래스이며, FragmentActivity에서 사용할 수 있습니다.
+    그러나 FragmentActivity는 Android API 레벨 11 이상에서만 지원되기 때문에,
+    이전 버전의 Android를 지원해야 하는 경우 AppCompatActivity를 사용해야 합니다.
+     */
+
     @Provides
     fun provideActivity(activity: Activity) = activity as AppCompatActivity
 

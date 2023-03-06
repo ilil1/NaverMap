@@ -16,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Module
 @InstallIn(FragmentComponent::class)
 object MapModule {
+    //fragment 매개변수는 Dagger Hilt가 자동으로 제공하는 의존성
     @Provides
     fun provideMapFragment(fragment: Fragment) = fragment as MapFragment
 
