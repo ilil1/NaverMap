@@ -11,11 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.project.navermap.MapApplication.Companion.appConfig
 import com.project.navermap.R
 import com.project.navermap.presentation.mainActivity.myinfo.MyInfoViewModel
+import com.project.navermap.presentation.ui.extensions.dpToSp
 
 
 @Composable
@@ -72,23 +74,13 @@ fun MyInfoProfile(
         )
 //        }
 
-        TextField(
-            value = appConfig.getNickName() ?: "",
-            onValueChange = { viewModel.onNicknameChanged(it) },
-            label = { Text(text = "Nickname") },
-            singleLine = true,
+        Text(
+            text = appConfig.getNickName() ?: "",
+            fontSize = 15.dpToSp(),
+            color = Color.Black,
             modifier = Modifier
                 .size(width = 200.dp, height = 60.dp)
                 .padding(start = 5.dp)
         )
-        if (showClickBtn)
-            Button(
-                onClick = onClickNickSaveBtn,
-                modifier = Modifier
-                    .padding(horizontal = 5.dp)
-                    .align(Alignment.CenterVertically)
-            ) {
-                Text(text = "Save")
-            }
     }
 }
