@@ -17,8 +17,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.project.navermap.MapApplication.Companion.appConfig
 import com.project.navermap.R
@@ -92,6 +94,14 @@ fun MyInfoHomeScreen(
                 color = ColorC1C1C1,
                 thickness = 10.dp
             )
+
+            Column {
+                Section(title = "계정", items = listOf("주소 재설정", "로그아웃"))
+                Divider(color = Color.Gray, thickness = 3.dp)
+                Section(title = "앱 설정", items = listOf("알림설정", "환경설정"))
+                Divider(color = Color.Gray, thickness = 3.dp)
+                Section(title = "이용 안내", items = listOf("고객센터", "이용약관", "개인정보 처리 방침"))
+            }
         }
     }
 
@@ -133,6 +143,30 @@ private fun TopBar(
             fontSize = 20.dpToSp(),
             color = Color.White
         )
+    }
+}
+
+@Composable
+fun Section(title: String, items: List<String>) {
+    Column(modifier = Modifier.padding(horizontal = 18.dp)) {
+        Text(
+            text = title,
+            fontSize = 30.dpToSp(),
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+
+        items.forEach { item ->
+            Text(
+                text = item,
+                fontSize = 15.dpToSp(),
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+            )
+        }
     }
 }
 
