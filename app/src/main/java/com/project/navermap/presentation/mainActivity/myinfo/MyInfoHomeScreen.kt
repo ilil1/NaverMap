@@ -53,9 +53,8 @@ fun MyInfoHomeScreen(
     ) {
         Column(
             modifier = modifier
-                .fillMaxWidth()
+                .fillMaxSize()
         ) {
-
             TopBar(
                 modifier = Modifier,
                 onClickActivityBackPress = { onClickClose() }
@@ -95,12 +94,24 @@ fun MyInfoHomeScreen(
                 thickness = 10.dp
             )
 
-            Column {
-                Section(title = "계정", items = listOf("주소 재설정", "로그아웃"))
+            Column(modifier = Modifier.fillMaxSize()) {
+                Section(
+                    title = "계정",
+                    items = listOf("주소 재설정", "로그아웃"),
+                    onClick = {}
+                )
                 Divider(color = Color.Gray, thickness = 3.dp)
-                Section(title = "앱 설정", items = listOf("알림설정", "환경설정"))
+                Section(
+                    title = "앱 설정",
+                    items = listOf("알림설정", "환경설정"),
+                    onClick = {}
+                )
                 Divider(color = Color.Gray, thickness = 3.dp)
-                Section(title = "이용 안내", items = listOf("고객센터", "이용약관", "개인정보 처리 방침"))
+                Section(
+                    title = "이용 안내",
+                    items = listOf("고객센터", "이용약관", "개인정보 처리 방침"),
+                    onClick = {}
+                )
             }
         }
     }
@@ -147,7 +158,11 @@ private fun TopBar(
 }
 
 @Composable
-fun Section(title: String, items: List<String>) {
+fun Section(
+    title: String,
+    items: List<String>,
+    onClick: () -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 18.dp)) {
         Text(
             text = title,

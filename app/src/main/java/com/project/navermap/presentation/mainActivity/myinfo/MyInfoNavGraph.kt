@@ -25,5 +25,18 @@ fun NavGraphBuilder.myInfoNavGraph(
                 onClickClose = onBackActivity
             )
         }
+        composable(route = MyInfoScreenNavs.OrderList.route){
+
+        }
+        composable(route = MyInfoScreenNavs.ReviewList.route){
+
+        }
+
+        composable(route = MyInfoScreenNavs.FavoriteList.route) {
+        }
+
+        composable(route = MyInfoScreenNavs.InterestingList.route){
+
+        }
     }
 }
